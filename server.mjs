@@ -83,6 +83,20 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (req.method === "GET" && req.url.startsWith("/assets/")) {
+    const name = req.url.split("?")[0].replace(/^\/assets\//, "");
+    if (/[\\/]|\.\./.test(name)) { send(400, "text/plain", "bad path"); return; }
+    try {
+      const buf = await readFile(join(ROOT, "assets", name));
+      const type = name.endsWith(".png") ? "image/png"
+        : name.endsWith(".jpg") || name.endsWith(".jpeg") ? "image/jpeg"
+        : name.endsWith(".svg") ? "image/svg+xml" : "application/octet-stream";
+      res.writeHead(200, { "Content-Type": type, "Cache-Control": "no-store" });
+      res.end(buf);
+    } catch { send(404, "text/plain; charset=utf-8", "not found"); }
+    return;
+  }
+
   if (req.method === "GET" && req.url === "/health") {
     send(200, "application/json", JSON.stringify({ ok: true, model: MODEL, hasKey: !!API_KEY }));
     return;

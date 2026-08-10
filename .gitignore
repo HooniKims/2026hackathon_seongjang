@@ -38,3 +38,7 @@ claude-artifact-original.png
 
 # Vercel
 .vercel
+.env*
+
+# 외부에서 생성된 화면 안내 자료 (커밋 제외)
+artifact_screens/

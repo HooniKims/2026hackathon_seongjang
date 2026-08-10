@@ -254,6 +254,43 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
 .heart.on{background:#fde7ef;color:#be123c}
 .wcard-score{margin-left:auto;font-weight:700;color:var(--foreground)}
 .mine-tag{border-radius:9999px;background:var(--accent);color:var(--accent-foreground);padding:.125rem .5rem;font-size:.625rem;font-weight:700;white-space:nowrap}
+.back{display:inline-flex;align-items:center;gap:.375rem;font-size:.875rem;font-weight:500;color:var(--muted-foreground);cursor:pointer;transition:all .2s;margin-bottom:1.25rem}
+.back:hover{transform:translateX(-2px);color:var(--foreground)}
+.wthumb{position:relative;aspect-ratio:16/9;border-radius:.75rem;overflow:hidden;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.wthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.wcard{cursor:pointer;padding:0;overflow:hidden;gap:0}
+.wcard .wbody{display:flex;flex-direction:column;gap:.5rem;padding:1rem 1.125rem}
+.wcard .wthumb{border-radius:0}
+.wdetail{display:flex;flex-direction:column;gap:1.25rem}
+.wd-hero{border-radius:1rem;background:var(--card);box-shadow:var(--shadow-sm);overflow:hidden}
+.wd-hero .wthumb{border-radius:0;aspect-ratio:16/9}
+.wd-head{padding:1.5rem 1.75rem;display:flex;flex-direction:column;gap:.625rem}
+.wd-t{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
+.wd-s{font-size:.9375rem;color:var(--muted-foreground)}
+.wd-pills{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem}
+.wd-links{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+.wd-link{display:inline-flex;align-items:center;gap:.4375rem;border-radius:.75rem;border:1px solid var(--border);
+  background:var(--card);padding:.5rem .875rem;font-size:.8125rem;font-weight:600;text-decoration:none;color:inherit;transition:all .2s}
+.wd-link:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);background:var(--accent);color:var(--accent-foreground)}
+.wd-sec{border-radius:1rem;background:var(--card);box-shadow:var(--shadow-sm);padding:1.375rem 1.5rem}
+.wd-sec h3{display:flex;align-items:center;gap:.5rem;font-size:.9375rem;font-weight:700;margin-bottom:.875rem}
+.wd-sec h3::before{content:"";width:.5rem;height:.5rem;border-radius:.1875rem;background:var(--c1);flex-shrink:0}
+.wd-sec p{font-size:.875rem;line-height:1.75;white-space:pre-wrap;color:var(--foreground)}
+.wd-grid{display:grid;gap:1rem}
+@media(min-width:820px){.wd-grid{grid-template-columns:1fr 1fr}}
+.wd-box{border:1px solid var(--border);border-radius:.75rem;padding:.875rem 1rem}
+.wd-box .k{font-size:.75rem;font-weight:700;color:var(--muted-foreground);margin-bottom:.375rem}
+.wd-box p{font-size:.8125rem;line-height:1.7}
+.wd-score{display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center;font-size:.8125rem;color:var(--muted-foreground)}
+.wd-score b{font-size:1.125rem;color:var(--foreground)}
+.revprev{display:flex;gap:1rem;border-radius:.875rem;background:var(--muted);padding:1rem;margin-bottom:1.25rem;align-items:flex-start}
+.revprev .wthumb{width:11rem;flex-shrink:0;aspect-ratio:16/9;border-radius:.625rem}
+.revprev-b{min-width:0;display:flex;flex-direction:column;gap:.375rem}
+.revprev-t{font-size:1rem;font-weight:700}
+.revprev-d{font-size:.8125rem;color:var(--muted-foreground);line-height:1.6}
+.clicky{cursor:pointer}
+.clicky:hover{background:var(--accent)}
 #tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .12s;background:#0f1926;color:#fff;border-radius:.5rem;padding:.4375rem .625rem;font-size:.75rem;line-height:1.5;box-shadow:var(--shadow-md);white-space:nowrap}
 #tip.on{opacity:1}
 #toast{position:fixed;top:5rem;left:50%;transform:translateX(-50%) translateY(-1rem);z-index:70;opacity:0;transition:all .25s;
@@ -290,8 +327,9 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
     <button class="pn" data-v="write"><span class="pn-n num">2</span>연수생 입력</button>
     <button class="pn" data-v="preview"><span class="pn-n num">3</span>사례집 초안</button>
     <button class="pn" data-v="board"><span class="pn-n num">4</span>동료 산출물</button>
-    <button class="pn" data-v="review"><span class="pn-n num">5</span>현장 평가</button>
-    <button class="pn" data-v="ethics"><span class="pn-n num">6</span>윤리 설문</button>
+    <button class="pn" data-v="book"><span class="pn-n num">5</span>사례집 엮기</button>
+    <button class="pn" data-v="review"><span class="pn-n num">6</span>현장 평가</button>
+    <button class="pn" data-v="ethics"><span class="pn-n num">7</span>윤리 설문</button>
   </div>
 </nav>
 
@@ -488,6 +526,15 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
           <div class="f"><label class="f-lab" for="w_title">도구 이름 <span class="req">필수</span></label><input type="text" id="w_title" data-k="title" placeholder="예) 우리반 알림장 도우미"></div>
           <div class="f"><label class="f-lab" for="w_url">배포 링크</label><input type="text" id="w_url" data-k="url" placeholder="https://"></div>
         </div>
+        <div class="f"><label class="f-lab" for="w_github">GitHub 저장소</label>
+          <input type="text" id="w_github" data-k="github" placeholder="https://github.com/...">
+          <span class="f-hint">사례집 페이지와 산출물 카드에 함께 실립니다</span></div>
+        <div class="f"><span class="f-lab">대표 화면</span>
+          <div id="thumbBox"></div>
+          <button class="btn btn-o" id="btnThumb" style="align-self:flex-start">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="m3 15 4-4 5 5M14 12l3-3 4 4"/></svg>
+            배포 링크에서 미리보기 가져오기</button>
+          <span class="f-hint">링크를 넣고 누르면 첫 화면을 캡처해 대표 이미지로 씁니다</span></div>
         <div class="f"><label class="f-lab" for="w_tagline">한 줄 소개 <span class="req">필수</span></label>
           <input type="text" id="w_tagline" data-k="tagline" maxlength="60" placeholder="60자 이내"></div>
         <div class="f"><span class="f-lab">유형 태그 <span class="req">필수</span></span>
@@ -593,6 +640,31 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
   </div>
   <div class="filters" id="boardFilters"></div>
   <div class="grid" id="boardGrid" style="grid-template-columns:repeat(auto-fill,minmax(19rem,1fr))"></div>
+</section>
+
+
+<!-- ══════════ 산출물 상세 (사례집 페이지) ══════════ -->
+<section class="view" id="v-work">
+  <a class="back no-print" id="workBack"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>돌아가기</a>
+  <div id="workBody"></div>
+</section>
+
+<!-- ══════════ 사례집 1권 ══════════ -->
+<section class="view" id="v-book">
+  <div class="pagehead no-print">
+    <div>
+      <h1>사례집 엮기</h1>
+      <p class="sub">지금까지 확정된 산출물을 한 권으로 모읍니다. 표지부터 순서대로 A4에 채워지고, 그대로 인쇄하거나 PDF 한 파일로 저장할 수 있어요.</p>
+    </div>
+    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+      <span class="hbar-sub" id="bookCount"></span>
+      <button class="btn btn-o" id="bookZoom">60%</button>
+      <button class="btn btn-p" id="bookPrint">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3M6 11l6 6 6-6M2 17v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2"/></svg>
+        PDF로 내려받기</button>
+    </div>
+  </div>
+  <div class="sheet-scroll" id="bookScroll" style="flex-direction:column;gap:1.25rem;align-items:center"></div>
 </section>
 
 <!-- ══════════ 현장 평가 ══════════ -->
@@ -705,33 +777,39 @@ var PRIN_Q=["편리함보다 학생의 학습권과 성장을 앞에 두는 것"
   "내가 만든 것을 사적 소유가 아닌 공교육의 자산으로 여기는 것",
   "도구가 어떻게 판단하는지 학생·학부모에게 설명할 수 있는 것"];
 
-/* [제목, 한줄소개, 유형, 상태, 문제영역, 하트, 평가평균] */
+/* [제목, 한줄소개, 유형, 상태, 문제영역, 하트, 평가평균, 썸네일] */
+var TH={a1:"assets/thumb-admin1.png",a2:"assets/thumb-admin2.png",c1:"assets/thumb-care1.png",
+        c2:"assets/thumb-care2.png",k1:"assets/thumb-class1.png",k2:"assets/thumb-class2.png"};
 var SEED_WORKS=[
-["보결 시간표 자동배정","보결 교사 찾기와 외부 강사 배정을 자동으로","행정","live","행정·공문",38,4.6],
-["우리반 알림장 도우미","가정통신문을 학급별 알림장으로 정리","행정","beta","행정·공문",29,4.2],
-["방과후 출결 알림","출결 확인 연락을 자동으로 보냄","행정","demo","행정·공문",18,3.6],
-["공문 요약 도우미","긴 공문에서 우리 학교에 해당하는 부분만","행정","beta","행정·공문",31,4.3],
-["학년 예산 집행 현황판","학년비가 어디에 얼마나 남았는지 한눈에","행정","beta","행정·공문",22,4.0],
-["물품 대장 스캐너","비품 라벨을 찍으면 대장에 자동 기록","행정","demo","행정·공문",11,3.4],
-["출장 신청 도우미","반복되는 출장 신청서를 저장해 두고 재사용","행정","demo","행정·공문",9,3.2],
-["학급비 정산 도우미","영수증 사진으로 정산표를 만들어 줌","행정","beta","행정·공문",17,3.9],
-["나이스 입력 체크리스트","학기말 입력 항목을 빠짐없이 확인","행정","live","행정·공문",26,4.4],
-["교실 비품 신청함","교실에서 바로 신청하고 처리 상태를 확인","행정","demo","학교행사",8,3.1],
-["학교행사 준비 체크판","행사 준비 항목을 담당별로 나눠 관리","행정","beta","학교행사",14,3.8],
-["수행평가 기록 도우미","수업 중 남긴 메모를 평가 기록으로","수업","beta","수업·평가",26,4.1],
-["디지털 음악 창작 보조","가락선을 그리면 멜로디로 바꿔 줌","수업","beta","수업·평가",22,3.9],
-["과학 실험 안전 체크","실험 전 안전 점검을 학생과 함께","수업","demo","보건·건강",12,3.5],
-["독서 기록 나눔터","읽은 책을 기록하고 서로의 기록을 봄","수업","live","수업·평가",33,4.5],
-["영어 발음 연습장","문장을 읽고 스스로 발음을 확인","수업","beta","수업·평가",19,3.9],
-["수학 오답 노트","틀린 문제를 유형별로 다시 풀어 봄","수업","beta","수업·평가",24,4.2],
-["토론 수업 타이머","발언 시간을 모둠별로 공평하게","수업","demo","수업·평가",7,3.0],
-["모둠 편성 도우미","조건을 넣으면 모둠을 자동으로 짜 줌","수업","demo","수업·평가",13,3.6],
-["학습지 생성기","교과서 범위로 연습 문제를 만들어 줌","수업","beta","수업·평가",21,4.0],
-["학부모 상담 예약","상담 가능 시간을 열어두면 학부모가 예약","소통·보호","live","학부모소통",34,4.4],
-["상담 기록 정리함","상담 내용을 학생별로 모아 둠","소통·보호","beta","학부모소통",20,4.0],
-["학교폭력 신고 안내","무엇을 어떻게 해야 하는지 단계별 안내","소통·보호","demo","학부모소통",10,3.3],
-["마음 날씨 일기장","아이들이 오늘의 감정을 남기고 담임이 살핌","소통·보호","live","보건·건강",28,4.5]
+["보결 시간표 자동배정","보결 교사 찾기와 외부 강사 배정을 자동으로","행정","live","행정·공문",38,4.6,TH.a1],
+["우리반 알림장 도우미","가정통신문을 학급별 알림장으로 정리","행정","beta","행정·공문",29,4.2,TH.a2],
+["방과후 출결 알림","출결 확인 연락을 자동으로 보냄","행정","demo","행정·공문",18,3.6,""],
+["공문 요약 도우미","긴 공문에서 우리 학교에 해당하는 부분만","행정","beta","행정·공문",31,4.3,TH.a2],
+["학년 예산 집행 현황판","학년비가 어디에 얼마나 남았는지 한눈에","행정","beta","행정·공문",22,4.0,""],
+["물품 대장 스캐너","비품 라벨을 찍으면 대장에 자동 기록","행정","demo","행정·공문",11,3.4,""],
+["출장 신청 도우미","반복되는 출장 신청서를 저장해 두고 재사용","행정","demo","행정·공문",9,3.2,""],
+["학급비 정산 도우미","영수증 사진으로 정산표를 만들어 줌","행정","beta","행정·공문",17,3.9,""],
+["나이스 입력 체크리스트","학기말 입력 항목을 빠짐없이 확인","행정","live","행정·공문",26,4.4,TH.a1],
+["교실 비품 신청함","교실에서 바로 신청하고 처리 상태를 확인","행정","demo","학교행사",8,3.1,""],
+["학교행사 준비 체크판","행사 준비 항목을 담당별로 나눠 관리","행정","beta","학교행사",14,3.8,""],
+["우리반 관찰 기록장","흩어진 관찰 메모를 학생별로 모아주는 웹앱","수업","beta","수업·평가",26,4.1,TH.k2],
+["디지털 음악 창작 보조","가락선을 그리면 멜로디로 바꿔 줌","수업","beta","수업·평가",22,3.9,""],
+["과학 실험 안전 체크","실험 전 안전 점검을 학생과 함께","수업","demo","보건·건강",12,3.5,""],
+["독서 기록 나눔터","읽은 책을 기록하고 서로의 기록을 봄","수업","live","수업·평가",33,4.5,TH.k1],
+["영어 발음 연습장","문장을 읽고 스스로 발음을 확인","수업","beta","수업·평가",19,3.9,""],
+["수학 오답 노트","틀린 문제를 유형별로 다시 풀어 봄","수업","beta","수업·평가",24,4.2,""],
+["토론 수업 타이머","발언 시간을 모둠별로 공평하게","수업","demo","수업·평가",7,3.0,""],
+["모둠 편성 도우미","조건을 넣으면 모둠을 자동으로 짜 줌","수업","demo","수업·평가",13,3.6,""],
+["학습지 생성기","교과서 범위로 연습 문제를 만들어 줌","수업","beta","수업·평가",21,4.0,""],
+["학부모 상담 예약","상담 가능 시간을 열어두면 학부모가 예약","소통·보호","live","학부모소통",34,4.4,TH.c1],
+["상담 기록 정리함","상담 내용을 학생별로 모아 둠","소통·보호","beta","학부모소통",20,4.0,""],
+["학교폭력 신고 안내","무엇을 어떻게 해야 하는지 단계별 안내","소통·보호","demo","학부모소통",10,3.3,""],
+["마음 날씨 일기장","아이들이 오늘의 감정을 남기고 담임이 살핌","소통·보호","live","보건·건강",28,4.5,TH.c2]
 ];
+
+/* 완성형 사례집 샘플 — 12번째 산출물(우리반 관찰 기록장) */
+var DETAILS={"w0": {"team": "서울문성초 신동욱 · 서울월정초 김예슬", "users": "연구부장, 교과 전담 교사", "url": "https://timetable.example.kr", "github": "https://github.com/sen-dev/relief-timetable", "gap": "• 보결 수업이 생길 때마다 전체 시간표를 펼쳐 놓고 그 시간에 수업이 없는 교사를 한 명씩 찾아 대조합니다.\n• 외부 강사 시간 배정은 학년별 시간표와 특별실 사용까지 겹쳐 보아야 해서 한 번에 끝나지 않습니다.\n• 배정이 겹치면 교사 사이의 조율이 필요해져, 업무보다 관계에서 오는 부담이 더 큽니다.", "why": "보결과 외부 강사 배정은 학교마다 매주 생기는 일이지만, 판단 근거가 되는 시간표가 여러 장으로 흩어져 있어 확인이 사람의 눈에 맡겨져 있습니다. 게다가 이 업무는 대개 연구부장 한 사람에게 몰려 있어, 실수가 나면 개인의 잘못처럼 다뤄지기 쉽습니다. 반복되는 확인을 사람이 감당하는 구조 자체를 손볼 필요가 있다고 보았습니다.", "value": "날짜만 고르면 가능한 교사가 추려지므로, 교차 확인에 쓰던 시간을 수업 준비로 돌릴 수 있습니다. 배정 근거가 화면에 남아 조율이 필요할 때 설명하기도 쉬워집니다. 무엇보다 담당자가 바뀌어도 같은 기준으로 배정된다는 점이 학교 안의 신뢰를 만듭니다.", "fr": "날짜와 교시를 고르면 그 시간에 수업이 없는 교사만 추려 보여줍니다. 외부 강사는 기간과 필요 차시를 넣으면 겹치지 않는 시간을 찾아 추천합니다. 특별실 사용까지 함께 확인해 중복 배정을 막습니다.", "scope": "보결 배정과 외부 강사 배정, 특별실 중복 확인까지 구현해 학교에서 운영 중입니다.", "turn": "금요일 오후에 시간표 네 장을 펼쳐 놓고 형광펜으로 줄을 긋다가, 이걸 매주 반복하고 있다는 걸 깨달았습니다.", "hope": "시간표를 맞추느라 쓰던 시간이 줄어, 그만큼 수업을 더 궁리할 수 있기를 바랐습니다.", "ethics": ["공공성", "투명성 및 설명 가능성"], "eth": "배정 근거를 화면에 남겨 누구나 확인할 수 있게 했고, 다른 학교에서도 쓸 수 있도록 학교 고유 설정을 분리했습니다.", "stack": "React · Tailwind CSS · Codex", "spread": "인근 3개 학교에 공유해 현재 함께 쓰고 있습니다."}, "w14": {"team": "서울하늘숲초 황지현", "users": "담임 교사, 학생", "url": "https://reading.example.kr", "github": "https://github.com/sen-dev/reading-share", "gap": "• 독서 기록장을 종이로 받으면 학기 말에야 누가 무엇을 읽었는지 알게 됩니다.\n• 읽은 책을 친구끼리 나눌 방법이 없어, 독서가 개인 숙제로만 남습니다.\n• 기록이 쌓여도 다시 꺼내 볼 일이 없어 아이들이 성취를 느끼기 어렵습니다.", "why": "독서 지도의 어려움은 책을 읽게 하는 데 있는 것이 아니라, 읽은 경험이 서로에게 보이지 않는 데 있다고 보았습니다. 기록이 교사에게만 제출되면 아이들에게는 검사받는 일이 되고, 서로 보이면 권유하고 싶은 일이 됩니다.", "value": "자기 기록이 쌓이는 것을 눈으로 보면서 아이들이 읽기를 스스로 이어 갑니다. 친구의 기록이 다음 책을 고르는 계기가 되고, 교사는 누가 어떤 흐름으로 읽는지 학기 중에 알 수 있습니다.", "fr": "학생이 읽은 책을 기록하고 별점과 짧은 감상을 남깁니다. 친구들의 기록을 볼 수 있고 추천을 누를 수 있습니다. 교사는 학급 전체의 읽기 흐름을 한 화면에서 봅니다.", "scope": "기록·공유·추천과 학급 통계까지 구현해 2학기부터 운영 중입니다.", "turn": "학기 말에 걷은 독서 기록장을 넘기다가, 이걸 3월에 알았다면 수업이 달랐겠다는 생각이 들었습니다.", "hope": "읽기가 검사받는 일이 아니라 서로에게 권하는 일이 되기를 바랐습니다.", "ethics": ["학생 성장 최우선", "개인정보·데이터 보호"], "eth": "학생 이름 대신 번호로 표시하고, 감상은 같은 학급 안에서만 보이도록 범위를 제한했습니다.", "stack": "React · Firebase Firestore · Antigravity", "spread": "학년 전체로 넓혀 6개 학급이 함께 쓰고 있습니다."}, "w20": {"team": "서울○○중 이수민", "users": "담임 교사, 학부모", "url": "https://counsel.example.kr", "github": "https://github.com/sen-dev/counsel-booking", "gap": "• 상담 주간이면 가능한 시간을 묻고 답하는 연락이 며칠씩 오갑니다.\n• 시간이 겹치면 다시 조율해야 해서 학부모에게도 번거로움이 넘어갑니다.\n• 확정된 일정을 따로 적어 두지 않으면 당일에 다시 확인해야 합니다.", "why": "상담 일정 조율은 내용이 어려운 일이 아니라 주고받는 횟수가 많은 일입니다. 교사와 학부모 모두 근무 중이라 연락이 엇갈리기 쉽고, 그 사이에 시간이 겹치면 처음부터 다시 시작됩니다. 조율 자체를 없앨 수는 없어도, 오가는 횟수는 줄일 수 있다고 판단했습니다.", "value": "교사가 가능한 시간을 열어두면 학부모가 직접 고르므로, 연락을 주고받는 일이 사라집니다. 중복이 원천적으로 막혀 다시 조율할 일도 없습니다. 남은 자리와 확정 일정이 한 화면에 있어 당일에 헤매지 않습니다.", "fr": "교사가 상담 가능 시간을 열어 둡니다. 학부모는 학생 정보를 확인한 뒤 빈 시간을 선택합니다. 같은 시간에 두 명이 예약되지 않도록 실시간으로 막습니다.", "scope": "시간 개설, 학부모 예약, 중복 방지, 일정 확인까지 구현해 상담 주간에 운영했습니다.", "turn": "밤 열한 시에 온 문자에 답을 하다가, 이 대화를 스무 번 하고 있다는 걸 알았습니다.", "hope": "상담이 시작되기 전에 서로 지치지 않기를 바랐습니다.", "ethics": ["개인정보·데이터 보호", "역할 경계 인식"], "eth": "학부모는 본인 자녀의 예약만 확인할 수 있고, 상담 내용은 이 도구에 저장하지 않습니다.", "stack": "React · Firebase · Solar Pro 4", "spread": "학교 전체 상담 주간 운영에 사용했습니다."}, "w23": {"team": "서울○○초 정하윤", "users": "담임 교사, 학생", "url": "https://weather.example.kr", "github": "https://github.com/sen-dev/mood-diary", "gap": "• 표정이 어두운 아이를 발견해도 언제부터 그랬는지 확인할 방법이 없습니다.\n• 상담이 필요한 아이를 담임의 기억에만 의존해 찾아내고 있습니다.\n• 아이가 먼저 말하기 어려워하는 감정은 대개 드러나지 않고 지나갑니다.", "why": "학생의 어려움은 갑자기 생기지 않고 며칠에 걸쳐 쌓입니다. 그런데 교사가 알아차리는 시점은 대개 문제가 드러난 뒤입니다. 매일의 감정을 아이가 직접 남길 수 있게 하면, 흐름을 보고 먼저 다가갈 수 있다고 보았습니다.", "value": "며칠째 흐린 아이가 자동으로 눈에 띄어 담임이 먼저 물어볼 수 있습니다. 말로 꺼내기 어려운 감정도 날씨로는 남길 수 있어 아이의 부담이 적습니다. 학급 전체의 분위기도 함께 보여 학급 운영의 근거가 됩니다.", "fr": "학생이 오늘의 감정을 날씨로 고르고 한 줄을 남깁니다. 담임은 학급 전체의 흐름과 며칠째 흐린 학생을 확인합니다. 연속으로 어려움이 보이면 따로 표시됩니다.", "scope": "감정 기록, 학급 흐름 보기, 연속 관찰 알림까지 구현해 운영 중입니다.", "turn": "한 학기가 끝나고서야 힘들었다고 말한 아이가 있었습니다. 그 말을 더 일찍 들을 방법이 필요했습니다.", "hope": "아이가 말하기 전에 먼저 물어볼 수 있는 담임이 되고 싶었습니다.", "ethics": ["학생 성장 최우선", "안전한 실험과 검증", "개인정보·데이터 보호"], "eth": "기록은 담임만 볼 수 있고 학생끼리는 서로 볼 수 없습니다. 학기가 끝나면 자동으로 삭제되도록 했습니다.", "stack": "React · Firebase Firestore · Antigravity", "spread": "학년 협의회에서 공유해 2개 학급이 함께 쓰고 있습니다."}};
+var SAMPLE_ID="w11", SAMPLE={"url": "https://class-note.example.kr", "github": "https://github.com/sen-dev/class-note", "team": "서울○○초 김하늘 · 서울○○중 박도현", "users": "담임 교사", "goal": "수시로 남긴 관찰 메모를 학생별로 자동 정리", "gap": "• 학기말 생활기록부를 작성할 때면 평소 수첩, 카카오톡, 구글독스 등에 짧게 남겨 둔 관찰 기록이 한곳에 모이지 않아 다시 찾아 모으는 데 며칠이 걸립니다.\n• 같은 학생에 대한 기록이 여러 매체에 흩어져 있어, 정작 필요한 순간에 어떤 내용이 어디에 있는지 떠올리기 어렵습니다.\n• 담임 교사는 수시로 메모를 남기지만, 그 메모들이 학생별로 정리되지 않은 채 입력 경로별로만 남아 있어 학기 말에 다시 학생 기준으로 재구성해야 합니다.\n• 동료 교사들도 비슷한 상황에서 기록을 모으는 데 시간을 쓰고 있어, 이 불편은 한 사람의 정리 습관 문제가 아니라 기록 방식이 흩어져 있는 구조에서 비롯됩니다.", "why": "이 문제는 단순히 교사가 정리를 잘하지 못해서 생기는 불편이 아닙니다. 관찰 기록은 수업 중, 쉬는 시간, 상담 직후처럼 짧은 틈에 수시로 생기는데, 그 순간의 기록은 빠른 입력과 접근성이 좋은 도구에 흩어지기 쉽습니다. 반면 생활기록부는 학생별로 서술해야 하므로, 기록을 모을 때는 다시 학생 기준으로 묶어내야 합니다. 입력의 편의와 기록의 정리 기준이 서로 달라서, 학기 말에 그 간극을 교사 개인이 수동으로 메워야 하는 구조가 반복됩니다. 결국 기록을 남기는 일보다 모은 뒤 다시 정리하는 일에 더 많은 시간이 들어가는 상황이 생깁니다.", "value": "관찰 메모를 학생별로 모아볼 수 있게 되면, 학기 말에 여기저기 흩어진 기록을 다시 찾아 모으는 시간을 줄일 수 있습니다. 교사는 기록을 모으는 데 쓰던 시간을 문장을 다듬거나 학생을 다시 살피는 데 쓸 수 있고, 그 여유는 생활기록부 작성의 밀도로 이어집니다. 또한 학생별로 기록이 쌓이면 한 학기를 돌아볼 때 어떤 장면이 누락되었는지도 더 쉽게 확인할 수 있습니다. 다만 이것은 기록을 자동으로 잘 써 주는 기능이 아니라, 흩어진 기록을 학생 기준으로 다시 묶는 수고를 덜어 주는 데서 시작되는 변화입니다.", "fr": "현재는 메모를 입력하고 학생별로 모아보는 기능까지 구현되어 있어, 흩어진 기록을 한 화면에서 학생 기준으로 확인하는 기본 흐름은 만들 수 있습니다. 그러나 학생 이름 검색이 되지 않아 특정 학생의 기록을 빠르게 찾기 어렵고, 이 점은 동료 피드백에서도 불편으로 지적되었습니다. 생기부 문장 추천 기능은 아직 구현하지 않았으며, 지금은 관찰 기록을 모으고 확인하는 단계에 머물러 있습니다. 따라서 다음 단계에서는 학생 검색과 같은 기본적인 찾기 기능을 우선해, 모아보기 기능이 실제로 쓰기 쉬운지 먼저 점검할 필요가 있습니다.", "scope": "메모 입력과 학생별 모아보기까지 구현했습니다. 생기부 문장 추천은 개인정보 검토가 끝나지 않아 이번 범위에서 제외했습니다.", "next": "가장 먼저 학생 이름 검색을 해결해, 모아보기 기능이 있어도 원하는 학생 기록을 바로 찾지 못하는 불편을 줄이려 합니다. 검색은 기록량이 늘어날수록 체감 차이가 커지는 기능이라, 지금 단계에서 먼저 손보는 것이 적절하다고 판단했습니다. 그다음에는 메모를 남기는 경로와 학생별 모아보기가 자연스럽게 이어지는지 살펴보며, 기록을 다시 찾는 횟수가 실제로 줄어드는지 확인하고자 합니다. 생기부 문장 추천은 아직 미구현 상태이므로, 관찰 기록이 충분히 모이고 정리 흐름이 안정된 뒤에 검토해도 늦지 않다고 보았습니다.", "turn": "3월에 적어둔 메모를 12월에 찾다가, 결국 기억으로 채워 넣은 적이 있었습니다. 그날 저녁에 처음으로 '이건 내가 만들어야겠다'고 생각했습니다.", "hope": "기록을 모으는 시간이 줄어든 만큼, 아이 한 명을 더 오래 들여다볼 수 있기를 바랐습니다.", "ethics": ["학생 성장 최우선", "개인정보·데이터 보호"], "eth": "학생 이름 대신 번호만 저장하도록 설계했고, 메모는 작성한 교사 계정에서만 열람할 수 있게 했습니다. 외부로 내보내는 기능은 넣지 않았습니다.", "stack": "React · Firebase Firestore · Solar Pro 4 · Antigravity", "spread": "학년 협의회에서 시연한 뒤 2학기부터 3개 반에 적용하고 있습니다."};
 
 /* 사전 신청서에서 모인 학교 문제 (영역별 제기 건수) */
 var RAISED={"행정·공문":12,"수업·평가":9,"학부모소통":5,"학교행사":3,"보건·건강":2};
@@ -757,8 +835,11 @@ var SEED_ETHICS_MEAN={"학생 성장 최우선":4.8,"개인정보·데이터 보
 
 function seedDB(){
   var works=SEED_WORKS.map(function(w,i){
-    return {id:"w"+i,title:w[0],tagline:w[1],cat:w[2],status:w[3],domain:w[4],
-      hearts:w[5],rSum:+(w[6]*6*5).toFixed(1),rN:6,mine:false};
+    var o={id:"w"+i,title:w[0],tagline:w[1],cat:w[2],status:w[3],domain:w[4],
+      hearts:w[5],rSum:+(w[6]*6*5).toFixed(1),rN:6,mine:false,thumb:w[7]||""};
+    if(o.id===SAMPLE_ID){ for(var k in SAMPLE) o[k]=SAMPLE[k]; }
+    if(DETAILS[o.id]){ for(var k2 in DETAILS[o.id]) o[k2]=DETAILS[o.id][k2]; }
+    return o;
   });
   var eth={}; PRIN.forEach(function(p){ eth[p]={s:+(SEED_ETHICS_MEAN[p]*23).toFixed(1),n:23}; });
   return {works:works, ethics:eth, ethicsOpen:[], reviews:0};
@@ -798,6 +879,7 @@ function go(v,smooth){
   if(v==="dash") renderDash();
   if(v==="board") renderBoard();
   if(v==="review") renderTargets();
+  if(v==="book") renderBook();
   scrollTo({top:0,behavior:smooth?"smooth":"auto"});
 }
 $$(".pn").forEach(function(b){
@@ -846,7 +928,10 @@ function renderDonut(){
   $$(".dl",$("#donutList")).forEach(function(row){var i=+row.dataset.i;
     row.addEventListener("mouseenter",function(){focus(i);showTip(items[i].k+" · <b>"+items[i].v+"건</b> ("+items[i]._p+"%)");});
     row.addEventListener("mousemove",moveTip);
-    row.addEventListener("mouseleave",function(){focus(null);hideTip();});});
+    row.addEventListener("mouseleave",function(){focus(null);hideTip();});
+    row.classList.add("clicky");
+    row.title="이 유형만 모아 보기";
+    row.addEventListener("click",function(){ setBoard("cat",CATS[i]); });});
   focus(null);
 }
 
@@ -921,7 +1006,9 @@ function renderDash(){
     var f=row.querySelectorAll(".hbar-fill");
     requestAnimationFrame(function(){f[0].style.width=p.started/max*100+"%";
       f[1].style.width=(p.raised-p.started)/max*100+"%";});
-    bindTip(row,p.k+"<br>제기 <b>"+p.raised+"건</b> · 착수 <b>"+p.started+"건</b><br>공감 "+p.heart);});
+    bindTip(row,p.k+"<br>제기 <b>"+p.raised+"건</b> · 착수 <b>"+p.started+"건</b><br>공감 "+p.heart+"<br><b>클릭하면 이 영역만 모아 봅니다</b>");
+    row.classList.add("clicky"); row.style.borderRadius=".5rem"; row.style.padding="2px 4px";
+    row.addEventListener("click",function(){ setBoard("domain",p.k); });});
   $("#tblPb").innerHTML=rows.map(function(p){
     return "<tr><td>"+p.k+"</td><td class='num'>"+p.raised+"</td><td class='num'>"+p.started+
       "</td><td class='num'>"+(p.raised-p.started)+"</td><td class='num'>"+p.heart+"</td></tr>";}).join("");
@@ -956,45 +1043,203 @@ function renderDash(){
         '</td><td>'+esc(w.tagline)+'</td><td>'+w.cat+'</td><td><span class="pill '+ST_CLASS[w.status]+'">'+
         ST_LABEL[w.status]+'</span></td><td class="num">'+w.hearts+'</td><td class="num">'+score(w).toFixed(1)+'</td></tr>';
     }).join("");
+  $$("#dashWorks tr").forEach(function(tr,i){
+    var w=works.slice().sort(function(a,b){return b.hearts-a.hearts;})[i];
+    tr.classList.add("clicky"); tr.onclick=function(){ openWork(w.id,"dash"); };});
   var cap=$("#v-dash .panel-h .hbar-sub");
   if(cap) cap.textContent=works.length+"건 중 8건 표시";
 }
 
 /* ═══════════════ 동료 산출물 (게시판) ═══════════════ */
-var boardFilter="전체";
+var boardFilter={t:"all",v:""};
+function setBoard(t,v){ boardFilter={t:t,v:v}; location.hash="board"; go("board",false); }
+function worksOf(){
+  return db.works.filter(function(w){
+    if(boardFilter.t==="cat") return w.cat===boardFilter.v;
+    if(boardFilter.t==="domain") return w.domain===boardFilter.v;
+    return true;}).sort(function(a,b){return b.hearts-a.hearts;});
+}
+function thumbHTML(w,cls){
+  return '<div class="wthumb '+(cls||"")+'">'+(w.thumb
+    ? '<img src="'+w.thumb+'" alt="'+esc(w.title)+' 대표 화면" loading="lazy">'
+    : '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="m3 15 4-4 5 5M14 12l3-3 4 4"/></svg>')+'</div>';
+}
 function renderBoard(){
-  var f=$("#boardFilters");
-  f.innerHTML=["전체"].concat(CATS).map(function(c){
-    return '<button class="fchip" data-c="'+c+'" aria-pressed="'+(c===boardFilter)+'">'+
-      (c==="전체"?"전체":CAT_FULL[c])+' <span class="num" style="opacity:.7">'+
-      (c==="전체"?db.works.length:db.works.filter(function(w){return w.cat===c;}).length)+'</span></button>';}).join("");
-  $$(".fchip",f).forEach(function(b){b.onclick=function(){boardFilter=b.dataset.c;renderBoard();};});
+  var f=$("#boardFilters"), n=db.works.length;
+  var chips=[['all','','전체',n]].concat(CATS.map(function(c){
+    return ['cat',c,CAT_FULL[c],db.works.filter(function(w){return w.cat===c;}).length];}));
+  if(boardFilter.t==="domain") chips.push(['domain',boardFilter.v,boardFilter.v,
+    db.works.filter(function(w){return w.domain===boardFilter.v;}).length]);
+  f.innerHTML=chips.map(function(c){
+    var on=(boardFilter.t===c[0] && (c[0]==="all"||boardFilter.v===c[1]));
+    return '<button class="fchip" data-t="'+c[0]+'" data-v="'+c[1]+'" aria-pressed="'+on+'">'+
+      c[2]+' <span class="num" style="opacity:.7">'+c[3]+'</span></button>';}).join("");
+  $$(".fchip",f).forEach(function(b){b.onclick=function(){ boardFilter={t:b.dataset.t,v:b.dataset.v}; renderBoard(); };});
 
-  var list=db.works.filter(function(w){return boardFilter==="전체"||w.cat===boardFilter;})
-                   .sort(function(a,b){return b.hearts-a.hearts;});
-  $("#boardGrid").innerHTML=list.map(function(w){
+  $("#boardGrid").innerHTML=worksOf().map(function(w){
     var liked=me.hearts.indexOf(w.id)>=0;
-    return '<article class="wcard'+(w.mine?' mine':'')+'">'+
+    return '<article class="wcard'+(w.mine?" mine":"")+'" data-id="'+w.id+'">'+
+      thumbHTML(w)+
+      '<div class="wbody">'+
       '<div class="wcard-h"><span class="wcard-t">'+esc(w.title)+'</span>'+
       '<span class="pill '+ST_CLASS[w.status]+'">'+ST_LABEL[w.status]+'</span></div>'+
       '<p class="wcard-d">'+esc(w.tagline)+'</p>'+
       '<div class="wcard-f">'+
-        '<button class="heart'+(liked?' on':'')+'" data-id="'+w.id+'">'+
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="'+(liked?'currentColor':'none')+
+        '<button class="heart'+(liked?" on":"")+'" data-h="'+w.id+'">'+
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="'+(liked?"currentColor":"none")+
           '" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>'+
           '<span class="num">'+w.hearts+'</span></button>'+
         '<span>'+w.domain+'</span>'+
         '<span class="wcard-score num">★ '+score(w).toFixed(1)+'</span>'+
-      '</div>'+
-      (w.mine?'<span class="mine-tag" style="align-self:flex-start">내 산출물</span>':'')+
-      '</article>';}).join("");
-  $$(".heart",$("#boardGrid")).forEach(function(b){
-    b.onclick=function(){
-      var w=db.works.filter(function(x){return x.id===b.dataset.id;})[0];
-      var i=me.hearts.indexOf(w.id);
-      if(i>=0){ me.hearts.splice(i,1); w.hearts--; } else { me.hearts.push(w.id); w.hearts++; }
-      saveDB(); saveMe(); renderBoard();};});
+      '</div></div></article>';}).join("");
+  $$(".wcard",$("#boardGrid")).forEach(function(c){
+    c.onclick=function(e){
+      var h=e.target.closest(".heart");
+      if(h){ e.stopPropagation();
+        var w=db.works.filter(function(x){return x.id===h.dataset.h;})[0];
+        var i=me.hearts.indexOf(w.id);
+        if(i>=0){me.hearts.splice(i,1);w.hearts--;} else {me.hearts.push(w.id);w.hearts++;}
+        saveDB();saveMe();renderBoard();return;}
+      openWork(c.dataset.id);};});
 }
+
+/* ═══════════════ 산출물 상세 (사례집 페이지) ═══════════════ */
+var workBackTo="board";
+function openWork(id,from){
+  var w=db.works.filter(function(x){return x.id===id;})[0]; if(!w) return;
+  workBackTo=from||"board";
+  var L=[];
+  if(w.url) L.push('<a class="wd-link" href="'+esc(w.url)+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>배포 사이트</a>');
+  if(w.github) L.push('<a class="wd-link" href="'+esc(w.github)+'" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.84 21.5c.5.08.66-.23.66-.5v-1.69C6.73 19.91 6.14 18 6.14 18A2.69 2.69 0 0 0 5 16.5c-.91-.62.07-.6.07-.6a2.1 2.1 0 0 1 1.53 1 2.15 2.15 0 0 0 2.91.83 2.16 2.16 0 0 1 .63-1.34c-2.14-.25-4.39-1.07-4.39-4.77a3.77 3.77 0 0 1 1-2.62 3.5 3.5 0 0 1 .1-2.58s.84-.27 2.75 1a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1 2.75-1a3.5 3.5 0 0 1 .1 2.58 3.77 3.77 0 0 1 1 2.62c0 3.71-2.26 4.52-4.41 4.76a2.42 2.42 0 0 1 .69 1.87v2.78c0 .27.15.59.67.5A10 10 0 0 0 12 2"/></svg>GitHub 저장소</a>');
+  function sec(t,v){ return v? '<div class="wd-sec"><h3>'+t+'</h3><p>'+esc(v)+'</p></div>':""; }
+  function box(k,v){ return '<div class="wd-box"><div class="k">'+k+'</div><p>'+(v?esc(v):"—")+'</p></div>'; }
+  $("#workBody").innerHTML='<div class="wdetail">'+
+    '<div class="wd-hero">'+thumbHTML(w)+
+      '<div class="wd-head"><h1 class="wd-t">'+esc(w.title)+'</h1>'+
+      '<p class="wd-s">'+esc(w.tagline)+'</p>'+
+      '<div class="wd-pills"><span class="pill '+ST_CLASS[w.status]+'">'+ST_LABEL[w.status]+'</span>'+
+        '<span class="pill pill-beta">'+CAT_FULL[w.cat]+'</span>'+
+        '<span class="pill pill-demo">'+w.domain+'</span>'+
+        (w.mine?'<span class="mine-tag">내 산출물</span>':'')+'</div>'+
+      '<div class="wd-links">'+L.join("")+
+        '<button class="wd-link" id="wdA4"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>A4 사례집으로 보기</button></div>'+
+      '<div class="wd-score" style="margin-top:.75rem">'+
+        '<span>공감 <b class="num">'+w.hearts+'</b></span>'+
+        '<span>평가 <b class="num">'+score(w).toFixed(1)+'</b> / 5.0 <span class="num">('+w.rN+'명)</span></span>'+
+        (w.team?'<span>'+esc(w.team)+'</span>':'')+'</div></div></div>'+
+    sec("0.1%의 빈틈, 현장의 발견", w.gap)+
+    (w.why||w.value||w.fr||w.scope ?
+      '<div class="wd-sec"><h3>솔루션 제안 — 빛의 설계도</h3><div class="wd-grid">'+
+      box("왜 이 문제인가?",w.why)+box("어떤 가치가 있는가?",w.value)+
+      box("기능적 요구 (FR)",w.fr)+box("구현한 범위",w.scope)+'</div></div>' : "")+
+    sec("무엇을 먼저 고칠 것인가", w.next)+
+    sec("펜 대신 키보드를 잡게 된 순간", w.turn)+
+    sec("교실에 어떤 변화를 바랐나요", w.hope)+
+    (w.ethics&&w.ethics.length ?
+      '<div class="wd-sec"><h3>교사 개발자의 약속</h3>'+
+      '<div class="wd-pills" style="margin-bottom:.75rem">'+w.ethics.map(function(e){
+        return '<span class="pill pill-beta">'+e+'</span>';}).join("")+'</div>'+
+      (w.eth?'<p>'+esc(w.eth)+'</p>':'')+'</div>' : "")+
+    (w.stack? '<div class="wd-sec"><h3>활용 플랫폼 및 기술 스택</h3><p>'+esc(w.stack)+'</p></div>':"")+
+    (w.spread? sec("학교로 어떻게 퍼뜨렸나", w.spread):"")+
+    '</div>';
+  var a4=$("#wdA4"); if(a4) a4.onclick=function(){ showA4(w); };
+  location.hash="work"; go("work",false);
+}
+
+/* 임의의 산출물을 A4 사례집 지면에 채워 보여준다 */
+function showA4(w){
+  function put(id,v,fb){var e=$(id);if(!e)return;
+    if(v&&String(v).trim()){e.textContent=v;e.classList.remove("sheet-empty");}
+    else{e.textContent=fb;e.classList.add("sheet-empty");}}
+  put("#pv_title",w.title,"—"); put("#pv_tagline",w.tagline,"—");
+  put("#pv_gap",w.gap,"—"); put("#pv_why",w.why,"—"); put("#pv_value",w.value,"—");
+  put("#pv_fr",w.fr,"—"); put("#pv_scope",w.scope,"—"); put("#pv_turn",w.turn,"—");
+  put("#pv_eth",(w.ethics||[]).join(" · "),"—");
+  $("#pv_cat").textContent=CAT_FULL[w.cat]; $("#pv_status").textContent=ST_LABEL[w.status];
+  $("#pv_users").textContent=w.users||w.domain;
+  var lk=$("#pv_links");
+  if(!lk){ lk=document.createElement("p"); lk.id="pv_links"; lk.className="sheet-tag";
+    lk.style.marginTop="3mm"; $("#pv_users").parentNode.after(lk); }
+  var parts=[]; if(w.url) parts.push("배포 "+w.url); if(w.github) parts.push("GitHub "+w.github);
+  lk.textContent=parts.join("  ·  ");
+  var mv=$("#pv_visual");
+  if(!mv){ mv=document.createElement("div"); mv.id="pv_visual";
+    mv.style.cssText="margin-top:5mm;border-radius:2mm;overflow:hidden;border:1px solid var(--border)";
+    $("#pv_gap").closest(".sheet-sec").before(mv); }
+  mv.innerHTML = w.thumb ? '<img src="'+w.thumb+'" alt="" style="display:block;width:100%">' : "";
+  a4Locked = w.id;
+  var bar=$("#a4Note");
+  if(!bar){ bar=document.createElement("span"); bar.id="a4Note"; bar.className="hbar-sub";
+    $(".prevbar").prepend(bar); }
+  bar.innerHTML='<b>'+esc(w.title)+'</b> 사례집 · <span class="linkbtn" id="a4Mine">내 원고로 돌아가기</span>';
+  location.hash="preview"; go("preview",false);
+  var mb=$("#a4Mine"); if(mb) mb.onclick=function(){ a4Locked=null; var n=$("#a4Note"); if(n) n.remove();
+    var v=$("#pv_visual"); if(v) v.remove(); sync(); };
+}
+var a4Locked=null;
+$("#workBack").onclick=function(){ location.hash=workBackTo; go(workBackTo,false); };
+
+/* ═══════════════ 사례집 1권 엮기 ═══════════════ */
+function sheetHTML(w,pageNo,total){
+  function sec(t,v){ return v? '<div class="sheet-sec"><h3>'+t+'</h3><p>'+esc(v)+'</p></div>':""; }
+  function box(k,v){ return '<div class="sheet-box"><div class="k">'+k+'</div><p'+(v?'':' class="sheet-empty"')+'>'+(v?esc(v):"—")+'</p></div>'; }
+  var links=[]; if(w.url) links.push("배포 "+w.url); if(w.github) links.push("GitHub "+w.github);
+  return '<div class="sheet">'+
+    '<div class="sheet-hd"><span class="t">제2호 교사 개발자 해커톤 사례집 · 성장형</span>'+
+    '<span class="p">'+pageNo+'/'+total+'</span></div>'+
+    '<h2 class="sheet-title">'+esc(w.title)+'</h2>'+
+    '<p class="sheet-tag">'+esc(w.tagline)+'</p>'+
+    '<div class="sheet-meta"><span class="sheet-pill">'+CAT_FULL[w.cat]+'</span>'+
+      '<span class="sheet-pill">'+ST_LABEL[w.status]+'</span>'+
+      '<span class="sheet-pill">'+w.domain+'</span></div>'+
+    (links.length?'<p class="sheet-tag" style="margin-top:3mm">'+esc(links.join("  ·  "))+'</p>':'')+
+    (w.thumb?'<div style="margin-top:5mm;border-radius:2mm;overflow:hidden;border:1px solid var(--border)">'+
+      '<img src="'+w.thumb+'" alt="" style="display:block;width:100%"></div>':'')+
+    sec("0.1%의 빈틈, 현장의 발견", w.gap)+
+    '<div class="sheet-sec"><h3>솔루션 제안 — 빛의 설계도</h3><div class="sheet-grid">'+
+      box("왜 이 문제인가?",w.why)+box("어떤 가치가 있는가?",w.value)+
+      box("기능적 요구 (FR)",w.fr)+box("구현한 범위",w.scope)+'</div></div>'+
+    sec("펜 대신 키보드를 잡게 된 순간", w.turn)+
+    ((w.ethics&&w.ethics.length)?'<div class="sheet-sec"><h3>교사 개발자의 약속</h3><p>'+
+      esc(w.ethics.join(" · "))+(w.eth?"\n"+w.eth:"")+'</p></div>':"")+
+    '<div class="sheet-ft"><span>SEN DEV CONNECT · sendev.kr</span>'+
+      '<span>'+esc(w.team||"서울특별시교육청")+'</span></div></div>';
+}
+function coverHTML(n){
+  return '<div class="sheet" style="justify-content:center;align-items:center;text-align:center;gap:8mm">'+
+    '<div style="display:flex;width:22mm;height:22mm;align-items:center;justify-content:center;'+
+    'border-radius:7mm;background:var(--primary);color:#fff">'+
+    '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg></div>'+
+    '<div><div style="font-size:12pt;color:var(--muted-foreground);letter-spacing:.1em;font-weight:600">SEN DEV CONNECT</div>'+
+    '<h2 style="font-size:30pt;font-weight:700;letter-spacing:-.03em;line-height:1.25;margin-top:4mm">'+
+    '제2호 교사 개발자<br>해커톤 사례집</h2>'+
+    '<p style="margin-top:5mm;font-size:12pt;color:var(--muted-foreground)">성장형 2기 · 산출물 '+n+'건</p></div>'+
+    '<div style="margin-top:auto;font-size:9pt;color:var(--muted-foreground)">서울특별시교육청</div></div>';
+}
+var bookZoom=[1,.6,.4], bz=1;
+function renderBook(){
+  var list=db.works.filter(function(w){ return (w.gap||"").trim() || w.mine; });
+  var total=list.length+1;
+  $("#bookCount").innerHTML= list.length
+    ? '표지 포함 <b class="num">'+total+'</b>쪽 · 산출물 <b class="num">'+list.length+'</b>건'
+    : '아직 엮을 사례집이 없어요';
+  $("#bookScroll").innerHTML = coverHTML(list.length) +
+    list.map(function(w,i){ return sheetHTML(w,i+2,total); }).join("");
+  applyBookZoom();
+}
+function applyBookZoom(){
+  var z=bookZoom[bz];
+  $$("#bookScroll .sheet").forEach(function(el){
+    el.style.transform="scale("+z+")"; el.style.transformOrigin="top center";
+    el.style.marginBottom=(297*(z-1))+"mm";});
+  $("#bookZoom").textContent=Math.round(z*100)+"%";
+}
+$("#bookZoom").addEventListener("click",function(){ bz=(bz+1)%bookZoom.length; applyBookZoom(); });
+$("#bookPrint").addEventListener("click",function(){
+  var keep=bz; bz=0; applyBookZoom();
+  setTimeout(function(){ window.print(); bz=keep; applyBookZoom(); },120);
+});
 
 /* ═══════════════ 현장 평가 ═══════════════ */
 var CRIT=[["현장성","교실·학교에서 실제로 겪는 문제이고, 다른 교사도 공감할 만한가?"],
@@ -1054,6 +1299,18 @@ function selectTarget(id){
   curTarget=id;
   var w=db.works.filter(function(x){return x.id===id;})[0];
   $("#revTitle").textContent=w?w.title:"—";
+  var host=$("#revPrev");
+  if(!host){ host=document.createElement("div"); host.id="revPrev";
+    $("#criteria").parentNode.insertBefore(host,$("#criteria")); }
+  host.innerHTML = w ? '<div class="revprev">'+thumbHTML(w)+
+    '<div class="revprev-b"><span class="revprev-t">'+esc(w.title)+'</span>'+
+    '<span class="revprev-d">'+esc(w.tagline)+'</span>'+
+    '<div class="wd-pills"><span class="pill '+ST_CLASS[w.status]+'">'+ST_LABEL[w.status]+'</span>'+
+    '<span class="pill pill-demo">'+w.domain+'</span></div>'+
+    '<button class="btn btn-o" id="revOpen" style="align-self:flex-start;margin-top:.25rem">'+
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"/><circle cx="12" cy="12" r="3"/></svg>'+
+    '산출물 페이지 보기</button></div></div>' : "";
+  var ob=$("#revOpen"); if(ob) ob.onclick=function(){ openWork(w.id,"review"); };
   critW.forEach(function(c){c.reset();});
   $("#r_advice").value="";
   updateReview();
@@ -1106,11 +1363,11 @@ $("#btnEthics").addEventListener("click",function(){
 
 /* ═══════════════ 연수생 입력 ═══════════════ */
 var DRAFT={
-  gap: "• 학기말 생활기록부를 작성할 때면 평소 수첩, 카카오톡, 구글독스 등에 짧게 남겨 둔 관찰 기록이 한곳에 모이지 않아 다시 찾아 모으는 데 며칠이 걸립니다.\n• 같은 학생에 대한 기록이 여러 매체에 흩어져 있어, 정작 필요한 순간에 어떤 내용이 어디에 있는지 떠올리기 어렵습니다.\n• 담임 교사는 수시로 메모를 남기지만, 그 메모들이 학생별로 정리되지 않은 채 입력 경로별로만 남아 있어 학기 말에 다시 학생 기준으로 재구성해야 합니다.\n• 동료 교사들도 비슷한 상황에서 기록을 모으는 데 시간을 쓰고 있어, 이 불편은 한 사람의 정리 습관 문제가 아니라 기록 방식이 흩어져 있는 구조에서 비롯됩니다.",
-  why: "이 문제는 단순히 교사가 정리를 잘하지 못해서 생기는 불편이 아닙니다. 관찰 기록은 수업 중, 쉬는 시간, 상담 직후처럼 짧은 틈에 수시로 생기는데, 그 순간의 기록은 빠른 입력과 접근성이 좋은 도구에 흩어지기 쉽습니다. 반면 생활기록부는 학생별로 서술해야 하므로, 기록을 모을 때는 다시 학생 기준으로 묶어내야 합니다. 입력의 편의와 기록의 정리 기준이 서로 달라서, 학기 말에 그 간극을 교사 개인이 수동으로 메워야 하는 구조가 반복됩니다. 결국 기록을 남기는 일보다 모은 뒤 다시 정리하는 일에 더 많은 시간이 들어가는 상황이 생깁니다.",
-  value: "관찰 메모를 학생별로 모아볼 수 있게 되면, 학기 말에 여기저기 흩어진 기록을 다시 찾아 모으는 시간을 줄일 수 있습니다. 교사는 기록을 모으는 데 쓰던 시간을 문장을 다듬거나 학생을 다시 살피는 데 쓸 수 있고, 그 여유는 생활기록부 작성의 밀도로 이어집니다. 또한 학생별로 기록이 쌓이면 한 학기를 돌아볼 때 어떤 장면이 누락되었는지도 더 쉽게 확인할 수 있습니다. 다만 이것은 기록을 자동으로 잘 써 주는 기능이 아니라, 흩어진 기록을 학생 기준으로 다시 묶는 수고를 덜어 주는 데서 시작되는 변화입니다.",
-  fr: "현재는 메모를 입력하고 학생별로 모아보는 기능까지 구현되어 있어, 흩어진 기록을 한 화면에서 학생 기준으로 확인하는 기본 흐름은 만들 수 있습니다. 그러나 학생 이름 검색이 되지 않아 특정 학생의 기록을 빠르게 찾기 어렵고, 이 점은 동료 피드백에서도 불편으로 지적되었습니다. 생기부 문장 추천 기능은 아직 구현하지 않았으며, 지금은 관찰 기록을 모으고 확인하는 단계에 머물러 있습니다. 따라서 다음 단계에서는 학생 검색과 같은 기본적인 찾기 기능을 우선해, 모아보기 기능이 실제로 쓰기 쉬운지 먼저 점검할 필요가 있습니다.",
-  next: "가장 먼저 학생 이름 검색을 해결해, 모아보기 기능이 있어도 원하는 학생 기록을 바로 찾지 못하는 불편을 줄이려 합니다. 검색은 기록량이 늘어날수록 체감 차이가 커지는 기능이라, 지금 단계에서 먼저 손보는 것이 적절하다고 판단했습니다. 그다음에는 메모를 남기는 경로와 학생별 모아보기가 자연스럽게 이어지는지 살펴보며, 기록을 다시 찾는 횟수가 실제로 줄어드는지 확인하고자 합니다. 생기부 문장 추천은 아직 미구현 상태이므로, 관찰 기록이 충분히 모이고 정리 흐름이 안정된 뒤에 검토해도 늦지 않다고 보았습니다."
+  gap: "• 급식 시간마다 알레르기 확인용 종이 명단을 꺼내 학생별로 하나씩 대조하는 일이 매일 반복됩니다.\n• 종이 명단은 학급이나 급식실 상황에 따라 놓이거나 순서가 꼬이기 쉬워, 바쁜 배식 흐름 속에서 확인 누락에 대한 긴장이 남습니다.\n• 학생이 전학 오거나 알레르기 정보가 바뀌어도 종이 명단이 즉시 반영되지 않아, 최신 정보를 다시 맞춰 보는 과정이 따로 필요합니다.\n• 담임교사나 급식 담당자가 같은 명단을 서로 다른 자리에서 다루다 보면, 누가 최종으로 확인했는지 흐름이 분명하지 않을 때가 있습니다.",
+  why: "이 문제는 단순히 종이 한 장을 쓰는 편의의 문제가 아니라, 매일 반복되는 확인 업무가 사람의 기억과 손동작에 의존한다는 점에서 구조적이라고 보았습니다. 급식 시간은 짧고 동선이 바쁘기 때문에, 확인 자체가 복잡한 일이 아니어도 놓치기 쉬운 조건이 계속 만들어집니다. 또한 알레르기 정보는 학생마다 다르고 상황에 따라 바뀔 수 있는데, 종이 명단은 그런 변화를 즉시 반영하기 어렵습니다. 결국 같은 확인을 여러 사람이 나눠 맡는 학교 현장에서, 정보의 최신성과 확인 절차의 일관성이 쉽게 흔들릴 수 있습니다. 그래서 이 일은 개인의 꼼꼼함만으로 해결하기보다, 반복되는 확인 방식 자체를 다시 볼 필요가 있다고 판단했습니다.",
+  value: "확인 방식이 정돈되면 교사는 매일 명단을 뒤적이며 긴장하는 시간을 줄이고, 그 여유를 학생 응대와 급식 흐름 살피는 데 쓸 수 있습니다. 학생 입장에서는 확인 과정이 흔들리지 않을수록 급식 시간이 보다 안정적으로 느껴집니다. 또한 정보가 한 곳에서 관리되면 담임교사와 급식 담당자 사이의 확인 부담이 나뉘어, 같은 일을 여러 번 되묻는 상황이 줄어듭니다. 무엇보다 알레르기처럼 놓치면 안 되는 정보를 다루는 일에서는, 빠르기보다 일정한 절차가 유지된다는 점이 중요합니다. 결국 이 변화는 교사 개인의 수고를 덜어 주는 데서 끝나지 않고, 급식을 둘러싼 확인 문화 자체를 조금 더 믿을 만한 방향으로 바꾸는 데 의미가 있습니다.",
+  fr: "교사는 매일 급식 전 알레르기 확인 대상 학생을 빠르게 확인할 수 있어야 하며, 종이 명단을 매번 꺼내 보지 않아도 현재 기준이 한눈에 드러나야 합니다. 알레르기 정보가 바뀌었을 때는 그 내용이 명단에 즉시 반영되어, 오래된 정보를 보고 확인하는 일이 생기지 않아야 합니다. 여러 사람이 같은 정보를 다룰 때는 누가 어떤 기준으로 확인했는지 흐름이 남아야 하며, 확인 누락이 생기기 쉬운 학생을 다시 살피기 쉬워야 합니다. 다만 아직 구현하지 못한 부분은, 실제로 어떤 화면이나 절차로 확인 흐름을 단순화할지, 그리고 변경된 정보가 여러 담당자에게 어떻게 바로 닿게 할지에 대한 세부 설계입니다.",
+  next: "가장 먼저 손볼 부분은 종이 명단을 매일 다시 옮겨 적거나 대조하는 반복을 줄이는 방향입니다. 확인 자체를 없애는 것이 아니라, 바쁜 급식 시간에도 같은 기준으로 빠르게 확인할 수 있게 하는 데 우선순위를 두었습니다. 그다음으로는 정보가 바뀌었을 때 종이 명단이 아니라 최신 정보가 기준이 되도록 하는 흐름을 정리하고자 합니다. 마지막으로는 담임교사와 급식 담당자 사이에서 확인 절차가 서로 다르게 흘러가지 않도록, 누가 무엇을 확인했는지 알 수 있는 최소한의 정리 방식을 검토할 계획입니다."
 };
 var AIF=["gap","why","value","fr","next"];
 var generated=me.gen||false, dirty=false, lastSave=null;
@@ -1146,7 +1403,7 @@ function restore(){
 }
 function sync(){
   var d=formData();
-  function put(id,v,fb){var e=$(id);if(!e)return;
+  function put(id,v,fb){ if(a4Locked) return; var e=$(id);if(!e)return;
     if(v&&String(v).trim()){e.textContent=v;e.classList.remove("sheet-empty");}
     else{e.textContent=fb;e.classList.add("sheet-empty");}}
   put("#pv_title",d.title,"도구 이름을 입력해 주세요");
@@ -1158,9 +1415,17 @@ function sync(){
   var chips=$$(".chips[data-group=ethics] .chip.on").map(function(c){return c.dataset.v;});
   put("#pv_eth",chips.join(" · "),"—");
   var c=$(".chips[data-group=cat] .chip.on"), s=$(".chips[data-group=status] .chip.on");
+  if(!a4Locked){
   $("#pv_cat").textContent=c?CAT_FULL[c.dataset.v]:"유형 미선택";
   $("#pv_status").textContent=s?s.textContent.trim():"상태 미선택";
   $("#pv_users").textContent=d.users||"사용자 미입력";
+  var lk=$("#pv_links");
+  if(!lk){ lk=document.createElement("p"); lk.id="pv_links"; lk.className="sheet-tag";
+    lk.style.marginTop="3mm"; $("#pv_users").parentNode.after(lk); }
+  var parts=[]; if((d.url||"").trim()) parts.push("배포 "+d.url.trim());
+  if((d.github||"").trim()) parts.push("GitHub "+d.github.trim());
+  lk.textContent=parts.join("  ·  ");
+  }
   [["1",["memo","gap","why","value","fr"]],["2",["scope","title","tagline"]],["3",["turn","hope","eth"]]]
     .forEach(function(p){
       var ok=p[1].every(function(k){return (d[k]||"").trim();});
@@ -1225,6 +1490,23 @@ $("#btnAI").addEventListener("click",function(){
       toast("예시 초안으로 대체했어요 (서버 미연결)");
       var el=$("#aiMeta"); if(el) el.innerHTML='<span style="color:var(--muted-foreground)">예시 초안 · 서버 미연결</span>';});});
 });
+var SAMPLE_THUMBS=[TH.a1,TH.a2,TH.k1,TH.c1,TH.c2];
+function renderThumbBox(){
+  var b=$("#thumbBox"); if(!b) return;
+  b.innerHTML = me.thumb
+    ? '<div class="wthumb" style="max-width:22rem"><img src="'+me.thumb+'" alt="대표 화면"></div>'
+    : '<div class="wthumb" style="max-width:22rem"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="m3 15 4-4 5 5M14 12l3-3 4 4"/></svg></div>';
+}
+$("#btnThumb").addEventListener("click",function(){
+  var u=($('[data-k="url"]')||{}).value||"";
+  if(!u.trim()){ toast("먼저 배포 링크를 넣어주세요"); $('[data-k="url"]').focus(); return; }
+  var b=this; b.disabled=true; b.style.opacity=".6";
+  setTimeout(function(){
+    var i=me.cat==="행정"?0:(me.cat==="수업"?2:3);
+    me.thumb=SAMPLE_THUMBS[i]; saveMe(); renderThumbBox();
+    b.disabled=false; b.style.opacity="";
+    toast("미리보기를 가져왔어요 (샘플 이미지)");},900);
+});
 $("#btnSave").addEventListener("click",function(){save();});
 $("#btnReset").addEventListener("click",function(){
   db.works=db.works.filter(function(w){return !w.mine;});
@@ -1244,6 +1526,9 @@ $("#btnDone").addEventListener("click",function(){
   if(!w){ w={id:"mine",mine:true,hearts:0,rSum:0,rN:0}; db.works.push(w); }
   w.title=d.title; w.tagline=d.tagline; w.cat=me.cat; w.domain=me.cat==="행정"?"행정·공문":(me.cat==="수업"?"수업·평가":"학부모소통");
   w.status=me.status==="배포중"?"live":(me.status==="베타테스트"?"beta":"demo");
+  ["gap","why","value","fr","scope","next","turn","hope","eth","url","github","users","goal"]
+    .forEach(function(k){ w[k]=d[k]||""; });
+  w.ethics=me.ethicsChips||[]; w.thumb=me.thumb||"";
   saveDB(); saveMe(); sync();
   toast("확정했어요 · 동료 산출물과 대시보드에 올라갔습니다");
 });
@@ -1267,34 +1552,27 @@ $$("#v-dash .filters .fchip").forEach(function(c){c.addEventListener("click",fun
 
 /* ═══════════════ 시연용 프리셋 ═══════════════ */
 if(/[?&]seed=1/.test(location.search) && !me.form.title){
-  var S={memo:"학기말에 생활기록부 쓸 때 아이들 관찰 기록이 여기저기 흩어져 있음. 수첩, 카톡, 구글독스. 모으는 데만 며칠 걸림.",
-    users:"담임 교사", goal:"수시로 남긴 관찰 메모를 학생별로 자동 정리",
-    nfr:"학생 이름은 저장하지 않고 번호로만 관리. 교사 계정만 접근 가능",
-    scope:"메모 입력과 학생별 모아보기까지 구현했습니다. 생기부 문장 추천은 개인정보 검토가 끝나지 않아 이번 범위에서 제외했습니다.",
-    peer:"학생 이름 검색이 안 되어서 불편하다는 의견이 가장 많았습니다.",
-    title:"우리반 관찰 기록장", tagline:"흩어진 관찰 메모를 학생별로 모아주는 웹앱",
-    url:"https://class-note.example.kr",
-    turn:"3월에 적어둔 메모를 12월에 찾다가, 결국 기억으로 채워 넣은 적이 있었습니다. 그날 저녁에 처음으로 '이건 내가 만들어야겠다'고 생각했습니다.",
-    hope:"기록을 모으는 시간이 줄어든 만큼, 아이 한 명을 더 오래 들여다볼 수 있기를 바랐습니다.",
-    eth:"학생 이름 대신 번호만 저장하도록 설계했고, 메모는 작성한 교사 계정에서만 열람할 수 있게 했습니다."};
+  var S={"memo": "급식 알레르기 확인을 매일 종이 명단으로 함. 명단이 젖거나 순서가 꼬여서 다시 맞춰봐야 할 때가 많음.", "users": "담임 교사, 급식 담당자", "goal": "알레르기 확인을 종이 없이 같은 기준으로", "nfr": "학생 이름 대신 번호로 관리. 교직원 계정만 접근", "scope": "학생별 알레르기 정보 등록과 급식 전 확인 화면까지 구현했습니다. 담당자 간 확인 이력 공유는 아직입니다.", "peer": "급식실에서 한 손으로 넘겨볼 수 있어야 한다는 의견이 있었습니다.", "title": "급식 알레르기 확인표", "tagline": "종이 명단 없이 급식 전 알레르기를 같은 기준으로 확인", "url": "https://meal-check.example.kr", "github": "https://github.com/sen-dev/meal-check", "turn": "배식 줄이 밀리는데 명단 순서가 꼬여 손이 떨렸던 날이 있었습니다. 그날 이후로 이건 종이로 할 일이 아니라고 생각했습니다.", "hope": "확인이 빨라지는 것보다, 매번 같은 방식으로 확인된다는 믿음이 생기기를 바랐습니다.", "eth": "학생 이름을 저장하지 않고 번호와 알레르기 항목만 다룹니다. 화면에도 필요한 정보만 나오게 했습니다."};
   Object.keys(S).forEach(function(k){var el=$('[data-k="'+k+'"]');if(el)el.value=S[k];});
   Object.keys(DRAFT).forEach(function(k){var el=$('[data-k="'+k+'"]');if(el)el.value=DRAFT[k];});
-  $$('.chips[data-group=cat] .chip').forEach(function(c){c.classList.toggle("on",c.dataset.v==="수업");});
+  $$('.chips[data-group=cat] .chip').forEach(function(c){c.classList.toggle("on",c.dataset.v==="소통·보호");});
   $$('.chips[data-group=status] .chip').forEach(function(c){c.classList.toggle("on",c.dataset.v==="베타테스트");});
   $$('.chips[data-group=ethics] .chip').forEach(function(c){
     c.classList.toggle("on", c.dataset.v==="개인정보·데이터 보호"||c.dataset.v==="학생 성장 최우선");});
   generated=true;
   AIF.forEach(function(k){var w=$('[data-ai="'+k+'"]');if(w)w.classList.add("ai");});
   var am=$("#aiMeta"); if(am) am.innerHTML='실제 호출 · <b>solar-pro4-260806</b> · 1,229 토큰 · 20.6초';
-  collect(); saveMe();
+  collect(); me.thumb=TH.c1; saveMe();
 }
 
 /* ═══════════════ 시작 ═══════════════ */
 var st=document.createElement("style");
 st.textContent="@keyframes spin{to{transform:rotate(360deg)}}";
 document.head.appendChild(st);
-restore(); sync(); updateEthics();
-go(location.hash.slice(1)||"dash",false);
+restore(); renderThumbBox(); sync(); updateEthics();
+var mw=/[?&]work=([\w-]+)/.exec(location.search);
+if(mw && db.works.some(function(x){return x.id===mw[1];})) openWork(mw[1],"board");
+else go(location.hash.slice(1)||"dash",false);
 setTimeout(function(){ document.body.setAttribute('data-h', String(Math.ceil(document.body.getBoundingClientRect().height))); },800);
 })();
 
