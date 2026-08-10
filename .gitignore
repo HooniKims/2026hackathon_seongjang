@@ -32,3 +32,9 @@ build/
 # 이 저장소 전용 GitLab 자격증명 파일이 생길 경우 대비
 .git-credentials
 gitlab-credentials
+
+# 정체 불명 임시 이미지 (커밋 제외)
+claude-artifact-original.png
+
+# Vercel
+.vercel

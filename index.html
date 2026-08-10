@@ -242,6 +242,18 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
 .sheet-ft{margin-top:auto;padding-top:5mm;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:7.5pt;color:var(--muted-foreground)}
 .sheet-empty{color:#9aa7b8;font-style:italic}
 
+.wcard{display:flex;flex-direction:column;gap:.5rem;border-radius:1rem;background:var(--card);padding:1.125rem 1.25rem;box-shadow:var(--shadow-sm);transition:all .2s}
+.wcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.wcard.mine{border:2px solid var(--primary)}
+.wcard-h{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.wcard-t{font-size:.9375rem;font-weight:700;line-height:1.35}
+.wcard-d{font-size:.8125rem;color:var(--muted-foreground);line-height:1.5}
+.wcard-f{display:flex;align-items:center;gap:.75rem;margin-top:.25rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted-foreground)}
+.heart{display:inline-flex;align-items:center;gap:.3125rem;border-radius:9999px;padding:.25rem .625rem;background:var(--muted);font-size:.75rem;font-weight:600;transition:all .15s}
+.heart:hover{background:var(--accent);color:var(--accent-foreground)}
+.heart.on{background:#fde7ef;color:#be123c}
+.wcard-score{margin-left:auto;font-weight:700;color:var(--foreground)}
+.mine-tag{border-radius:9999px;background:var(--accent);color:var(--accent-foreground);padding:.125rem .5rem;font-size:.625rem;font-weight:700;white-space:nowrap}
 #tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .12s;background:#0f1926;color:#fff;border-radius:.5rem;padding:.4375rem .625rem;font-size:.75rem;line-height:1.5;box-shadow:var(--shadow-md);white-space:nowrap}
 #tip.on{opacity:1}
 #toast{position:fixed;top:5rem;left:50%;transform:translateX(-50%) translateY(-1rem);z-index:70;opacity:0;transition:all .25s;
@@ -277,8 +289,9 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
     <button class="pn" data-v="dash" aria-current="page"><span class="pn-n num">1</span>대시보드</button>
     <button class="pn" data-v="write"><span class="pn-n num">2</span>연수생 입력</button>
     <button class="pn" data-v="preview"><span class="pn-n num">3</span>사례집 초안</button>
-    <button class="pn" data-v="review"><span class="pn-n num">4</span>현장 평가</button>
-    <button class="pn" data-v="ethics"><span class="pn-n num">5</span>윤리 설문</button>
+    <button class="pn" data-v="board"><span class="pn-n num">4</span>동료 산출물</button>
+    <button class="pn" data-v="review"><span class="pn-n num">5</span>현장 평가</button>
+    <button class="pn" data-v="ethics"><span class="pn-n num">6</span>윤리 설문</button>
   </div>
 </nav>
 
@@ -363,7 +376,7 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
     <div class="panel">
       <div class="panel-h"><span class="panel-t">서술형에서 올라온 새 원칙</span></div>
       <p class="panel-d">&ldquo;이 일곱 가지 말고 하나 더 만든다면?&rdquo; 응답을 주제별로 묶었습니다.</p>
-      <div style="display:flex;flex-direction:column;gap:.625rem">
+      <div style="display:flex;flex-direction:column;gap:.625rem" id="newPrin">
         <div class="newprin"><span class="newprin-n num">7</span><div><div style="font-size:.8125rem;font-weight:700">실패를 허용하는 문화</div><div class="hbar-sub">7명 언급 · 1기에서도 제기됨</div></div></div>
         <div class="newprin"><span class="newprin-n num">5</span><div><div style="font-size:.8125rem;font-weight:700">유지보수 책임의 명시</div><div class="hbar-sub">5명 언급 · 신규</div></div></div>
         <div class="newprin"><span class="newprin-n num">4</span><div><div style="font-size:.8125rem;font-weight:700">학생에게 설명할 수 있는 AI</div><div class="hbar-sub">4명 언급 · 신규</div></div></div>
@@ -378,7 +391,7 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
     <div class="panel-h"><span class="panel-t">성장형 2기 산출물</span><span class="hbar-sub">24건 중 6건 표시</span></div>
     <div class="tablewrap"><table>
       <thead><tr><th>산출물</th><th>출발한 문제</th><th>유형</th><th>상태</th><th>공감</th><th>평가</th></tr></thead>
-      <tbody>
+      <tbody id="dashWorks">
         <tr><td><b>보결 시간표 자동배정</b></td><td>보결 교사 찾기에 매번 2시간</td><td>행정</td><td><span class="pill pill-live">● Live</span></td><td class="num">38</td><td class="num">4.6</td></tr>
         <tr><td><b>학부모 상담 예약</b></td><td>상담 일정 조율 전화가 반복됨</td><td>소통·보호</td><td><span class="pill pill-live">● Live</span></td><td class="num">34</td><td class="num">4.4</td></tr>
         <tr><td><b>우리반 알림장 도우미</b></td><td>가정통신문을 학급별로 다시 옮겨 적음</td><td>행정</td><td><span class="pill pill-beta">◎ Beta</span></td><td class="num">29</td><td class="num">4.2</td></tr>
@@ -569,7 +582,20 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
   </div>
 </section>
 
-<!-- ══════════ 4. 현장 평가 ══════════ -->
+
+<!-- ══════════ 동료 산출물 (게시판) ══════════ -->
+<section class="view" id="v-board">
+  <div class="pagehead">
+    <div>
+      <h1>동료 산출물</h1>
+      <p class="sub">같은 기수가 만든 것들을 유형별로 모아 봅니다. 공감이 가는 것에 하트를 눌러주세요. 하트 수는 대시보드에 바로 반영됩니다.</p>
+    </div>
+  </div>
+  <div class="filters" id="boardFilters"></div>
+  <div class="grid" id="boardGrid" style="grid-template-columns:repeat(auto-fill,minmax(19rem,1fr))"></div>
+</section>
+
+<!-- ══════════ 현장 평가 ══════════ -->
 <section class="view" id="v-review">
   <div class="pagehead">
     <div>
@@ -658,9 +684,95 @@ var $=function(s,r){return (r||document).querySelector(s);},
     CV=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();};
 var C1=CV("--c1"),C2=CV("--c2"),C4=CV("--c4"),C5=CV("--c5"),GRID=CV("--grid"),MUT=CV("--muted-foreground");
 var SEQ=["--seq7","--seq6","--seq5","--seq4","--seq3","--seq2","--seq1"].map(CV);
-var KEY="sendev-proto-v1";
 
-/* ── 공통 ── */
+/* ═══════════════ 저장소 ═══════════════
+   프로토타입은 서버 DB 없이 localStorage 만 씁니다.
+   db  = 모두가 공유하는 것처럼 보이는 데이터 (더미 시드 + 내 활동)
+   me  = 이 브라우저의 사용자 상태 (내 입력, 누른 하트, 평가 이력)      */
+var DB_KEY="sendev-db-v2", ME_KEY="sendev-me-v2";
+
+var CATS=["행정","수업","소통·보호"];
+var CAT_FULL={"행정":"행정의 늪에서 교육의 뜰로","수업":"교실을 깨우는 기술","소통·보호":"연결과 보호의 울타리"};
+var CAT_COLOR={"행정":C1,"수업":C2,"소통·보호":C4};
+var ST_LABEL={live:"● Live",beta:"◎ Beta",demo:"○ Demo"};
+var ST_CLASS={live:"pill-live",beta:"pill-beta",demo:"pill-demo"};
+var PRIN=["학생 성장 최우선","개인정보·데이터 보호","책임과 출처 존중","안전한 실험과 검증","역할 경계 인식","공공성","투명성 및 설명 가능성"];
+var PRIN_Q=["편리함보다 학생의 학습권과 성장을 앞에 두는 것",
+  "학생·교사의 데이터를 최소로 모으고 안전하게 다루는 것",
+  "AI가 만든 코드와 남의 자료의 출처를 밝히고 책임지는 것",
+  "교실에 들이기 전에 충분히 시험하고 점검하는 것",
+  "기술이 교사의 판단과 관계를 대신하지 않도록 선을 긋는 것",
+  "내가 만든 것을 사적 소유가 아닌 공교육의 자산으로 여기는 것",
+  "도구가 어떻게 판단하는지 학생·학부모에게 설명할 수 있는 것"];
+
+/* [제목, 한줄소개, 유형, 상태, 문제영역, 하트, 평가평균] */
+var SEED_WORKS=[
+["보결 시간표 자동배정","보결 교사 찾기와 외부 강사 배정을 자동으로","행정","live","행정·공문",38,4.6],
+["우리반 알림장 도우미","가정통신문을 학급별 알림장으로 정리","행정","beta","행정·공문",29,4.2],
+["방과후 출결 알림","출결 확인 연락을 자동으로 보냄","행정","demo","행정·공문",18,3.6],
+["공문 요약 도우미","긴 공문에서 우리 학교에 해당하는 부분만","행정","beta","행정·공문",31,4.3],
+["학년 예산 집행 현황판","학년비가 어디에 얼마나 남았는지 한눈에","행정","beta","행정·공문",22,4.0],
+["물품 대장 스캐너","비품 라벨을 찍으면 대장에 자동 기록","행정","demo","행정·공문",11,3.4],
+["출장 신청 도우미","반복되는 출장 신청서를 저장해 두고 재사용","행정","demo","행정·공문",9,3.2],
+["학급비 정산 도우미","영수증 사진으로 정산표를 만들어 줌","행정","beta","행정·공문",17,3.9],
+["나이스 입력 체크리스트","학기말 입력 항목을 빠짐없이 확인","행정","live","행정·공문",26,4.4],
+["교실 비품 신청함","교실에서 바로 신청하고 처리 상태를 확인","행정","demo","학교행사",8,3.1],
+["학교행사 준비 체크판","행사 준비 항목을 담당별로 나눠 관리","행정","beta","학교행사",14,3.8],
+["수행평가 기록 도우미","수업 중 남긴 메모를 평가 기록으로","수업","beta","수업·평가",26,4.1],
+["디지털 음악 창작 보조","가락선을 그리면 멜로디로 바꿔 줌","수업","beta","수업·평가",22,3.9],
+["과학 실험 안전 체크","실험 전 안전 점검을 학생과 함께","수업","demo","보건·건강",12,3.5],
+["독서 기록 나눔터","읽은 책을 기록하고 서로의 기록을 봄","수업","live","수업·평가",33,4.5],
+["영어 발음 연습장","문장을 읽고 스스로 발음을 확인","수업","beta","수업·평가",19,3.9],
+["수학 오답 노트","틀린 문제를 유형별로 다시 풀어 봄","수업","beta","수업·평가",24,4.2],
+["토론 수업 타이머","발언 시간을 모둠별로 공평하게","수업","demo","수업·평가",7,3.0],
+["모둠 편성 도우미","조건을 넣으면 모둠을 자동으로 짜 줌","수업","demo","수업·평가",13,3.6],
+["학습지 생성기","교과서 범위로 연습 문제를 만들어 줌","수업","beta","수업·평가",21,4.0],
+["학부모 상담 예약","상담 가능 시간을 열어두면 학부모가 예약","소통·보호","live","학부모소통",34,4.4],
+["상담 기록 정리함","상담 내용을 학생별로 모아 둠","소통·보호","beta","학부모소통",20,4.0],
+["학교폭력 신고 안내","무엇을 어떻게 해야 하는지 단계별 안내","소통·보호","demo","학부모소통",10,3.3],
+["마음 날씨 일기장","아이들이 오늘의 감정을 남기고 담임이 살핌","소통·보호","live","보건·건강",28,4.5]
+];
+
+/* 사전 신청서에서 모인 학교 문제 (영역별 제기 건수) */
+var RAISED={"행정·공문":12,"수업·평가":9,"학부모소통":5,"학교행사":3,"보건·건강":2};
+
+/* 공감이 높은 문제 — 만든 팀이 있는지 여부 포함 */
+var SEED_PROBLEMS=[
+ {t:"상담 기록을 매번 세 군데에 옮겨 적는다",h:41,built:false},
+ {t:"가정통신문을 학급별로 다시 정리한다",h:38,built:true},
+ {t:"보결 교사 찾기에 매번 2시간",h:35,built:true},
+ {t:"수행평가 기록을 수기로 이중 관리",h:29,built:true},
+ {t:"방과후 출결 확인 연락이 매일 반복",h:24,built:false}
+];
+
+/* 차시별 활동 (시드) */
+var ACTIVITY={x:["9.4 원격","9.12 PRD","9.12 깃허브","9.12 백엔드","틔움","키움","나눔"],
+  s:[{k:"산출물 갱신",c:C1,d:[0,18,12,16,24,31,22]},
+     {k:"동료 피드백",c:C2,d:[0,3,2,4,12,38,44]},
+     {k:"활동한 교사",c:C4,d:[22,24,23,22,24,24,24]}]};
+
+/* 윤리 설문 시드 (23명 응답의 합계) */
+var SEED_ETHICS_MEAN={"학생 성장 최우선":4.8,"개인정보·데이터 보호":4.7,"책임과 출처 존중":4.1,
+  "안전한 실험과 검증":4.4,"역할 경계 인식":3.5,"공공성":3.7,"투명성 및 설명 가능성":3.9};
+
+function seedDB(){
+  var works=SEED_WORKS.map(function(w,i){
+    return {id:"w"+i,title:w[0],tagline:w[1],cat:w[2],status:w[3],domain:w[4],
+      hearts:w[5],rSum:+(w[6]*6*5).toFixed(1),rN:6,mine:false};
+  });
+  var eth={}; PRIN.forEach(function(p){ eth[p]={s:+(SEED_ETHICS_MEAN[p]*23).toFixed(1),n:23}; });
+  return {works:works, ethics:eth, ethicsOpen:[], reviews:0};
+}
+function loadJSON(k,fb){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fb; }catch(e){ return fb; } }
+function saveJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+var db = loadJSON(DB_KEY,null) || seedDB();
+var me = loadJSON(ME_KEY,null) || {form:{},cat:"",status:"",ethicsChips:[],gen:false,
+  hearts:[],reviewed:[],ethicsDone:false};
+function saveDB(){ saveJSON(DB_KEY,db); }
+function saveMe(){ saveJSON(ME_KEY,me); }
+
+/* ═══════════════ 공통 ═══════════════ */
 var tip=$("#tip");
 function showTip(t){tip.innerHTML=t;tip.classList.add("on");}
 function hideTip(){tip.classList.remove("on");}
@@ -670,61 +782,78 @@ function bindTip(el,t){el.addEventListener("mouseenter",function(){showTip(t);})
   el.addEventListener("mousemove",moveTip);el.addEventListener("mouseleave",hideTip);}
 var toastT;
 function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");
-  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on");},2000);}
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on");},2200);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function avg(w){ return w.rN ? w.rSum/w.rN/5*5/1 : 0; }
+function score(w){ return w.rN ? +(w.rSum/w.rN/5).toFixed(1) : 0; }
 
-/* ── 페이지 전환 ── */
+/* ═══════════════ 화면 전환 ═══════════════ */
 function go(v,smooth){
   if(!$("#v-"+v)) v="dash";
   $$(".pn").forEach(function(x){
     if(x.dataset.v===v) x.setAttribute("aria-current","page"); else x.removeAttribute("aria-current");});
   $$(".view").forEach(function(s){s.classList.toggle("on", s.id==="v-"+v);});
   $("#savebar").style.display = (v==="write") ? "" : "none";
+  if(v==="dash") renderDash();
+  if(v==="board") renderBoard();
+  if(v==="review") renderTargets();
   scrollTo({top:0,behavior:smooth?"smooth":"auto"});
 }
 $$(".pn").forEach(function(b){
   b.addEventListener("click",function(){
     if(location.hash!=="#"+b.dataset.v) location.hash=b.dataset.v;
-    go(b.dataset.v,true);
-  });
-});
+    go(b.dataset.v,true);});});
 addEventListener("hashchange",function(){ go(location.hash.slice(1)||"dash",false); });
 
-/* ══════ 대시보드 ══════ */
-var types=[{k:"행정의 늪에서 교육의 뜰로",short:"행정",v:11,c:C1},
-           {k:"교실을 깨우는 기술",short:"수업",v:9,c:C2},
-           {k:"연결과 보호의 울타리",short:"소통·보호",v:4,c:C4}];
-(function(){
-  var R=52,CX=70,CY=70,SW=19,GAP=2.4,CIRC=2*Math.PI*R;
-  var total=types.reduce(function(a,t){return a+t.v;},0),g=$("#donutG"),off=0;
+/* ═══════════════ 차트 헬퍼 ═══════════════ */
+function hbars(host,rows,unit,seq){
+  if(!host) return;
+  var max=Math.max.apply(null,rows.map(function(r){return r.v;}))||1;
+  host.innerHTML="";
+  rows.forEach(function(r,i){
+    var row=document.createElement("div");row.className="hbar-row";
+    row.innerHTML='<span class="hbar-lab">'+esc(r.k)+'</span><span class="hbar-track">'+
+      '<span class="hbar-fill" style="width:0;background:'+(seq?SEQ[i%SEQ.length]:(r.c||C1))+'"></span></span>'+
+      '<span class="hbar-val num">'+(r.d||r.v)+(unit||"")+'</span>';
+    host.appendChild(row);
+    var f=row.querySelector(".hbar-fill");
+    requestAnimationFrame(function(){f.style.width=r.v/max*100+"%";});
+    bindTip(row,esc(r.k)+" · <b>"+(r.d||r.v)+(unit||"")+"</b>"+(r.tip?"<br>"+r.tip:""));});
+}
+
+function renderDonut(){
+  var counts={}; CATS.forEach(function(c){counts[c]=0;});
+  db.works.forEach(function(w){ if(counts[w.cat]!=null) counts[w.cat]++; });
+  var items=CATS.map(function(c){return {k:CAT_FULL[c],short:c,v:counts[c],c:CAT_COLOR[c]};});
+  var total=items.reduce(function(a,t){return a+t.v;},0)||1;
+  var R=52,CX=70,CY=70,SW=19,GAP=2.4,CIRC=2*Math.PI*R,off=0,g=$("#donutG");
   g.innerHTML='<circle cx="'+CX+'" cy="'+CY+'" r="'+R+'" fill="none" stroke="'+GRID+'" stroke-width="'+SW+'"/>';
-  types.forEach(function(t){
+  items.forEach(function(t){
     var len=t.v/total*CIRC,c=document.createElementNS("http://www.w3.org/2000/svg","circle");
     c.setAttribute("cx",CX);c.setAttribute("cy",CY);c.setAttribute("r",R);
     c.setAttribute("fill","none");c.setAttribute("stroke",t.c);c.setAttribute("stroke-width",SW);
     c.setAttribute("stroke-dasharray",Math.max(0,len-GAP)+" "+(CIRC-Math.max(0,len-GAP)));
     c.setAttribute("stroke-dashoffset",-off);c.setAttribute("class","donut-seg");
-    g.appendChild(c);t._el=c;t._p=Math.round(t.v/total*100);off+=len;
-  });
-  $("#donutList").innerHTML=types.map(function(t,i){
+    g.appendChild(c);t._el=c;t._p=Math.round(t.v/total*100);off+=len;});
+  $("#donutList").innerHTML=items.map(function(t,i){
     return '<div class="dl" data-i="'+i+'"><i style="background:'+t.c+'"></i><span>'+t.k+
       '</span><span class="n num">'+t.v+'</span><span class="p num">'+t._p+'%</span></div>';}).join("");
-  function focus(i){types.forEach(function(t,j){t._el.classList.toggle("dim",i!==null&&i!==j);
+  function focus(i){items.forEach(function(t,j){t._el.classList.toggle("dim",i!==null&&i!==j);
     t._el.setAttribute("stroke-width",i===j?SW+6:SW);});
-    $("#donutV").textContent=i===null?total:types[i].v;
-    $("#donutK").textContent=i===null?"산출물":types[i].short;}
-  $$(".dl").forEach(function(row){var i=+row.dataset.i;
-    row.addEventListener("mouseenter",function(){focus(i);showTip(types[i].k+" · <b>"+types[i].v+"건</b> ("+types[i]._p+"%)");});
+    $("#donutV").textContent=i===null?total:items[i].v;
+    $("#donutK").textContent=i===null?"산출물":items[i].short;}
+  $$(".dl",$("#donutList")).forEach(function(row){var i=+row.dataset.i;
+    row.addEventListener("mouseenter",function(){focus(i);showTip(items[i].k+" · <b>"+items[i].v+"건</b> ("+items[i]._p+"%)");});
     row.addEventListener("mousemove",moveTip);
     row.addEventListener("mouseleave",function(){focus(null);hideTip();});});
-})();
+  focus(null);
+}
 
-(function(){
+function renderLine(){
   var W=720,H=250,PL=38,PR=14,PT=14,PB=34,iw=W-PL-PR,ih=H-PT-PB;
-  var xs=["9.4 원격","9.12 PRD","9.12 깃허브","9.12 백엔드","틔움","키움","나눔"];
-  var ss=[{k:"산출물 갱신",c:C1,d:[0,18,12,16,24,31,22]},
-          {k:"동료 피드백",c:C2,d:[0,3,2,4,12,38,44]},
-          {k:"활동한 교사",c:C4,d:[22,24,23,22,24,24,24]}];
-  var max=50,n=xs.length,X=function(i){return PL+i/(n-1)*iw;},Y=function(v){return PT+ih-v/max*ih;};
+  var xs=ACTIVITY.x, ss=ACTIVITY.s, max=50, n=xs.length;
+  var X=function(i){return PL+i/(n-1)*iw;},Y=function(v){return PT+ih-v/max*ih;};
   var out="";
   [0,10,20,30,40,50].forEach(function(v){
     out+='<line x1="'+PL+'" y1="'+Y(v)+'" x2="'+(W-PR)+'" y2="'+Y(v)+'" stroke="'+GRID+'" stroke-width="1"/>'+
@@ -740,7 +869,7 @@ var types=[{k:"행정의 늪에서 교육의 뜰로",short:"행정",v:11,c:C1},
   $("#lineG").innerHTML=out;
   $("#lineLegend").innerHTML=ss.map(function(s){return '<span class="lg"><i style="background:'+s.c+'"></i>'+s.k+'</span>';}).join("");
   var svg=$("#lineBox svg"),ch=$("#ch");
-  svg.addEventListener("mousemove",function(e){
+  svg.onmousemove=function(e){
     var r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W;
     if(px<PL||px>W-PR)return;
     var i=Math.max(0,Math.min(n-1,Math.round((px-PL)/iw*(n-1))));
@@ -748,241 +877,133 @@ var types=[{k:"행정의 늪에서 교육의 뜰로",short:"행정",v:11,c:C1},
     ss.forEach(function(s,si){var d=$("#hd"+si);d.setAttribute("cx",X(i));d.setAttribute("cy",Y(s.d[i]));d.style.opacity="1";});
     showTip("<b>"+xs[i]+"</b><br>"+ss.map(function(s){
       return '<span style="display:inline-block;width:.5rem;height:.5rem;border-radius:2px;background:'+s.c+';margin-right:.3rem"></span>'+s.k+" "+s.d[i];}).join("<br>"));
-    moveTip(e);});
-  svg.addEventListener("mouseleave",function(){ch.style.opacity="0";
-    ss.forEach(function(s,i){$("#hd"+i).style.opacity="0";});hideTip();});
-})();
+    moveTip(e);};
+  svg.onmouseleave=function(){ch.style.opacity="0";
+    ss.forEach(function(s,i){$("#hd"+i).style.opacity="0";});hideTip();};
+}
 
-var problems=[{k:"행정·공문",r:12,s:10,h:156},{k:"수업·평가",r:9,s:8,h:121},
-  {k:"학부모소통",r:5,s:3,h:84},{k:"학교행사",r:3,s:2,h:32},{k:"보건·건강",r:2,s:1,h:19}];
-(function(){
-  var host=$("#barsP"),max=12;host.innerHTML="";
-  problems.forEach(function(p){
+/* ═══════════════ 대시보드 ═══════════════ */
+function renderDash(){
+  var works=db.works;
+  var liveN=works.filter(function(w){return w.status==="live";}).length;
+  var raisedTotal=Object.keys(RAISED).reduce(function(a,k){return a+RAISED[k];},0);
+  var ethN=db.ethics[PRIN[0]].n;
+  var ethRank=PRIN.map(function(p){return {k:p,v:db.ethics[p].s/db.ethics[p].n};})
+                  .sort(function(a,b){return b.v-a.v;});
+
+  $("#v-dash .kpis").innerHTML=[
+    ["참여 교사", works.length+'<small>명</small>', "입문형 수료자의 <b class='num'>28%</b>가 이어옴"],
+    ["가져온 학교 문제", raisedTotal+'<small>건</small>', "사전 신청서 + PRD 문제정의"],
+    ["학교에서 실제 사용", liveN+'<small>건</small>', "전체의 <b class='num'>"+Math.round(liveN/works.length*100)+"%</b>가 Live"],
+    ["1순위 윤리 가치", '<span style="font-size:1.1875rem">'+ethRank[0].k+'</span>',
+      ethN+"명 응답 · 평균 <b class='num'>"+ethRank[0].v.toFixed(1)+"</b>/5.0"]
+  ].map(function(k){
+    return '<div class="kpi"><div class="kpi-k">'+k[0]+'</div><div class="kpi-v num">'+k[1]+
+           '</div><div class="kpi-s">'+k[2]+'</div></div>';}).join("");
+
+  renderDonut(); renderLine();
+
+  /* 문제 지도 — 제기(시드) vs 착수(실제 산출물 수) */
+  var startedBy={}; works.forEach(function(w){ startedBy[w.domain]=(startedBy[w.domain]||0)+1; });
+  var rows=Object.keys(RAISED).map(function(d){
+    return {k:d,raised:RAISED[d],started:Math.min(startedBy[d]||0,RAISED[d]),
+            heart:works.filter(function(w){return w.domain===d;}).reduce(function(a,w){return a+w.hearts;},0)};
+  }).sort(function(a,b){return b.raised-a.raised;});
+  var host=$("#barsP"),max=Math.max.apply(null,rows.map(function(r){return r.raised;}));
+  host.innerHTML="";
+  rows.forEach(function(p){
     var row=document.createElement("div");row.className="hbar-row";
     row.innerHTML='<span class="hbar-lab">'+p.k+'</span><span class="hbar-track" style="background:transparent">'+
       '<span class="hbar-fill" style="width:0;background:'+C1+'"></span>'+
       '<span class="hbar-fill" style="width:0;background:'+GRID+'"></span></span>'+
-      '<span class="hbar-val num">'+p.r+'건<br><span class="hbar-sub">공감 '+p.h+'</span></span>';
+      '<span class="hbar-val num">'+p.raised+'건<br><span class="hbar-sub">공감 '+p.heart+'</span></span>';
     host.appendChild(row);
     var f=row.querySelectorAll(".hbar-fill");
-    requestAnimationFrame(function(){f[0].style.width=p.s/max*100+"%";f[1].style.width=(p.r-p.s)/max*100+"%";});
-    bindTip(row,p.k+"<br>제기 <b>"+p.r+"건</b> · 착수 <b>"+p.s+"건</b> · 미착수 "+(p.r-p.s)+"건<br>공감 "+p.h);});
-  $("#tblPb").innerHTML=problems.map(function(p){
-    return "<tr><td>"+p.k+"</td><td class='num'>"+p.r+"</td><td class='num'>"+p.s+
-      "</td><td class='num'>"+(p.r-p.s)+"</td><td class='num'>"+p.h+"</td></tr>";}).join("");
-})();
+    requestAnimationFrame(function(){f[0].style.width=p.started/max*100+"%";
+      f[1].style.width=(p.raised-p.started)/max*100+"%";});
+    bindTip(row,p.k+"<br>제기 <b>"+p.raised+"건</b> · 착수 <b>"+p.started+"건</b><br>공감 "+p.heart);});
+  $("#tblPb").innerHTML=rows.map(function(p){
+    return "<tr><td>"+p.k+"</td><td class='num'>"+p.raised+"</td><td class='num'>"+p.started+
+      "</td><td class='num'>"+(p.raised-p.started)+"</td><td class='num'>"+p.heart+"</td></tr>";}).join("");
 
-function hbars(host,rows,unit,seq){
-  var max=Math.max.apply(null,rows.map(function(r){return r.v;}));host.innerHTML="";
-  rows.forEach(function(r,i){
-    var row=document.createElement("div");row.className="hbar-row";
-    row.innerHTML='<span class="hbar-lab">'+r.k+'</span><span class="hbar-track">'+
-      '<span class="hbar-fill" style="width:0;background:'+(seq?SEQ[i%SEQ.length]:(r.c||C1))+'"></span></span>'+
-      '<span class="hbar-val num">'+(r.d||r.v)+(unit||"")+'</span>';
-    host.appendChild(row);
-    var f=row.querySelector(".hbar-fill");
-    requestAnimationFrame(function(){f.style.width=r.v/max*100+"%";});
-    bindTip(row,r.k+" · <b>"+(r.d||r.v)+(unit||"")+"</b>"+(r.tip?"<br>"+r.tip:""));});
-}
-hbars($("#topIdeas"),[{k:"상담 기록 3중 입력",v:41,c:C5,tip:"아직 만든 팀 없음"},
-  {k:"가정통신문 재정리",v:38},{k:"보결 교사 찾기",v:35},{k:"수행평가 이중 기록",v:29},
-  {k:"방과후 출결 확인",v:24,c:C5,tip:"아직 만든 팀 없음"}],"");
+  hbars($("#topIdeas"),SEED_PROBLEMS.map(function(p){
+    return {k:p.t.length>14?p.t.slice(0,13)+"…":p.t, v:p.h, c:p.built?C1:C5,
+            tip:p.built?"만든 팀 있음":"<b>아직 만든 팀 없음</b>"};}),"");
 
-var PRIN=["학생 성장 최우선","개인정보·데이터 보호","책임과 출처 존중","안전한 실험과 검증","역할 경계 인식","공공성","투명성 및 설명 가능성"];
-var PRIN_Q=["편리함보다 학생의 학습권과 성장을 앞에 두는 것",
-  "학생·교사의 데이터를 최소로 모으고 안전하게 다루는 것",
-  "AI가 만든 코드와 남의 자료의 출처를 밝히고 책임지는 것",
-  "교실에 들이기 전에 충분히 시험하고 점검하는 것",
-  "기술이 교사의 판단과 관계를 대신하지 않도록 선을 긋는 것",
-  "내가 만든 것을 사적 소유가 아닌 공교육의 자산으로 여기는 것",
-  "도구가 어떻게 판단하는지 학생·학부모에게 설명할 수 있는 것"];
-var prinData=[{v:4.8,f:11},{v:4.7,f:8},{v:4.1,f:1},{v:4.4,f:3},{v:3.5,f:0},{v:3.7,f:0},{v:3.9,f:1}];
-(function(){
-  var rows=PRIN.map(function(k,i){return {k:k.replace("·데이터",""),v:prinData[i].v,d:prinData[i].v.toFixed(1),tip:"1순위 지목 "+prinData[i].f+"명"};})
-    .sort(function(a,b){return b.v-a.v;});
-  hbars($("#barsE"),rows,"",true);
-  $("#tblEb").innerHTML=rows.map(function(r,i){
-    return "<tr><td>"+r.k+"</td><td class='num'>"+r.d+"</td><td class='num'>"+
-      (prinData[PRIN.map(function(p){return p.replace("·데이터","");}).indexOf(r.k)].f)+"명</td></tr>";}).join("");
-})();
+  /* 윤리 7대 원칙 */
+  hbars($("#barsE"),ethRank.map(function(r){
+    return {k:r.k.replace("·데이터",""),v:r.v,d:r.v.toFixed(1)};}),"",true);
+  $("#tblEb").innerHTML=ethRank.map(function(r){
+    return "<tr><td>"+r.k+"</td><td class='num'>"+r.v.toFixed(1)+"</td><td class='num'>"+db.ethics[r.k].n+"명</td></tr>";}).join("");
+  $$("#v-dash .insight-d")[0] && ($$("#v-dash .insight-d")[0].innerHTML =
+    ethRank.slice(0,3).map(function(r){return r.k;}).join(" · ")+" — 상위 셋이 1기와 동일합니다.");
 
-$$("[data-table]").forEach(function(b){b.addEventListener("click",function(){
-  var el=$("#"+b.dataset.table);el.classList.toggle("on");
-  b.textContent=el.classList.contains("on")?"차트로 보기":"표로 보기";});});
-$$(".fchip").forEach(function(c){c.addEventListener("click",function(){
-  $$(".fchip").forEach(function(x){x.setAttribute("aria-pressed","false");});
-  c.setAttribute("aria-pressed","true");});});
+  /* 내가 낸 서술형 응답을 새 원칙 후보에 덧붙임 */
+  var np=$("#newPrin");
+  $$(".mine-open",np).forEach(function(e){e.remove();});
+  db.ethicsOpen.forEach(function(t){
+    var d=document.createElement("div"); d.className="newprin mine-open";
+    d.style.borderColor=CV("--primary"); d.style.background=CV("--accent");
+    d.innerHTML='<span class="newprin-n num" style="background:'+CV("--primary")+'">새</span>'+
+      '<div><div style="font-size:.8125rem;font-weight:700">방금 제출된 응답</div>'+
+      '<div class="hbar-sub">'+esc(t.length>44?t.slice(0,43)+"…":t)+'</div></div>';
+    np.appendChild(d);});
 
-/* ══════ 연수생 입력 ══════ */
-var DRAFT={
-  gap: "• 학기말 생활기록부를 작성할 때면 평소 수첩, 카카오톡, 구글독스 등에 짧게 남겨 둔 관찰 기록이 한곳에 모이지 않아 다시 찾아 모으는 데 며칠이 걸립니다.\n• 같은 학생에 대한 기록이 여러 매체에 흩어져 있어, 정작 필요한 순간에 어떤 내용이 어디에 있는지 떠올리기 어렵습니다.\n• 담임 교사는 수시로 메모를 남기지만, 그 메모들이 학생별로 정리되지 않은 채 입력 경로별로만 남아 있어 학기 말에 다시 학생 기준으로 재구성해야 합니다.\n• 동료 교사들도 비슷한 상황에서 기록을 모으는 데 시간을 쓰고 있어, 이 불편은 한 사람의 정리 습관 문제가 아니라 기록 방식이 흩어져 있는 구조에서 비롯됩니다.",
-  why: "이 문제는 단순히 교사가 정리를 잘하지 못해서 생기는 불편이 아닙니다. 관찰 기록은 수업 중, 쉬는 시간, 상담 직후처럼 짧은 틈에 수시로 생기는데, 그 순간의 기록은 빠른 입력과 접근성이 좋은 도구에 흩어지기 쉽습니다. 반면 생활기록부는 학생별로 서술해야 하므로, 기록을 모을 때는 다시 학생 기준으로 묶어내야 합니다. 입력의 편의와 기록의 정리 기준이 서로 달라서, 학기 말에 그 간극을 교사 개인이 수동으로 메워야 하는 구조가 반복됩니다. 결국 기록을 남기는 일보다 모은 뒤 다시 정리하는 일에 더 많은 시간이 들어가는 상황이 생깁니다.",
-  value: "관찰 메모를 학생별로 모아볼 수 있게 되면, 학기 말에 여기저기 흩어진 기록을 다시 찾아 모으는 시간을 줄일 수 있습니다. 교사는 기록을 모으는 데 쓰던 시간을 문장을 다듬거나 학생을 다시 살피는 데 쓸 수 있고, 그 여유는 생활기록부 작성의 밀도로 이어집니다. 또한 학생별로 기록이 쌓이면 한 학기를 돌아볼 때 어떤 장면이 누락되었는지도 더 쉽게 확인할 수 있습니다. 다만 이것은 기록을 자동으로 잘 써 주는 기능이 아니라, 흩어진 기록을 학생 기준으로 다시 묶는 수고를 덜어 주는 데서 시작되는 변화입니다.",
-  fr: "현재는 메모를 입력하고 학생별로 모아보는 기능까지 구현되어 있어, 흩어진 기록을 한 화면에서 학생 기준으로 확인하는 기본 흐름은 만들 수 있습니다. 그러나 학생 이름 검색이 되지 않아 특정 학생의 기록을 빠르게 찾기 어렵고, 이 점은 동료 피드백에서도 불편으로 지적되었습니다. 생기부 문장 추천 기능은 아직 구현하지 않았으며, 지금은 관찰 기록을 모으고 확인하는 단계에 머물러 있습니다. 따라서 다음 단계에서는 학생 검색과 같은 기본적인 찾기 기능을 우선해, 모아보기 기능이 실제로 쓰기 쉬운지 먼저 점검할 필요가 있습니다.",
-  next: "가장 먼저 학생 이름 검색을 해결해, 모아보기 기능이 있어도 원하는 학생 기록을 바로 찾지 못하는 불편을 줄이려 합니다. 검색은 기록량이 늘어날수록 체감 차이가 커지는 기능이라, 지금 단계에서 먼저 손보는 것이 적절하다고 판단했습니다. 그다음에는 메모를 남기는 경로와 학생별 모아보기가 자연스럽게 이어지는지 살펴보며, 기록을 다시 찾는 횟수가 실제로 줄어드는지 확인하고자 합니다. 생기부 문장 추천은 아직 미구현 상태이므로, 관찰 기록이 충분히 모이고 정리 흐름이 안정된 뒤에 검토해도 늦지 않다고 보았습니다."
-};
-var AIF=["gap","why","value","fr","next"];
-var generated=false, dirty=false, lastSave=null;
-
-function stage(n){
-  $$(".sp").forEach(function(s){s.setAttribute("aria-selected", s.dataset.s===String(n)?"true":"false");});
-  $$(".stage").forEach(function(s){s.style.display = s.dataset.s===String(n)?"flex":"none";});
-}
-$$(".sp").forEach(function(s){s.addEventListener("click",function(){stage(s.dataset.s);});});
-
-function data(){
-  var o={};
-  $$("[data-k]").forEach(function(el){o[el.dataset.k]=el.value;});
-  o._cat=($(".chips[data-group=cat] .chip.on")||{}).dataset ? $(".chips[data-group=cat] .chip.on").dataset.v : "";
-  o._status=($(".chips[data-group=status] .chip.on")||{}).dataset ? $(".chips[data-group=status] .chip.on").dataset.v : "";
-  o._ethics=$$(".chips[data-group=ethics] .chip.on").map(function(c){return c.dataset.v;});
-  o._gen=generated;
-  return o;
-}
-function sync(){
-  var d=data();
-  function put(id,v,fb){var e=$(id);if(!e)return;
-    if(v&&v.trim()){e.textContent=v;e.classList.remove("sheet-empty");}
-    else{e.textContent=fb;e.classList.add("sheet-empty");}}
-  put("#pv_title",d.title,"도구 이름을 입력해 주세요");
-  put("#pv_tagline",d.tagline,"한 줄 소개가 여기에 표시됩니다");
-  put("#pv_gap",d.gap,"틔움 단계에서 작성하면 표시됩니다.");
-  put("#pv_why",d.why,"—");put("#pv_value",d.value,"—");
-  put("#pv_fr",d.fr,"—");put("#pv_scope",d.scope,"—");
-  put("#pv_turn",d.turn,"나눔 단계에서 작성하면 표시됩니다.");
-  put("#pv_eth",d._ethics.join(" · "),"—");
-  $("#pv_cat").textContent=d._cat||"유형 미선택";
-  $("#pv_status").textContent=d._status||"상태 미선택";
-  $("#pv_users").textContent=d.users||"사용자 미입력";
-  // 스프린트 완료 표시
-  [["1",["memo","gap","why","value","fr"]],["2",["scope","title","tagline"]],["3",["turn","hope","eth"]]]
-    .forEach(function(p){
-      var ok=p[1].every(function(k){return (d[k]||"").trim();});
-      var m=$('.sp[data-s="'+p[0]+'"] .sp-done'); if(m) m.style.display=ok?"":"none";});
-  var left=AIF.filter(function(k){return $('[data-ai="'+k+'"]').classList.contains("ai");});
-  var own=["turn","hope","eth"].filter(function(k){return !(d[k]||"").trim();});
-  var ok=generated&&!left.length&&!own.length;
-  $("#btnDone").disabled=!ok;
-  if(!generated) $("#saveState").innerHTML=lastSave?("자동 저장됨 · <b>"+lastSave+"</b>"):"아직 저장된 내용이 없어요";
-  else if(left.length) $("#saveState").innerHTML="<b>"+left.length+"개</b> 항목이 AI 초안 그대로예요";
-  else if(own.length) $("#saveState").innerHTML="직접 쓰실 항목 <b>"+own.length+"개</b>가 비었어요";
-  else $("#saveState").innerHTML="모든 항목 검토 완료 · 확정할 수 있어요";
-}
-function save(silent){
-  try{ localStorage.setItem(KEY,JSON.stringify(data())); }catch(e){}
-  lastSave=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
-  dirty=false; if(!silent) toast("저장했어요"); sync();
-}
-function load(){
-  var raw; try{ raw=localStorage.getItem(KEY); }catch(e){ return; }
-  if(!raw) return;
-  var d; try{ d=JSON.parse(raw); }catch(e){ return; }
-  $$("[data-k]").forEach(function(el){ if(d[el.dataset.k]!=null) el.value=d[el.dataset.k]; });
-  if(d._cat) $$(".chips[data-group=cat] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===d._cat);});
-  if(d._status) $$(".chips[data-group=status] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===d._status);});
-  if(d._ethics) $$(".chips[data-group=ethics] .chip").forEach(function(c){c.classList.toggle("on",d._ethics.indexOf(c.dataset.v)>=0);});
-  generated=!!d._gen;
-  if(generated) AIF.forEach(function(k){ if((d[k]||"").trim()) $('[data-ai="'+k+'"]').classList.add("edited"); });
-  toast("저장해 둔 내용을 불러왔어요");
-}
-$$("[data-k]").forEach(function(el){
-  el.addEventListener("input",function(){
-    var w=el.closest(".f");
-    if(w&&w.classList.contains("ai")){w.classList.remove("ai");w.classList.add("edited");}
-    dirty=true; sync();});
-});
-$$(".chips[data-group]").forEach(function(g){
-  g.addEventListener("click",function(e){
-    var b=e.target.closest(".chip"); if(!b)return;
-    if(g.dataset.multi) b.classList.toggle("on");
-    else { $$(".chip",g).forEach(function(c){c.classList.remove("on");}); b.classList.add("on"); }
-    dirty=true; sync();});
-});
-var SPIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg> ';
-var REDO='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg> 다시 생성';
-
-/* 초안을 한 항목씩 흘려 넣기 */
-function fillDraft(d, done){
-  var i=0, iv=setInterval(function(){
-    if(i>=AIF.length){ clearInterval(iv); done(); return; }
-    var k=AIF[i++];
-    if(d[k]==null){ return; }
-    $('[data-k="'+k+'"]').value=String(d[k]).trim();
-    var w=$('[data-ai="'+k+'"]'); w.classList.add("ai"); w.classList.remove("edited");
-    sync();
-  },260);
+  /* 산출물 표 */
+  $("#dashWorks").innerHTML=works.slice().sort(function(a,b){return b.hearts-a.hearts;}).slice(0,8)
+    .map(function(w){
+      return '<tr><td><b>'+esc(w.title)+'</b>'+(w.mine?' <span class="mine-tag">내 산출물</span>':'')+
+        '</td><td>'+esc(w.tagline)+'</td><td>'+w.cat+'</td><td><span class="pill '+ST_CLASS[w.status]+'">'+
+        ST_LABEL[w.status]+'</span></td><td class="num">'+w.hearts+'</td><td class="num">'+score(w).toFixed(1)+'</td></tr>';
+    }).join("");
+  var cap=$("#v-dash .panel-h .hbar-sub");
+  if(cap) cap.textContent=works.length+"건 중 8건 표시";
 }
 
-$("#btnAI").addEventListener("click",function(){
-  var b=this, t0=Date.now();
-  b.disabled=true; b.innerHTML=SPIN+"Solar 호출 중…";
-  var payload={
-    memo:  ($('[data-k="memo"]')||{}).value  || "",
-    users: ($('[data-k="users"]')||{}).value || "",
-    goal:  ($('[data-k="goal"]')||{}).value  || "",
-    scope: ($('[data-k="scope"]')||{}).value || "",
-    peer:  ($('[data-k="peer"]')||{}).value  || ""
-  };
-  if(!payload.memo.trim()){
-    b.disabled=false; b.innerHTML=REDO.replace("다시 생성","AI 초안 생성");
-    toast("먼저 한 줄 메모를 적어주세요"); stage(1); $('[data-k="memo"]').focus(); return;
-  }
+/* ═══════════════ 동료 산출물 (게시판) ═══════════════ */
+var boardFilter="전체";
+function renderBoard(){
+  var f=$("#boardFilters");
+  f.innerHTML=["전체"].concat(CATS).map(function(c){
+    return '<button class="fchip" data-c="'+c+'" aria-pressed="'+(c===boardFilter)+'">'+
+      (c==="전체"?"전체":CAT_FULL[c])+' <span class="num" style="opacity:.7">'+
+      (c==="전체"?db.works.length:db.works.filter(function(w){return w.cat===c;}).length)+'</span></button>';}).join("");
+  $$(".fchip",f).forEach(function(b){b.onclick=function(){boardFilter=b.dataset.c;renderBoard();};});
 
-  var ctrl = ("AbortController" in window) ? new AbortController() : null;
-  var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 60000);
+  var list=db.works.filter(function(w){return boardFilter==="전체"||w.cat===boardFilter;})
+                   .sort(function(a,b){return b.hearts-a.hearts;});
+  $("#boardGrid").innerHTML=list.map(function(w){
+    var liked=me.hearts.indexOf(w.id)>=0;
+    return '<article class="wcard'+(w.mine?' mine':'')+'">'+
+      '<div class="wcard-h"><span class="wcard-t">'+esc(w.title)+'</span>'+
+      '<span class="pill '+ST_CLASS[w.status]+'">'+ST_LABEL[w.status]+'</span></div>'+
+      '<p class="wcard-d">'+esc(w.tagline)+'</p>'+
+      '<div class="wcard-f">'+
+        '<button class="heart'+(liked?' on':'')+'" data-id="'+w.id+'">'+
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="'+(liked?'currentColor':'none')+
+          '" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>'+
+          '<span class="num">'+w.hearts+'</span></button>'+
+        '<span>'+w.domain+'</span>'+
+        '<span class="wcard-score num">★ '+score(w).toFixed(1)+'</span>'+
+      '</div>'+
+      (w.mine?'<span class="mine-tag" style="align-self:flex-start">내 산출물</span>':'')+
+      '</article>';}).join("");
+  $$(".heart",$("#boardGrid")).forEach(function(b){
+    b.onclick=function(){
+      var w=db.works.filter(function(x){return x.id===b.dataset.id;})[0];
+      var i=me.hearts.indexOf(w.id);
+      if(i>=0){ me.hearts.splice(i,1); w.hearts--; } else { me.hearts.push(w.id); w.hearts++; }
+      saveDB(); saveMe(); renderBoard();};});
+}
 
-  fetch("/api/draft",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(payload),
-    signal: ctrl ? ctrl.signal : undefined
-  })
-  .then(function(r){ return r.json().then(function(j){ if(!r.ok||!j.ok) throw new Error(j.error||("HTTP "+r.status)); return j; }); })
-  .then(function(j){
-    clearTimeout(timer);
-    fillDraft(j.draft, function(){
-      generated=true; b.disabled=false; b.innerHTML=REDO;
-      save(true);
-      var m=j.meta||{};
-      toast("Solar Pro 4 초안 완성 · " + Math.round((m.ms||(Date.now()-t0))/100)/10 + "초");
-      var el=$("#aiMeta");
-      if(el) el.innerHTML='실제 호출 · <b>'+(m.model||"solar-pro4")+'</b> · '+
-        (m.tokens?m.tokens+" 토큰 · ":"")+Math.round((m.ms||0)/100)/10+"초";
-    });
-  })
-  .catch(function(err){
-    clearTimeout(timer);
-    /* 로컬 서버가 아니면(아티팩트 등) 준비된 예시로 대체 */
-    fillDraft(DRAFT, function(){
-      generated=true; b.disabled=false; b.innerHTML=REDO;
-      save(true);
-      toast("예시 초안으로 대체했어요 (서버 미연결)");
-      var el=$("#aiMeta");
-      if(el) el.innerHTML='<span style="color:var(--muted-foreground)">예시 초안 · 서버 미연결 ('+
-        String(err.message).slice(0,40)+')</span>';
-    });
-  });
-});
-$("#btnSave").addEventListener("click",function(){save();});
-$("#btnDone").addEventListener("click",function(){ save(true); toast("확정했어요. 사례집 초안에서 확인하세요"); });
-$("#btnReset").addEventListener("click",function(){
-  try{ localStorage.removeItem(KEY); }catch(e){}
-  $$("[data-k]").forEach(function(el){el.value="";});
-  $$(".chip").forEach(function(c){c.classList.remove("on");});
-  $$(".f").forEach(function(f){f.classList.remove("ai","edited");});
-  generated=false; lastSave=null; sync(); toast("비웠어요");
-});
-setInterval(function(){ if(dirty) save(true); },5000);
+/* ═══════════════ 현장 평가 ═══════════════ */
+var CRIT=[["현장성","교실·학교에서 실제로 겪는 문제이고, 다른 교사도 공감할 만한가?"],
+  ["교육적 가치","업무 효율을 넘어 학생의 배움과 성장에 닿아 있는가?"],
+  ["실행력","문제를 실제로 동작하는 형태로 옮겼는가? (완성도가 아니라 작동)"],
+  ["안전과 책임","개인정보·윤리·사후관리를 고려했는가?"],
+  ["확산 가능성","다른 학교·교사가 재사용할 수 있게 기록·공개되었는가?"]];
+var critW=[], curTarget=null;
 
-/* ══════ A4 ══════ */
-var zooms=[1,.8,.6],zi=1;
-function applyZoom(){var s=$("#sheet");s.style.transform="scale("+zooms[zi]+")";
-  s.style.marginBottom=297*(zooms[zi]-1)+"mm";$("#btnZoom").textContent=Math.round(zooms[zi]*100)+"%";}
-$("#btnZoom").addEventListener("click",function(){zi=(zi+1)%zooms.length;applyZoom();});
-$("#btnPrint").addEventListener("click",function(){window.print();});
-applyZoom();
-
-/* ══════ 별점 ══════ */
 function starWidget(host,onChange){
   var val=0;
   function render(){
@@ -997,75 +1018,256 @@ function starWidget(host,onChange){
         $(".half",d).addEventListener("click",function(){val=i-0.5;render();onChange(val);});
         $(".full",d).addEventListener("click",function(){val=i;render();onChange(val);});
       })(i,d);
-      host.appendChild(d);
-    }
+      host.appendChild(d);}
   }
   render();
-  return {get:function(){return val;}};
+  return {get:function(){return val;},reset:function(){val=0;render();onChange(0);}};
 }
 
-var CRIT=[["현장성","교실·학교에서 실제로 겪는 문제이고, 다른 교사도 공감할 만한가?"],
-  ["교육적 가치","업무 효율을 넘어 학생의 배움과 성장에 닿아 있는가?"],
-  ["실행력","문제를 실제로 동작하는 형태로 옮겼는가? (완성도가 아니라 작동)"],
-  ["안전과 책임","개인정보·윤리·사후관리를 고려했는가?"],
-  ["확산 가능성","다른 학교·교사가 재사용할 수 있게 기록·공개되었는가?"]];
-var critW=[];
-(function(){
+(function buildCrit(){
   var host=$("#criteria");
   CRIT.forEach(function(c,i){
     var d=document.createElement("div");d.className="crit";
     d.innerHTML='<div class="crit-h"><span class="crit-n">'+(i+1)+'. '+c[0]+'</span><span class="crit-q">'+c[1]+'</span></div>'+
       '<div class="rate"><span class="stars"></span><span class="rate-v num">0.0</span><span class="rate-n">/ 5.0</span></div>';
     host.appendChild(d);
-    critW.push(starWidget($(".stars",d),function(v){
-      $(".rate-v",d).textContent=v.toFixed(1); updateReview();}));
-  });
+    critW.push(starWidget($(".stars",d),function(v){$(".rate-v",d).textContent=v.toFixed(1);updateReview();}));});
 })();
+
+function myCat(){ return me.cat || "행정"; }
+function renderTargets(){
+  var list=db.works.filter(function(w){return w.cat===myCat() && !w.mine;}).slice(0,6);
+  var sub=$("#v-review .panel-h .hbar-sub");
+  if(sub) sub.textContent="우리 모둠 · "+CAT_FULL[myCat()];
+  $("#targets").innerHTML=list.map(function(w,i){
+    var done=me.reviewed.indexOf(w.id)>=0;
+    return '<button class="tg" aria-selected="'+(i===0)+'" data-id="'+w.id+'">'+
+      '<span class="tg-t">'+esc(w.title)+'</span><span class="tg-d">'+esc(w.tagline)+'</span>'+
+      '<span class="tg-s" style="visibility:'+(done?"visible":"hidden")+'">'+
+      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>평가 완료</span></button>';}).join("");
+  $$(".tg").forEach(function(t){t.onclick=function(){
+    $$(".tg").forEach(function(x){x.setAttribute("aria-selected","false");});
+    t.setAttribute("aria-selected","true"); selectTarget(t.dataset.id);};});
+  if(list.length) selectTarget(list[0].id);
+}
+function selectTarget(id){
+  curTarget=id;
+  var w=db.works.filter(function(x){return x.id===id;})[0];
+  $("#revTitle").textContent=w?w.title:"—";
+  critW.forEach(function(c){c.reset();});
+  $("#r_advice").value="";
+  updateReview();
+}
 function updateReview(){
   var t=critW.reduce(function(a,w){return a+w.get();},0);
   $("#revTotal").textContent=t.toFixed(1);
-  $("#btnReview").disabled = !(critW.every(function(w){return w.get()>0;}) && $("#r_advice").value.trim());
+  var done=curTarget && me.reviewed.indexOf(curTarget)>=0;
+  $("#btnReview").disabled = done || !(critW.every(function(w){return w.get()>0;}) && $("#r_advice").value.trim());
+  $("#btnReview").textContent = done ? "이미 평가했어요" : "익명으로 제출";
 }
 $("#r_advice").addEventListener("input",updateReview);
 $("#btnReview").addEventListener("click",function(){
-  var sel=$(".tg[aria-selected=true]");
-  $(".tg-s",sel).style.visibility="visible";
-  toast("익명으로 제출했어요");
-  this.disabled=true;
+  var w=db.works.filter(function(x){return x.id===curTarget;})[0];
+  if(!w) return;
+  var total=critW.reduce(function(a,c){return a+c.get();},0);
+  w.rSum+=total; w.rN+=1; db.reviews++;
+  me.reviewed.push(w.id);
+  saveDB(); saveMe();
+  toast("익명으로 제출했어요 · 「"+w.title+"」 평균 "+score(w).toFixed(1)+"점");
+  renderTargets();
 });
-$$(".tg").forEach(function(t){t.addEventListener("click",function(){
-  $$(".tg").forEach(function(x){x.setAttribute("aria-selected","false");});
-  t.setAttribute("aria-selected","true");
-  $("#revTitle").textContent=$(".tg-t",t).textContent;});});
 
-/* ══════ 윤리 설문 ══════ */
+/* ═══════════════ 윤리 설문 ═══════════════ */
 var ethW=[];
-(function(){
+(function buildEthics(){
   var host=$("#ethicsQ");
   PRIN.forEach(function(p,i){
     var d=document.createElement("div");d.className="crit";
     d.innerHTML='<div class="crit-h"><span class="crit-n">'+(i+1)+'. '+p+'</span><span class="crit-q">'+PRIN_Q[i]+'</span></div>'+
       '<div class="rate"><span class="stars"></span><span class="rate-v num">0.0</span><span class="rate-n">/ 5.0</span></div>';
     host.appendChild(d);
-    ethW.push(starWidget($(".stars",d),function(v){
-      $(".rate-v",d).textContent=v.toFixed(1); updateEthics();}));
-  });
+    ethW.push(starWidget($(".stars",d),function(v){$(".rate-v",d).textContent=v.toFixed(1);updateEthics();}));});
 })();
 function updateEthics(){
   var n=ethW.filter(function(w){return w.get()>0;}).length;
-  $("#ethicsProg").innerHTML="<b class='num'>"+n+"</b> / 7 문항 응답";
-  $("#btnEthics").disabled = !(n===7 && $("#e_open").value.trim());
+  $("#ethicsProg").innerHTML= me.ethicsDone ? "제출을 마쳤습니다. 고맙습니다"
+    : "<b class='num'>"+n+"</b> / 7 문항 응답";
+  $("#btnEthics").disabled = me.ethicsDone || !(n===7 && $("#e_open").value.trim());
+  $("#btnEthics").textContent = me.ethicsDone ? "제출 완료" : "제출";
 }
 $("#e_open").addEventListener("input",updateEthics);
-$("#btnEthics").addEventListener("click",function(){toast("응답을 제출했어요. 고맙습니다");this.disabled=true;});
+$("#btnEthics").addEventListener("click",function(){
+  PRIN.forEach(function(p,i){ db.ethics[p].s+=ethW[i].get(); db.ethics[p].n+=1; });
+  var open=$("#e_open").value.trim();
+  if(open) db.ethicsOpen.push(open);
+  me.ethicsDone=true; saveDB(); saveMe(); updateEthics();
+  toast("응답을 제출했어요 · 대시보드에 반영됩니다");
+});
 
-var st=document.createElement("style");
-st.textContent="@keyframes spin{to{transform:rotate(360deg)}}";
-document.head.appendChild(st);
+/* ═══════════════ 연수생 입력 ═══════════════ */
+var DRAFT={
+  gap: "• 학기말 생활기록부를 작성할 때면 평소 수첩, 카카오톡, 구글독스 등에 짧게 남겨 둔 관찰 기록이 한곳에 모이지 않아 다시 찾아 모으는 데 며칠이 걸립니다.\n• 같은 학생에 대한 기록이 여러 매체에 흩어져 있어, 정작 필요한 순간에 어떤 내용이 어디에 있는지 떠올리기 어렵습니다.\n• 담임 교사는 수시로 메모를 남기지만, 그 메모들이 학생별로 정리되지 않은 채 입력 경로별로만 남아 있어 학기 말에 다시 학생 기준으로 재구성해야 합니다.\n• 동료 교사들도 비슷한 상황에서 기록을 모으는 데 시간을 쓰고 있어, 이 불편은 한 사람의 정리 습관 문제가 아니라 기록 방식이 흩어져 있는 구조에서 비롯됩니다.",
+  why: "이 문제는 단순히 교사가 정리를 잘하지 못해서 생기는 불편이 아닙니다. 관찰 기록은 수업 중, 쉬는 시간, 상담 직후처럼 짧은 틈에 수시로 생기는데, 그 순간의 기록은 빠른 입력과 접근성이 좋은 도구에 흩어지기 쉽습니다. 반면 생활기록부는 학생별로 서술해야 하므로, 기록을 모을 때는 다시 학생 기준으로 묶어내야 합니다. 입력의 편의와 기록의 정리 기준이 서로 달라서, 학기 말에 그 간극을 교사 개인이 수동으로 메워야 하는 구조가 반복됩니다. 결국 기록을 남기는 일보다 모은 뒤 다시 정리하는 일에 더 많은 시간이 들어가는 상황이 생깁니다.",
+  value: "관찰 메모를 학생별로 모아볼 수 있게 되면, 학기 말에 여기저기 흩어진 기록을 다시 찾아 모으는 시간을 줄일 수 있습니다. 교사는 기록을 모으는 데 쓰던 시간을 문장을 다듬거나 학생을 다시 살피는 데 쓸 수 있고, 그 여유는 생활기록부 작성의 밀도로 이어집니다. 또한 학생별로 기록이 쌓이면 한 학기를 돌아볼 때 어떤 장면이 누락되었는지도 더 쉽게 확인할 수 있습니다. 다만 이것은 기록을 자동으로 잘 써 주는 기능이 아니라, 흩어진 기록을 학생 기준으로 다시 묶는 수고를 덜어 주는 데서 시작되는 변화입니다.",
+  fr: "현재는 메모를 입력하고 학생별로 모아보는 기능까지 구현되어 있어, 흩어진 기록을 한 화면에서 학생 기준으로 확인하는 기본 흐름은 만들 수 있습니다. 그러나 학생 이름 검색이 되지 않아 특정 학생의 기록을 빠르게 찾기 어렵고, 이 점은 동료 피드백에서도 불편으로 지적되었습니다. 생기부 문장 추천 기능은 아직 구현하지 않았으며, 지금은 관찰 기록을 모으고 확인하는 단계에 머물러 있습니다. 따라서 다음 단계에서는 학생 검색과 같은 기본적인 찾기 기능을 우선해, 모아보기 기능이 실제로 쓰기 쉬운지 먼저 점검할 필요가 있습니다.",
+  next: "가장 먼저 학생 이름 검색을 해결해, 모아보기 기능이 있어도 원하는 학생 기록을 바로 찾지 못하는 불편을 줄이려 합니다. 검색은 기록량이 늘어날수록 체감 차이가 커지는 기능이라, 지금 단계에서 먼저 손보는 것이 적절하다고 판단했습니다. 그다음에는 메모를 남기는 경로와 학생별 모아보기가 자연스럽게 이어지는지 살펴보며, 기록을 다시 찾는 횟수가 실제로 줄어드는지 확인하고자 합니다. 생기부 문장 추천은 아직 미구현 상태이므로, 관찰 기록이 충분히 모이고 정리 흐름이 안정된 뒤에 검토해도 늦지 않다고 보았습니다."
+};
+var AIF=["gap","why","value","fr","next"];
+var generated=me.gen||false, dirty=false, lastSave=null;
+var SPIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg> ';
+var REDO='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg> 다시 생성';
 
-/* 시연용 프리셋:  ?seed=1  → 입력·AI초안이 채워진 상태로 열림 */
-if(/[?&]seed=1/.test(location.search)){
-  var SEED={memo:"학기말에 생활기록부 쓸 때 아이들 관찰 기록이 여기저기 흩어져 있음. 수첩, 카톡, 구글독스. 모으는 데만 며칠 걸림.",
+function stage(n){
+  $$(".sp").forEach(function(s){s.setAttribute("aria-selected", s.dataset.s===String(n)?"true":"false");});
+  $$(".stage").forEach(function(s){s.style.display = s.dataset.s===String(n)?"flex":"none";});
+}
+$$(".sp").forEach(function(s){s.addEventListener("click",function(){stage(s.dataset.s);});});
+
+function formData(){
+  var o={}; $$("[data-k]").forEach(function(el){o[el.dataset.k]=el.value;});
+  return o;
+}
+function collect(){
+  me.form=formData();
+  var c=$(".chips[data-group=cat] .chip.on"); me.cat=c?c.dataset.v:"";
+  var s=$(".chips[data-group=status] .chip.on"); me.status=s?s.dataset.v:"";
+  me.ethicsChips=$$(".chips[data-group=ethics] .chip.on").map(function(x){return x.dataset.v;});
+  me.gen=generated;
+}
+function restore(){
+  Object.keys(me.form||{}).forEach(function(k){
+    var el=$('[data-k="'+k+'"]'); if(el) el.value=me.form[k];});
+  if(me.cat) $$(".chips[data-group=cat] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===me.cat);});
+  if(me.status) $$(".chips[data-group=status] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===me.status);});
+  (me.ethicsChips||[]).forEach(function(v){
+    $$(".chips[data-group=ethics] .chip").forEach(function(c){ if(c.dataset.v===v) c.classList.add("on");});});
+  if(generated) AIF.forEach(function(k){
+    var el=$('[data-k="'+k+'"]'); if(el&&el.value.trim()) $('[data-ai="'+k+'"]').classList.add("edited");});
+}
+function sync(){
+  var d=formData();
+  function put(id,v,fb){var e=$(id);if(!e)return;
+    if(v&&String(v).trim()){e.textContent=v;e.classList.remove("sheet-empty");}
+    else{e.textContent=fb;e.classList.add("sheet-empty");}}
+  put("#pv_title",d.title,"도구 이름을 입력해 주세요");
+  put("#pv_tagline",d.tagline,"한 줄 소개가 여기에 표시됩니다");
+  put("#pv_gap",d.gap,"틔움 단계에서 작성하면 표시됩니다.");
+  put("#pv_why",d.why,"—");put("#pv_value",d.value,"—");
+  put("#pv_fr",d.fr,"—");put("#pv_scope",d.scope,"—");
+  put("#pv_turn",d.turn,"나눔 단계에서 작성하면 표시됩니다.");
+  var chips=$$(".chips[data-group=ethics] .chip.on").map(function(c){return c.dataset.v;});
+  put("#pv_eth",chips.join(" · "),"—");
+  var c=$(".chips[data-group=cat] .chip.on"), s=$(".chips[data-group=status] .chip.on");
+  $("#pv_cat").textContent=c?CAT_FULL[c.dataset.v]:"유형 미선택";
+  $("#pv_status").textContent=s?s.textContent.trim():"상태 미선택";
+  $("#pv_users").textContent=d.users||"사용자 미입력";
+  [["1",["memo","gap","why","value","fr"]],["2",["scope","title","tagline"]],["3",["turn","hope","eth"]]]
+    .forEach(function(p){
+      var ok=p[1].every(function(k){return (d[k]||"").trim();});
+      var m=$('.sp[data-s="'+p[0]+'"] .sp-done'); if(m) m.style.display=ok?"":"none";});
+  var left=AIF.filter(function(k){return $('[data-ai="'+k+'"]').classList.contains("ai");});
+  var own=["turn","hope","eth"].filter(function(k){return !(d[k]||"").trim();});
+  var need=["title","tagline"].filter(function(k){return !(d[k]||"").trim();});
+  var hasCat=!!$(".chips[data-group=cat] .chip.on"), hasSt=!!$(".chips[data-group=status] .chip.on");
+  var ok=generated&&!left.length&&!own.length&&!need.length&&hasCat&&hasSt;
+  $("#btnDone").disabled=!ok;
+  if(!generated) $("#saveState").innerHTML=lastSave?("자동 저장됨 · <b>"+lastSave+"</b>"):"아직 저장된 내용이 없어요";
+  else if(left.length) $("#saveState").innerHTML="<b>"+left.length+"개</b> 항목이 AI 초안 그대로예요";
+  else if(own.length) $("#saveState").innerHTML="직접 쓰실 항목 <b>"+own.length+"개</b>가 비었어요";
+  else if(need.length||!hasCat||!hasSt) $("#saveState").innerHTML="키움 단계의 <b>공유 카드</b>를 채워주세요";
+  else $("#saveState").innerHTML="모든 항목 검토 완료 · 확정하면 동료 산출물 목록에 올라갑니다";
+}
+function save(silent){
+  collect(); saveMe();
+  lastSave=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
+  dirty=false; if(!silent) toast("저장했어요"); sync();
+}
+$$("[data-k]").forEach(function(el){
+  el.addEventListener("input",function(){
+    var w=el.closest(".f");
+    if(w&&w.classList.contains("ai")){w.classList.remove("ai");w.classList.add("edited");}
+    dirty=true; sync();});});
+$$(".chips[data-group]").forEach(function(g){
+  g.addEventListener("click",function(e){
+    var b=e.target.closest(".chip"); if(!b)return;
+    if(g.dataset.multi) b.classList.toggle("on");
+    else { $$(".chip",g).forEach(function(c){c.classList.remove("on");}); b.classList.add("on"); }
+    dirty=true; sync();});});
+
+function fillDraft(d,done){
+  var i=0, iv=setInterval(function(){
+    if(i>=AIF.length){ clearInterval(iv); done(); return; }
+    var k=AIF[i++]; if(d[k]==null) return;
+    $('[data-k="'+k+'"]').value=String(d[k]).trim();
+    var w=$('[data-ai="'+k+'"]'); w.classList.add("ai"); w.classList.remove("edited");
+    sync();},260);
+}
+$("#btnAI").addEventListener("click",function(){
+  var b=this,t0=Date.now();
+  var payload={memo:($('[data-k="memo"]')||{}).value||"", users:($('[data-k="users"]')||{}).value||"",
+    goal:($('[data-k="goal"]')||{}).value||"", scope:($('[data-k="scope"]')||{}).value||"",
+    peer:($('[data-k="peer"]')||{}).value||""};
+  if(!payload.memo.trim()){ toast("먼저 한 줄 메모를 적어주세요"); stage(1); $('[data-k="memo"]').focus(); return; }
+  b.disabled=true; b.innerHTML=SPIN+"Solar 호출 중…";
+  var ctrl=("AbortController" in window)?new AbortController():null;
+  var timer=setTimeout(function(){if(ctrl)ctrl.abort();},60000);
+  fetch("/api/draft",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload),signal:ctrl?ctrl.signal:undefined})
+  .then(function(r){return r.json().then(function(j){if(!r.ok||!j.ok)throw new Error(j.error||("HTTP "+r.status));return j;});})
+  .then(function(j){ clearTimeout(timer);
+    fillDraft(j.draft,function(){ generated=true;b.disabled=false;b.innerHTML=REDO;save(true);
+      var m=j.meta||{};
+      toast("Solar Pro 4 초안 완성 · "+Math.round((m.ms||(Date.now()-t0))/100)/10+"초");
+      var el=$("#aiMeta"); if(el) el.innerHTML='실제 호출 · <b>'+(m.model||"solar-pro4")+'</b> · '+
+        (m.tokens?m.tokens+" 토큰 · ":"")+Math.round((m.ms||0)/100)/10+"초";});})
+  .catch(function(err){ clearTimeout(timer);
+    fillDraft(DRAFT,function(){ generated=true;b.disabled=false;b.innerHTML=REDO;save(true);
+      toast("예시 초안으로 대체했어요 (서버 미연결)");
+      var el=$("#aiMeta"); if(el) el.innerHTML='<span style="color:var(--muted-foreground)">예시 초안 · 서버 미연결</span>';});});
+});
+$("#btnSave").addEventListener("click",function(){save();});
+$("#btnReset").addEventListener("click",function(){
+  db.works=db.works.filter(function(w){return !w.mine;});
+  me={form:{},cat:"",status:"",ethicsChips:[],gen:false,hearts:[],reviewed:[],ethicsDone:false};
+  saveDB(); saveMe();
+  $$("[data-k]").forEach(function(el){el.value="";});
+  $$(".chip").forEach(function(c){c.classList.remove("on");});
+  $$(".f").forEach(function(f){f.classList.remove("ai","edited");});
+  generated=false; lastSave=null; critW.forEach(function(c){c.reset();});
+  ethW.forEach(function(c){c.reset();}); $("#e_open").value="";
+  sync(); updateEthics(); toast("내 기록을 비웠어요");
+});
+$("#btnDone").addEventListener("click",function(){
+  collect();
+  var d=me.form;
+  var w=db.works.filter(function(x){return x.mine;})[0];
+  if(!w){ w={id:"mine",mine:true,hearts:0,rSum:0,rN:0}; db.works.push(w); }
+  w.title=d.title; w.tagline=d.tagline; w.cat=me.cat; w.domain=me.cat==="행정"?"행정·공문":(me.cat==="수업"?"수업·평가":"학부모소통");
+  w.status=me.status==="배포중"?"live":(me.status==="베타테스트"?"beta":"demo");
+  saveDB(); saveMe(); sync();
+  toast("확정했어요 · 동료 산출물과 대시보드에 올라갔습니다");
+});
+setInterval(function(){ if(dirty) save(true); },5000);
+
+/* ═══════════════ A4 ═══════════════ */
+var zooms=[1,.8,.6],zi=1;
+function applyZoom(){var s=$("#sheet");s.style.transform="scale("+zooms[zi]+")";
+  s.style.marginBottom=297*(zooms[zi]-1)+"mm";$("#btnZoom").textContent=Math.round(zooms[zi]*100)+"%";}
+$("#btnZoom").addEventListener("click",function(){zi=(zi+1)%zooms.length;applyZoom();});
+$("#btnPrint").addEventListener("click",function(){window.print();});
+applyZoom();
+
+/* ═══════════════ 표 토글 ═══════════════ */
+$$("[data-table]").forEach(function(b){b.addEventListener("click",function(){
+  var el=$("#"+b.dataset.table);el.classList.toggle("on");
+  b.textContent=el.classList.contains("on")?"차트로 보기":"표로 보기";});});
+$$("#v-dash .filters .fchip").forEach(function(c){c.addEventListener("click",function(){
+  $$("#v-dash .filters .fchip").forEach(function(x){x.setAttribute("aria-pressed","false");});
+  c.setAttribute("aria-pressed","true");});});
+
+/* ═══════════════ 시연용 프리셋 ═══════════════ */
+if(/[?&]seed=1/.test(location.search) && !me.form.title){
+  var S={memo:"학기말에 생활기록부 쓸 때 아이들 관찰 기록이 여기저기 흩어져 있음. 수첩, 카톡, 구글독스. 모으는 데만 며칠 걸림.",
     users:"담임 교사", goal:"수시로 남긴 관찰 메모를 학생별로 자동 정리",
     nfr:"학생 이름은 저장하지 않고 번호로만 관리. 교사 계정만 접근 가능",
     scope:"메모 입력과 학생별 모아보기까지 구현했습니다. 생기부 문장 추천은 개인정보 검토가 끝나지 않아 이번 범위에서 제외했습니다.",
@@ -1075,19 +1277,25 @@ if(/[?&]seed=1/.test(location.search)){
     turn:"3월에 적어둔 메모를 12월에 찾다가, 결국 기억으로 채워 넣은 적이 있었습니다. 그날 저녁에 처음으로 '이건 내가 만들어야겠다'고 생각했습니다.",
     hope:"기록을 모으는 시간이 줄어든 만큼, 아이 한 명을 더 오래 들여다볼 수 있기를 바랐습니다.",
     eth:"학생 이름 대신 번호만 저장하도록 설계했고, 메모는 작성한 교사 계정에서만 열람할 수 있게 했습니다."};
-  Object.keys(SEED).forEach(function(k){ var el=$('[data-k="'+k+'"]'); if(el) el.value=SEED[k]; });
-  Object.keys(DRAFT).forEach(function(k){ var el=$('[data-k="'+k+'"]'); if(el) el.value=DRAFT[k]; });
-  $$('.chips[data-group=cat] .chip').forEach(function(c){ c.classList.toggle("on", c.dataset.v==="행정"); });
-  $$('.chips[data-group=status] .chip').forEach(function(c){ c.classList.toggle("on", c.dataset.v==="베타테스트"); });
+  Object.keys(S).forEach(function(k){var el=$('[data-k="'+k+'"]');if(el)el.value=S[k];});
+  Object.keys(DRAFT).forEach(function(k){var el=$('[data-k="'+k+'"]');if(el)el.value=DRAFT[k];});
+  $$('.chips[data-group=cat] .chip').forEach(function(c){c.classList.toggle("on",c.dataset.v==="수업");});
+  $$('.chips[data-group=status] .chip').forEach(function(c){c.classList.toggle("on",c.dataset.v==="베타테스트");});
   $$('.chips[data-group=ethics] .chip').forEach(function(c){
-    c.classList.toggle("on", c.dataset.v==="개인정보·데이터 보호"||c.dataset.v==="학생 성장 최우선"); });
+    c.classList.toggle("on", c.dataset.v==="개인정보·데이터 보호"||c.dataset.v==="학생 성장 최우선");});
   generated=true;
-  AIF.forEach(function(k){ var w=$('[data-ai="'+k+'"]'); if(w) w.classList.add("ai"); });
+  AIF.forEach(function(k){var w=$('[data-ai="'+k+'"]');if(w)w.classList.add("ai");});
   var am=$("#aiMeta"); if(am) am.innerHTML='실제 호출 · <b>solar-pro4-260806</b> · 1,229 토큰 · 20.6초';
+  collect(); saveMe();
 }
 
-load(); sync();
+/* ═══════════════ 시작 ═══════════════ */
+var st=document.createElement("style");
+st.textContent="@keyframes spin{to{transform:rotate(360deg)}}";
+document.head.appendChild(st);
+restore(); sync(); updateEthics();
 go(location.hash.slice(1)||"dash",false);
 setTimeout(function(){ document.body.setAttribute('data-h', String(Math.ceil(document.body.getBoundingClientRect().height))); },800);
 })();
+
 </script>

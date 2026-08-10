@@ -1,0 +1,11 @@
+{
+  "name": "sendev-growth-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "성장형 교사 개발자 플랫폼 프로토타입",
+  "scripts": {
+    "dev": "node server.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

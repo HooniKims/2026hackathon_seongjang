@@ -19,18 +19,27 @@ sendev.kr에 이식하는 것을 전제로, 디자인과 데이터 구조를 맞
 
 ## 실행
 
+### 로컬
 ```bash
 cp .env.example .env      # UPSTAGE_API_KEY 입력
 node server.mjs           # → http://localhost:8787
 ```
-
 의존성 없습니다. Node 18 이상이면 됩니다.
+
+### Vercel 배포
+```bash
+npx vercel                       # 첫 배포 (프로젝트 연결)
+npx vercel env add UPSTAGE_API_KEY production
+npx vercel --prod                # 운영 배포
+```
+정적 `index.html` + 서버리스 함수 `api/draft.js` 구조라 빌드 설정이 필요 없습니다.
 
 | 주소 | 화면 |
 |---|---|
 | `/?seed=1#dash` | 대시보드 |
 | `/?seed=1#write` | 연수생 입력 (틔움·키움·나눔) |
 | `/?seed=1#preview` | 사례집 초안 (A4) |
+| `/?seed=1#board` | 동료 산출물 (하트) |
 | `/?seed=1#review` | 현장 평가 (익명) |
 | `/?seed=1#ethics` | 윤리 설문 |
 
@@ -41,20 +50,25 @@ node server.mjs           # → http://localhost:8787
 
 | 파일 | 역할 |
 |---|---|
-| `prototype.html` | 화면 5종. 데이터는 localStorage, 더미 데이터는 파일에 번들 |
-| `server.mjs` | `.env` 를 읽어 Upstage Solar 호출. **API 키가 머무는 유일한 곳** |
+| `index.html` | 화면 6종. 데이터는 localStorage, 더미 데이터는 파일에 번들 |
+| `api/draft.js` | Upstage Solar 호출. **API 키가 머무는 유일한 곳.** Vercel 함수이자 공용 모듈 |
+| `server.mjs` | 로컬 개발 서버. `api/draft.js` 를 그대로 가져다 씁니다 |
 | `CASEBOOK_SPEC.md` | 사례집 데이터 스키마 · 루브릭 · 윤리 설문 문항 |
 | `DESIGN.md` | sendev.kr 디자인 시스템 조사 결과 |
 | `screenshots/` | 화면 캡처 5종 |
 
 ### sendev 이식 시
 
-`server.mjs` 의 `/api/draft` 핸들러가 **TanStack Start 서버 함수(`createServerFn`)로 그대로 옮겨질 자리**입니다.
+`api/draft.js` 의 `makeDraft()` 가 **TanStack Start 서버 함수(`createServerFn`)로 그대로 옮겨질 자리**입니다.
 브라우저는 API 키를 보지 않습니다. 이 경계를 유지해 주세요.
+
+저장소는 지금 localStorage 입니다. sendev 이식 시 이 부분만 서버 DB로 바꾸면 됩니다.
+`db.works` / `db.ethics` / `me` 세 덩어리가 저장 대상 전부입니다.
 
 ## 알아둘 것
 
-- 대시보드 숫자는 **전부 예시 데이터**입니다.
+- 산출물 24건은 **예시 데이터**이고, 여기에 내가 확정한 산출물이 더해집니다.
+- 하트·평가·윤리 설문은 **실제로 저장되고 대시보드에 즉시 반영**됩니다. 저장 위치는 브라우저입니다.
 - AI 초안은 `solar-pro4` 를 실제 호출합니다. 응답에 20초 안팎 걸립니다.
 - AI가 쓴 항목은 **고쳐야만 확정**됩니다. 초안 그대로 저장되지 않습니다.
 - `펜 대신 키보드를 잡게 된 순간` `교실에 어떤 변화를 바랐나요` 두 항목은 AI가 쓰지 않습니다.
