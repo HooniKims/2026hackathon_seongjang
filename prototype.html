@@ -1,0 +1,1093 @@
+<title>성장형 교사 개발자 플랫폼 — 프로토타입</title>
+
+<style>
+:root{
+  --background:#f8fafc; --foreground:#0f1926;
+  --card:#fff; --muted:#f1f5f9; --muted-foreground:#687485;
+  --primary:#11b981; --primary-foreground:#f6fefa;
+  --secondary:#e7f7ee; --secondary-foreground:#005336;
+  --accent:#d8f7e6; --accent-foreground:#005336;
+  --border:#dfe5eb; --ring:#11b981; --destructive:#e40014;
+  --c1:#059669; --c2:#0369a1; --c3:#6d28d9; --c4:#d97706; --c5:#be123c;
+  --seq1:#a7f3d0; --seq2:#6ee7b7; --seq3:#34d399; --seq4:#10b981; --seq5:#059669; --seq6:#047857; --seq7:#065f46;
+  --grid:#eef2f6; --postit:#f6efd5; --postit-fg:#2a4243; --postit-bd:#e6d9a8;
+  --star:#f59e0b;
+  --shadow-sm:0 1px 2px 0 rgb(15 25 38/.05);
+  --shadow-md:0 4px 6px -1px rgb(15 25 38/.08),0 2px 4px -2px rgb(15 25 38/.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",system-ui,sans-serif;
+  background:var(--background);color:var(--foreground);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+.num{font-variant-numeric:tabular-nums}
+h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
+.sub{margin-top:.25rem;font-size:.875rem;color:var(--muted-foreground);max-width:64ch}
+
+/* 헤더 */
+.hdr{position:sticky;top:0;z-index:30;background:rgb(255 255 255/.92);backdrop-filter:blur(8px);box-shadow:var(--shadow-sm)}
+.hdr-in{margin:0 auto;max-width:1800px;display:flex;align-items:center;gap:.75rem;padding:.875rem 1.5rem}
+@media(min-width:640px){.hdr-in{padding:.875rem 3rem}}
+.logo{display:flex;align-items:center;gap:.5rem}
+.logo-mark{display:flex;height:2.25rem;width:2.25rem;align-items:center;justify-content:center;border-radius:.875rem;background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow-md)}
+.logo-txt{font-size:1.125rem;font-weight:700}
+.spacer{margin-left:auto}
+.protoTag{display:inline-flex;align-items:center;gap:.375rem;border-radius:9999px;background:#fff4e4;color:#92400e;padding:.25rem .625rem;font-size:.6875rem;font-weight:700;white-space:nowrap}
+
+/* 페이지 전환 */
+.pnav{position:sticky;top:3.75rem;z-index:25;background:rgb(248 250 252/.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.pnav-in{margin:0 auto;max-width:1800px;display:flex;gap:.375rem;padding:.625rem 1.5rem;overflow-x:auto;scrollbar-width:none}
+.pnav-in::-webkit-scrollbar{display:none}
+@media(min-width:640px){.pnav-in{padding:.625rem 3rem}}
+.pn{display:flex;align-items:center;gap:.4375rem;border-radius:.75rem;padding:.5rem .875rem;font-size:.8125rem;font-weight:500;color:var(--muted-foreground);white-space:nowrap;transition:all .15s}
+.pn:hover{background:var(--muted);color:var(--foreground)}
+.pn[aria-current=page]{background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow-sm)}
+.pn-n{display:flex;height:1.125rem;width:1.125rem;align-items:center;justify-content:center;border-radius:9999px;background:rgb(15 25 38/.08);font-size:.625rem;font-weight:700}
+.pn[aria-current=page] .pn-n{background:rgb(255 255 255/.25)}
+
+.wrap{margin:0 auto;max-width:1800px;padding:1.5rem 1.5rem 6rem}
+@media(min-width:640px){.wrap{padding:1.75rem 3rem 6rem}}
+.narrow{max-width:64rem}
+.view{display:none}.view.on{display:block}
+
+.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem}
+
+/* 카드 */
+.panel{border-radius:1rem;background:var(--card);padding:1.25rem 1.375rem;box-shadow:var(--shadow-sm);min-width:0}
+.panel-h{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;margin-bottom:.25rem;flex-wrap:wrap}
+.panel-t{display:flex;align-items:center;gap:.5rem;font-size:.9375rem;font-weight:700}
+.panel-d{font-size:.75rem;color:var(--muted-foreground);margin-bottom:1.125rem;line-height:1.55}
+.panel-note{margin-top:1rem;padding-top:.875rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted-foreground);line-height:1.6}
+.panel-note b{color:var(--foreground)}
+.linkbtn{font-size:.75rem;font-weight:600;color:var(--primary);text-decoration:underline;text-underline-offset:2px}
+.grid{display:grid;gap:1.25rem;align-items:start}
+@media(min-width:1100px){.g-donut{grid-template-columns:22rem 1fr}.g-32{grid-template-columns:1.6fr 1fr}.g-2{grid-template-columns:1fr 1fr}}
+.sec-t{display:flex;align-items:center;gap:.75rem;font-size:.8125rem;font-weight:700;letter-spacing:.06em;color:var(--muted-foreground);margin:1.75rem 0 .875rem}
+.sec-t::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* KPI */
+.kpis{display:grid;gap:.875rem;margin-bottom:1.25rem}
+@media(min-width:600px){.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{border-radius:1rem;background:var(--card);padding:1.125rem 1.25rem;box-shadow:var(--shadow-sm)}
+.kpi-k{font-size:.75rem;color:var(--muted-foreground)}
+.kpi-v{margin-top:.375rem;font-size:1.875rem;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.kpi-v.txt{font-size:1.1875rem;padding-top:.5rem}
+.kpi-v small{font-size:.9375rem;font-weight:600;color:var(--muted-foreground);margin-left:.125rem}
+.kpi-s{margin-top:.25rem;font-size:.75rem;color:var(--muted-foreground)}
+.kpi-s .up{color:var(--c1);font-weight:600}
+
+/* 필터칩 */
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.fchip{border-radius:9999px;background:var(--card);padding:.4375rem .875rem;font-size:.8125rem;font-weight:500;color:var(--muted-foreground);box-shadow:var(--shadow-sm)}
+.fchip[aria-pressed=true]{background:var(--primary);color:var(--primary-foreground)}
+
+/* 도넛 */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:1rem}
+.donut{position:relative;width:13rem;height:13rem}
+.donut svg{transform:rotate(-90deg);width:100%;height:100%}
+.donut-seg{transition:stroke-width .18s,opacity .18s}
+.donut-seg.dim{opacity:.32}
+.donut-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-c .v{font-size:2.125rem;font-weight:700;letter-spacing:-.03em;line-height:1}
+.donut-c .k{font-size:.75rem;color:var(--muted-foreground);margin-top:.125rem}
+.donut-list{display:flex;flex-direction:column;gap:.5rem;width:100%}
+.dl{display:grid;grid-template-columns:auto 1fr auto auto;gap:.5rem;align-items:center;font-size:.8125rem;padding:.25rem .375rem;border-radius:.5rem}
+.dl:hover{background:var(--muted)}
+.dl i{width:.625rem;height:.625rem;border-radius:.1875rem}
+.dl .n{font-weight:700}.dl .p{color:var(--muted-foreground);font-size:.75rem;min-width:2.5rem;text-align:right}
+
+/* 라인 */
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+.crosshair{stroke:var(--muted-foreground);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.legend{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.875rem}
+.lg{display:flex;align-items:center;gap:.4375rem;font-size:.75rem;color:var(--muted-foreground)}
+.lg i{width:.75rem;height:.1875rem;border-radius:9999px;flex-shrink:0}
+
+/* 수평바 */
+.hbars{display:flex;flex-direction:column;gap:.75rem}
+.hbar-row{display:grid;grid-template-columns:7.5rem 1fr auto;gap:.75rem;align-items:center}
+@media(max-width:560px){.hbar-row{grid-template-columns:5.5rem 1fr auto;gap:.5rem}}
+.hbar-lab{font-size:.8125rem;font-weight:500;text-align:right}
+.hbar-track{height:.875rem;border-radius:9999px;background:var(--grid);overflow:hidden;display:flex;gap:2px}
+.hbar-fill{height:100%;border-radius:9999px;transition:width .6s cubic-bezier(.22,1,.36,1)}
+.hbar-val{font-size:.8125rem;font-weight:700;min-width:3.25rem;text-align:right}
+.hbar-sub{font-size:.6875rem;color:var(--muted-foreground);font-weight:500}
+
+.insight{display:flex;gap:.875rem;border-radius:.875rem;background:var(--accent);color:var(--accent-foreground);padding:1rem 1.125rem;align-items:flex-start;line-height:1.6}
+.insight svg{flex-shrink:0;margin-top:.125rem}
+.insight-t{font-size:.8125rem;font-weight:700;margin-bottom:.25rem}
+.insight-d{font-size:.8125rem}
+.quote{border-left:3px solid var(--c3);border-radius:.25rem;background:var(--muted);padding:.75rem .875rem;font-size:.8125rem;line-height:1.6}
+.quote cite{display:block;margin-top:.375rem;font-size:.6875rem;font-style:normal;color:var(--muted-foreground)}
+.newprin{display:flex;align-items:center;gap:.625rem;border-radius:.75rem;border:1px dashed var(--c3);background:#f8f5ff;padding:.75rem .875rem}
+.newprin-n{display:flex;height:1.75rem;width:1.75rem;flex-shrink:0;align-items:center;justify-content:center;border-radius:9999px;background:var(--c3);color:#fff;font-size:.75rem;font-weight:700}
+
+/* 표 */
+.tablewrap{overflow-x:auto;border-radius:.75rem;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.8125rem;min-width:42rem}
+thead{background:var(--muted)}
+th{padding:.625rem .875rem;text-align:left;font-weight:600;white-space:nowrap;font-size:.75rem;color:var(--muted-foreground)}
+td{padding:.625rem .875rem;border-top:1px solid var(--border)}
+tbody tr:hover{background:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:.25rem;border-radius:9999px;padding:.125rem .5rem;font-size:.6875rem;font-weight:600;white-space:nowrap}
+.pill-live{background:var(--primary);color:#fff}
+.pill-beta{background:var(--accent);color:var(--accent-foreground)}
+.pill-demo{background:var(--muted);color:var(--muted-foreground)}
+.tableview{display:none;margin-top:1rem}.tableview.on{display:block}
+
+/* ─── 스프린트 스텝 ─── */
+.sprints{display:grid;gap:.75rem;margin-bottom:1.5rem}
+@media(min-width:760px){.sprints{grid-template-columns:repeat(3,1fr)}}
+.sp{display:flex;flex-direction:column;gap:.25rem;align-items:flex-start;text-align:left;border-radius:1rem;background:var(--card);padding:.9375rem 1.125rem;box-shadow:var(--shadow-sm);border:2px solid transparent;transition:all .2s}
+.sp:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.sp[aria-selected=true]{border-color:var(--primary);background:var(--accent)}
+.sp-k{display:flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:700;letter-spacing:.08em;color:var(--muted-foreground)}
+.sp[aria-selected=true] .sp-k{color:var(--accent-foreground)}
+.sp-t{font-size:1.0625rem;font-weight:700}
+.sp-d{font-size:.75rem;color:var(--muted-foreground);line-height:1.5}
+.sp[aria-selected=true] .sp-d{color:var(--accent-foreground)}
+.sp-done{margin-left:auto;color:var(--c1)}
+
+/* 폼 */
+.fields{display:flex;flex-direction:column;gap:1.125rem}
+.f{display:flex;flex-direction:column;gap:.4375rem}
+.f-lab{display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600}
+.req{color:var(--primary);font-size:.75rem}
+.f-hint{font-size:.75rem;color:var(--muted-foreground)}
+input[type=text],textarea,select{width:100%;border-radius:.75rem;border:1px solid var(--border);background:var(--background);
+  padding:.625rem .875rem;font-size:.875rem;outline:none;transition:box-shadow .15s,border-color .15s}
+textarea{resize:vertical;min-height:4.5rem;line-height:1.6}
+input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-color:transparent}
+.row2{display:grid;gap:1.125rem}
+@media(min-width:640px){.row2{grid-template-columns:1fr 1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{border-radius:9999px;background:var(--muted);padding:.375rem .875rem;font-size:.8125rem;font-weight:500;color:var(--muted-foreground);transition:all .15s}
+.chip:hover{color:var(--foreground)}
+.chip.on{background:var(--accent);color:var(--accent-foreground)}
+.f.ai textarea,.f.ai input[type=text]{background:var(--postit);border-color:var(--postit-bd)}
+.f.ai .f-lab::after{content:"AI 초안 · 수정 필요";margin-left:auto;border-radius:9999px;background:var(--postit);color:var(--postit-fg);padding:.125rem .5rem;font-size:.6875rem;font-weight:700;border:1px solid var(--postit-bd)}
+.f.edited .f-lab::after{content:"수정함";margin-left:auto;border-radius:9999px;background:var(--accent);color:var(--accent-foreground);padding:.125rem .5rem;font-size:.6875rem;font-weight:700}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:.75rem;padding:.5rem 1rem;font-size:.875rem;font-weight:500;transition:all .15s;white-space:nowrap}
+.btn:active{transform:scale(.96)}
+.btn-p{background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow-sm)}
+.btn-p:hover{background:#0fa876}
+.btn-s{background:var(--secondary);color:var(--secondary-foreground)}
+.btn-o{border:1px solid var(--border);background:var(--card)}
+.btn-o:hover{background:var(--accent);color:var(--accent-foreground)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-postit{background:var(--postit);color:var(--postit-fg);font-weight:600;box-shadow:var(--shadow-sm)}
+.btn-postit:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.alert{display:flex;gap:.75rem;border-radius:.75rem;background:var(--postit);color:var(--postit-fg);padding:.875rem 1rem;font-size:.8125rem;line-height:1.6;align-items:flex-start}
+.alert.ok{background:var(--accent);color:var(--accent-foreground)}
+.alert svg{flex-shrink:0;margin-top:.125rem}
+
+/* 저장바 */
+.savebar{position:fixed;inset-inline:0;bottom:0;z-index:28;background:rgb(255 255 255/.96);backdrop-filter:blur(8px);border-top:1px solid var(--border)}
+.savebar-in{margin:0 auto;max-width:1800px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8125rem 1.5rem;flex-wrap:wrap}
+@media(min-width:640px){.savebar-in{padding:.8125rem 3rem}}
+.savetxt{font-size:.8125rem;color:var(--muted-foreground)}
+.savetxt b{color:var(--foreground)}
+
+/* 별점 */
+.rate{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.stars{display:flex;gap:.1875rem}
+.star{position:relative;width:1.75rem;height:1.75rem;flex-shrink:0}
+.star svg{position:absolute;inset:0;width:100%;height:100%}
+.star .bg{color:var(--grid)}
+.star .fg{color:var(--star);overflow:hidden}
+.star .half{position:absolute;inset:0;width:50%;z-index:2}
+.star .full{position:absolute;inset:0;left:50%;width:50%;z-index:2}
+.star .half,.star .full{cursor:pointer}
+.rate-v{font-size:.9375rem;font-weight:700;min-width:2.25rem}
+.rate-n{font-size:.75rem;color:var(--muted-foreground)}
+
+.crit{display:flex;flex-direction:column;gap:.5rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.crit:last-of-type{border-bottom:none}
+.crit-h{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.crit-n{font-size:.9375rem;font-weight:700}
+.crit-q{font-size:.75rem;color:var(--muted-foreground)}
+
+/* 평가 대상 카드 */
+.targets{display:grid;gap:.75rem;margin-bottom:1.25rem}
+@media(min-width:760px){.targets{grid-template-columns:repeat(3,1fr)}}
+.tg{display:flex;flex-direction:column;gap:.25rem;align-items:flex-start;text-align:left;border-radius:.875rem;background:var(--card);padding:.875rem 1rem;box-shadow:var(--shadow-sm);border:2px solid transparent;transition:all .2s}
+.tg:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.tg[aria-selected=true]{border-color:var(--primary);background:var(--accent)}
+.tg-t{font-size:.9375rem;font-weight:700}
+.tg-d{font-size:.75rem;color:var(--muted-foreground)}
+.tg[aria-selected=true] .tg-d{color:var(--accent-foreground)}
+.tg-s{display:flex;align-items:center;gap:.375rem;margin-top:.25rem;font-size:.6875rem;font-weight:600;color:var(--c1)}
+
+/* A4 */
+.prevbar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.875rem;flex-wrap:wrap}
+.sheet-scroll{overflow:auto;border-radius:1rem;background:var(--muted);padding:1.25rem;display:flex;justify-content:center}
+.sheet{width:210mm;min-height:297mm;background:#fff;box-shadow:var(--shadow-md);padding:14mm 15mm;display:flex;flex-direction:column;flex-shrink:0;transform-origin:top center}
+.sheet-hd{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--primary);padding-bottom:3mm;margin-bottom:6mm}
+.sheet-hd .t{font-size:9pt;font-weight:700}
+.sheet-hd .p{font-size:8pt;color:var(--muted-foreground);font-variant-numeric:tabular-nums}
+.sheet-title{font-size:20pt;font-weight:700;line-height:1.25;letter-spacing:-.02em;text-wrap:balance}
+.sheet-tag{margin-top:2mm;font-size:9pt;color:var(--muted-foreground)}
+.sheet-meta{display:flex;flex-wrap:wrap;gap:2mm;margin-top:4mm}
+.sheet-pill{border-radius:9999px;background:var(--accent);color:var(--accent-foreground);padding:1mm 3mm;font-size:7.5pt;font-weight:600}
+.sheet-sec{margin-top:7mm}
+.sheet-sec h3{display:flex;align-items:center;gap:2mm;font-size:10pt;font-weight:700;color:var(--c1);margin-bottom:2.5mm}
+.sheet-sec h3::before{content:"";width:3mm;height:3mm;border-radius:1mm;background:var(--c1);flex-shrink:0}
+.sheet-sec p,.sheet-sec li{font-size:9pt;line-height:1.65;color:#1c2b3d;white-space:pre-wrap}
+.sheet-sec ul{padding-left:5mm}
+.sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:2mm}
+.sheet-box{border:1px solid var(--border);border-radius:2mm;padding:3mm}
+.sheet-box .k{font-size:7.5pt;font-weight:700;color:var(--muted-foreground);margin-bottom:1mm}
+.sheet-ft{margin-top:auto;padding-top:5mm;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:7.5pt;color:var(--muted-foreground)}
+.sheet-empty{color:#9aa7b8;font-style:italic}
+
+#tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .12s;background:#0f1926;color:#fff;border-radius:.5rem;padding:.4375rem .625rem;font-size:.75rem;line-height:1.5;box-shadow:var(--shadow-md);white-space:nowrap}
+#tip.on{opacity:1}
+#toast{position:fixed;top:5rem;left:50%;transform:translateX(-50%) translateY(-1rem);z-index:70;opacity:0;transition:all .25s;
+  background:var(--foreground);color:#fff;border-radius:.75rem;padding:.625rem 1.125rem;font-size:.8125rem;font-weight:500;box-shadow:var(--shadow-md);pointer-events:none}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@page{size:A4 portrait;margin:0}
+@media print{
+  .hdr,.pnav,.savebar,.no-print{display:none!important}
+  body{background:#fff}
+  .wrap{padding:0;max-width:none}
+  .sheet-scroll{overflow:visible;background:none;padding:0;border-radius:0}
+  .sheet{box-shadow:none;transform:none!important;page-break-after:always;break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+</style>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <span class="logo">
+      <span class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg></span>
+      <span class="logo-txt">SEN DEV CONNECT</span>
+    </span>
+    <span class="spacer"></span>
+    <span class="protoTag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>프로토타입 · 예시 데이터</span>
+  </div>
+</header>
+
+<nav class="pnav" aria-label="프로토타입 화면">
+  <div class="pnav-in">
+    <button class="pn" data-v="dash" aria-current="page"><span class="pn-n num">1</span>대시보드</button>
+    <button class="pn" data-v="write"><span class="pn-n num">2</span>연수생 입력</button>
+    <button class="pn" data-v="preview"><span class="pn-n num">3</span>사례집 초안</button>
+    <button class="pn" data-v="review"><span class="pn-n num">4</span>현장 평가</button>
+    <button class="pn" data-v="ethics"><span class="pn-n num">5</span>윤리 설문</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ══════════ 1. 대시보드 ══════════ -->
+<section class="view on" id="v-dash">
+  <div class="pagehead">
+    <div>
+      <h1>성장형 2기 대시보드</h1>
+      <p class="sub">교사가 어떤 학교 문제를 가져왔고, 무엇을 만들었고, 어떤 가치를 지켰는지를 한 화면에서 봅니다.</p>
+    </div>
+  </div>
+  <div class="filters">
+    <button class="fchip" aria-pressed="true">성장형 2기</button>
+    <button class="fchip" aria-pressed="false">2026학년도 전체</button>
+    <button class="fchip" aria-pressed="false">공개 동의 건만</button>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-k">참여 교사</div><div class="kpi-v num">24<small>명</small></div><div class="kpi-s">입문형 수료자의 <b class="num">28%</b>가 이어옴</div></div>
+    <div class="kpi"><div class="kpi-k">가져온 학교 문제</div><div class="kpi-v num">31<small>건</small></div><div class="kpi-s">사전 신청서 + PRD 문제정의</div></div>
+    <div class="kpi"><div class="kpi-k">학교에서 실제 사용</div><div class="kpi-v num">5<small>건</small></div><div class="kpi-s"><span class="up">↑ 3건</span> 해커톤 직후 대비</div></div>
+    <div class="kpi"><div class="kpi-k">1순위 윤리 가치</div><div class="kpi-v txt">학생 성장 최우선</div><div class="kpi-s">24명 응답 · 평균 <b class="num">4.8</b>/5.0</div></div>
+  </div>
+
+  <div class="grid g-donut">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">웹앱 유형 분포</span></div>
+      <p class="panel-d">제출할 때 고른 유형이 그대로 집계됩니다.</p>
+      <div class="donut-wrap">
+        <div class="donut"><svg viewBox="0 0 140 140" role="img" aria-label="웹앱 유형 분포"><g id="donutG"></g></svg>
+          <div class="donut-c"><span class="v num" id="donutV">24</span><span class="k" id="donutK">산출물</span></div></div>
+        <div class="donut-list" id="donutList"></div>
+      </div>
+      <p class="panel-note"><b>행정 편중이 2기 연속</b>입니다. 수업·평가 쪽 유도가 필요한지 검토할 근거가 됩니다.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">차시별 활동 현황</span><span class="hbar-sub">9.4 원격 → 9.13 나눔</span></div>
+      <p class="panel-d">산출물이 갱신되고 서로 피드백을 주고받은 양입니다. 활동이 죽은 차시가 곧 과정을 손봐야 할 지점입니다.</p>
+      <div class="chartbox" id="lineBox"><svg viewBox="0 0 720 250" role="img" aria-label="차시별 활동 현황"><g id="lineG"></g></svg></div>
+      <div class="legend" id="lineLegend"></div>
+      <p class="panel-note"><b>키움·나눔</b>에서 피드백이 폭증합니다. 이승엽 선생님 차시(자기·동료 점검)와 겹치는 구간이라, 이때 강사 지원을 집중하면 효과가 큽니다.</p>
+    </div>
+  </div>
+
+  <div class="sec-t">현장의 문제</div>
+  <div class="grid g-32">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">교사들이 가져온 학교 문제</span><button class="linkbtn" data-table="tblP">표로 보기</button></div>
+      <p class="panel-d">사전 신청서의 학교 현안과 PRD 문제정의를 영역별로 셌습니다. 진한 막대가 실제로 만들기 시작한 건수입니다.</p>
+      <div class="hbars" id="barsP"></div>
+      <div class="legend">
+        <span class="lg"><i style="background:var(--c1);height:.625rem;width:.625rem;border-radius:.1875rem"></i>착수</span>
+        <span class="lg"><i style="background:var(--grid);height:.625rem;width:.625rem;border-radius:.1875rem"></i>미착수</span>
+      </div>
+      <div class="tableview" id="tblP"><div class="tablewrap"><table><thead><tr><th>영역</th><th>제기</th><th>착수</th><th>미착수</th><th>공감</th></tr></thead><tbody id="tblPb"></tbody></table></div></div>
+      <p class="panel-note"><b>읽는 법</b> — 제기는 많은데 착수가 적은 영역이 <b>다음 기수의 주제 후보</b>입니다. 지금은 학부모소통이 공감 84에 미착수 2건으로 가장 벌어져 있습니다.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">공감이 높은 문제</span></div>
+      <p class="panel-d">동료들이 하트를 많이 누른 문제. 아직 아무도 안 만든 것에 표시했습니다.</p>
+      <div class="hbars" id="topIdeas"></div>
+      <div class="insight" style="margin-top:1.125rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2Z"/><path d="M9 21h6"/></svg>
+        <div><div class="insight-t">미착수 1위</div><div class="insight-d">&ldquo;상담 기록을 매번 세 군데에 옮겨 적는다&rdquo; — 공감 <b class="num">41</b>, 만든 팀 없음</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-t">교사 개발자 윤리</div>
+  <div class="grid g-32">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">7대 원칙 — 중요도</span><button class="linkbtn" data-table="tblE">표로 보기</button></div>
+      <p class="panel-d">마지막 차시에 받은 설문 결과입니다. 제1호 사례집은 이 분석을 손으로 했고, 올해는 제출과 동시에 나옵니다.</p>
+      <div class="hbars" id="barsE"></div>
+      <div class="tableview" id="tblE"><div class="tablewrap"><table><thead><tr><th>원칙</th><th>평균</th><th>1순위 지목</th></tr></thead><tbody id="tblEb"></tbody></table></div></div>
+      <div class="insight" style="margin-top:1.125rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg>
+        <div><div class="insight-t">숫자로 증명된 3대 핵심 가치</div><div class="insight-d">학생 성장 최우선 · 개인정보·데이터 보호 · 안전한 실험과 검증 — 상위 셋이 1기와 동일합니다.</div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">서술형에서 올라온 새 원칙</span></div>
+      <p class="panel-d">&ldquo;이 일곱 가지 말고 하나 더 만든다면?&rdquo; 응답을 주제별로 묶었습니다.</p>
+      <div style="display:flex;flex-direction:column;gap:.625rem">
+        <div class="newprin"><span class="newprin-n num">7</span><div><div style="font-size:.8125rem;font-weight:700">실패를 허용하는 문화</div><div class="hbar-sub">7명 언급 · 1기에서도 제기됨</div></div></div>
+        <div class="newprin"><span class="newprin-n num">5</span><div><div style="font-size:.8125rem;font-weight:700">유지보수 책임의 명시</div><div class="hbar-sub">5명 언급 · 신규</div></div></div>
+        <div class="newprin"><span class="newprin-n num">4</span><div><div style="font-size:.8125rem;font-weight:700">학생에게 설명할 수 있는 AI</div><div class="hbar-sub">4명 언급 · 신규</div></div></div>
+      </div>
+      <div class="quote" style="margin-top:1rem">한국 교육 현장은 여전히 실패에 대해 매우 엄격한 분위기를 가지고 있고, 이는 학생뿐 아니라 교사에게도 동일하게 적용된다고 느꼈습니다.<cite>실패를 허용하는 문화 · 제1호 참여자</cite></div>
+      <p class="panel-note">2년 연속 제기된 <b>&lsquo;실패를 허용하는 문화&rsquo;</b>는 8번째 원칙 후보로 다룰 만합니다.</p>
+    </div>
+  </div>
+
+  <div class="sec-t">산출물</div>
+  <div class="panel">
+    <div class="panel-h"><span class="panel-t">성장형 2기 산출물</span><span class="hbar-sub">24건 중 6건 표시</span></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>산출물</th><th>출발한 문제</th><th>유형</th><th>상태</th><th>공감</th><th>평가</th></tr></thead>
+      <tbody>
+        <tr><td><b>보결 시간표 자동배정</b></td><td>보결 교사 찾기에 매번 2시간</td><td>행정</td><td><span class="pill pill-live">● Live</span></td><td class="num">38</td><td class="num">4.6</td></tr>
+        <tr><td><b>학부모 상담 예약</b></td><td>상담 일정 조율 전화가 반복됨</td><td>소통·보호</td><td><span class="pill pill-live">● Live</span></td><td class="num">34</td><td class="num">4.4</td></tr>
+        <tr><td><b>우리반 알림장 도우미</b></td><td>가정통신문을 학급별로 다시 옮겨 적음</td><td>행정</td><td><span class="pill pill-beta">◎ Beta</span></td><td class="num">29</td><td class="num">4.2</td></tr>
+        <tr><td><b>수행평가 기록 도우미</b></td><td>평가 기록을 수기로 이중 관리</td><td>수업</td><td><span class="pill pill-beta">◎ Beta</span></td><td class="num">26</td><td class="num">4.1</td></tr>
+        <tr><td><b>디지털 음악 창작 보조</b></td><td>가락선을 멜로디로 바꿔주는 도구가 없음</td><td>수업</td><td><span class="pill pill-beta">◎ Beta</span></td><td class="num">22</td><td class="num">3.9</td></tr>
+        <tr><td><b>방과후 출결 알림</b></td><td>출결 확인 연락이 매일 반복됨</td><td>행정</td><td><span class="pill pill-demo">○ Demo</span></td><td class="num">18</td><td class="num">3.6</td></tr>
+      </tbody></table></div>
+  </div>
+</section>
+
+<!-- ══════════ 2. 연수생 입력 ══════════ -->
+<section class="view" id="v-write">
+  <div class="pagehead">
+    <div>
+      <h1>내 개발 기록</h1>
+      <p class="sub">스프린트마다 짧게 적으면 AI가 사례집 문체로 초안을 만들어요. 확인하고 고쳐서 완성하세요. 쓰는 대로 자동 저장됩니다.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.375rem">
+      <button class="btn btn-postit no-print" id="btnAI">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.94 14.06 4 20M14.5 4.5l5 5M17 3l4 4-9.5 9.5-5-5z"/><path d="m5 15-1 5 5-1"/></svg>
+        AI 초안 생성
+      </button>
+      <span class="hbar-sub no-print" id="aiMeta"></span>
+    </div>
+  </div>
+
+  <div class="sprints" role="tablist">
+    <button class="sp" role="tab" aria-selected="true" data-s="1">
+      <span class="sp-k">1차 스프린트 · 9.13 오전<svg class="sp-done" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <span class="sp-t">틔움</span><span class="sp-d">학교 문제를 찾고 무엇을 왜 만들지 정합니다</span></button>
+    <button class="sp" role="tab" aria-selected="false" data-s="2">
+      <span class="sp-k">2차 스프린트 · 9.13 낮<svg class="sp-done" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <span class="sp-t">키움</span><span class="sp-d">스스로 점검하고 동료 피드백을 받아 고칩니다</span></button>
+    <button class="sp" role="tab" aria-selected="false" data-s="3">
+      <span class="sp-k">3차 스프린트 · 9.13 오후<svg class="sp-done" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:none"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <span class="sp-t">나눔</span><span class="sp-d">발표하고 학교로 퍼뜨릴 준비를 합니다</span></button>
+  </div>
+
+  <!-- 틔움 -->
+  <div class="stage" data-s="1" style="display:flex;flex-direction:column;gap:1.25rem">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">🌱 이 문제를 왜 골랐나요</span></div>
+      <p class="panel-d">문장이 아니어도 괜찮아요. 떠오르는 대로 짧게 적으면 AI가 늘려 씁니다.</p>
+      <div class="fields">
+        <div class="f"><label class="f-lab" for="w_memo">한 줄 메모 <span class="req">필수</span></label>
+          <textarea id="w_memo" data-k="memo" placeholder="예) 가정통신문 30장 → 학급별로 다시 정리, 매주 금요일 2시간"></textarea></div>
+        <div class="f" data-ai="gap"><label class="f-lab" for="w_gap">0.1%의 빈틈, 현장의 발견</label>
+          <textarea id="w_gap" data-k="gap" placeholder="AI 초안 생성을 누르면 채워집니다"></textarea></div>
+        <div class="f" data-ai="why"><label class="f-lab" for="w_why">왜 이 문제인가?</label>
+          <textarea id="w_why" data-k="why" placeholder="AI 초안 생성을 누르면 채워집니다"></textarea></div>
+        <div class="f" data-ai="value"><label class="f-lab" for="w_value">어떤 가치가 있는가?</label>
+          <textarea id="w_value" data-k="value" placeholder="AI 초안 생성을 누르면 채워집니다"></textarea></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">📐 PRD — 무엇을 만들 것인가</span></div>
+      <p class="panel-d">최성규 선생님 차시에서 작성한 PRD 내용을 옮겨 적으세요.</p>
+      <div class="fields">
+        <div class="row2">
+          <div class="f"><label class="f-lab" for="w_users">주요 사용자</label><input type="text" id="w_users" data-k="users" placeholder="예) 담임 교사, 학부모"></div>
+          <div class="f"><label class="f-lab" for="w_goal">핵심 목표</label><input type="text" id="w_goal" data-k="goal" placeholder="예) 가정통신문을 학급 알림장으로 자동 변환"></div>
+        </div>
+        <div class="f" data-ai="fr"><label class="f-lab" for="w_fr">기능적 요구 (FR)</label>
+          <textarea id="w_fr" data-k="fr" placeholder="AI 초안 생성을 누르면 채워집니다"></textarea></div>
+        <div class="f"><label class="f-lab" for="w_nfr">비기능적 요구 (NFR) · 개인정보</label>
+          <textarea id="w_nfr" data-k="nfr" placeholder="예) 학생 이름은 저장하지 않음, 교사 계정만 접근"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 키움 -->
+  <div class="stage" data-s="2" style="display:none;flex-direction:column;gap:1.25rem">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">🔍 자기 점검</span></div>
+      <p class="panel-d">1차 결과물을 PRD와 견줘 봅니다. AI가 루브릭 기준으로 약한 곳을 짚어줍니다.</p>
+      <div class="alert ok" style="margin-bottom:1.125rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg>
+        <span><b>AI 점검 결과</b> — 안전과 책임 항목이 약합니다. 학생 입력값을 어떻게 다루는지 적어두면 배포 전 검토가 수월해집니다.</span>
+      </div>
+      <div class="fields">
+        <div class="f"><label class="f-lab" for="w_scope">어디까지 구현했나요 <span class="req">필수</span></label>
+          <textarea id="w_scope" data-k="scope" placeholder="미완성이어도 괜찮아요. 어디까지 됐는지만 정확히"></textarea></div>
+        <div class="f"><label class="f-lab" for="w_peer">동료 피드백에서 받은 것</label>
+          <textarea id="w_peer" data-k="peer" placeholder="예) 첫 화면에서 뭘 해야 할지 모르겠다는 의견"></textarea></div>
+        <div class="f" data-ai="next"><label class="f-lab" for="w_next">무엇을 먼저 고칠 것인가</label>
+          <textarea id="w_next" data-k="next" placeholder="AI 초안 생성을 누르면 채워집니다"></textarea></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">🏷️ 공유 카드</span></div>
+      <p class="panel-d">이 정보로 발표 모둠이 자동 구성되고, 대시보드 통계가 만들어집니다.</p>
+      <div class="fields">
+        <div class="row2">
+          <div class="f"><label class="f-lab" for="w_title">도구 이름 <span class="req">필수</span></label><input type="text" id="w_title" data-k="title" placeholder="예) 우리반 알림장 도우미"></div>
+          <div class="f"><label class="f-lab" for="w_url">배포 링크</label><input type="text" id="w_url" data-k="url" placeholder="https://"></div>
+        </div>
+        <div class="f"><label class="f-lab" for="w_tagline">한 줄 소개 <span class="req">필수</span></label>
+          <input type="text" id="w_tagline" data-k="tagline" maxlength="60" placeholder="60자 이내"></div>
+        <div class="f"><span class="f-lab">유형 태그 <span class="req">필수</span></span>
+          <div class="chips" data-group="cat">
+            <button class="chip" data-v="행정">행정의 늪에서 교육의 뜰로</button>
+            <button class="chip" data-v="수업">교실을 깨우는 기술</button>
+            <button class="chip" data-v="소통·보호">연결과 보호의 울타리</button></div>
+          <span class="f-hint">같은 태그끼리 발표 모둠이 됩니다</span></div>
+        <div class="f"><span class="f-lab">배포 상태 <span class="req">필수</span></span>
+          <div class="chips" data-group="status">
+            <button class="chip" data-v="배포중">● 배포중 (Live)</button>
+            <button class="chip" data-v="베타테스트">◎ 베타테스트 (Beta)</button>
+            <button class="chip" data-v="프로토타입">○ 프로토타입 (Demo)</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 나눔 -->
+  <div class="stage" data-s="3" style="display:none;flex-direction:column;gap:1.25rem">
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">🗣️ 선생님의 목소리</span></div>
+      <div class="alert" style="margin-bottom:1.125rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+        <span>이 두 항목은 <b>AI가 대신 쓰지 않습니다.</b> 선생님의 경험이 사례집에서 가장 중요한 부분이에요.</span>
+      </div>
+      <div class="fields">
+        <div class="f"><label class="f-lab" for="w_turn">펜 대신 키보드를 잡게 된 순간 <span class="req">필수</span></label>
+          <textarea id="w_turn" data-k="turn" placeholder="직접 작성해 주세요"></textarea></div>
+        <div class="f"><label class="f-lab" for="w_hope">교실에 어떤 변화를 바랐나요 <span class="req">필수</span></label>
+          <textarea id="w_hope" data-k="hope" placeholder="직접 작성해 주세요"></textarea></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-h"><span class="panel-t">🛡️ 교사 개발자의 약속</span></div>
+      <p class="panel-d">우리가 특히 지킨 약속을 고르고, 어떻게 지켰는지 적어주세요.</p>
+      <div class="fields">
+        <div class="f"><div class="chips" data-group="ethics" data-multi="1">
+          <button class="chip" data-v="학생 성장 최우선">학생 성장 최우선</button>
+          <button class="chip" data-v="개인정보·데이터 보호">개인정보·데이터 보호</button>
+          <button class="chip" data-v="책임과 출처 존중">책임과 출처 존중</button>
+          <button class="chip" data-v="안전한 실험과 검증">안전한 실험과 검증</button>
+          <button class="chip" data-v="역할 경계 인식">역할 경계 인식</button>
+          <button class="chip" data-v="공공성">공공성</button>
+          <button class="chip" data-v="투명성 및 설명 가능성">투명성 및 설명 가능성</button></div></div>
+        <div class="f"><label class="f-lab" for="w_eth">어떻게 지켰나요 <span class="req">필수</span></label>
+          <textarea id="w_eth" data-k="eth" placeholder="직접 작성해 주세요"></textarea></div>
+        <div class="f"><label class="f-lab" for="w_spread">학교로 어떻게 퍼뜨릴 계획인가요</label>
+          <textarea id="w_spread" data-k="spread" placeholder="예) 학년 협의회에서 시연, 2학기부터 3개 반 적용"></textarea></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3. 사례집 초안 ══════════ -->
+<section class="view" id="v-preview">
+  <div class="pagehead no-print">
+    <div>
+      <h1>사례집 초안 확인</h1>
+      <p class="sub">입력한 내용이 사례집 양식에 그대로 들어갑니다. A4 크기 그대로라 바로 인쇄하거나 PDF로 저장할 수 있어요.</p>
+    </div>
+  </div>
+  <div class="prevbar no-print">
+    <span class="hbar-sub">제2호 교사 개발자 해커톤 사례집 · 성장형 · 1/4쪽</span>
+    <div style="display:flex;gap:.5rem">
+      <button class="btn btn-o" id="btnZoom">80%</button>
+      <button class="btn btn-s" id="btnPrint">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>PDF로 저장</button>
+    </div>
+  </div>
+  <div class="sheet-scroll">
+    <div class="sheet" id="sheet">
+      <div class="sheet-hd"><span class="t">제2호 교사 개발자 해커톤 사례집 · 성장형</span><span class="p">1/4</span></div>
+      <h2 class="sheet-title" id="pv_title">도구 이름을 입력해 주세요</h2>
+      <p class="sheet-tag" id="pv_tagline">한 줄 소개가 여기에 표시됩니다</p>
+      <div class="sheet-meta">
+        <span class="sheet-pill" id="pv_cat">유형 미선택</span>
+        <span class="sheet-pill" id="pv_status">상태 미선택</span>
+        <span class="sheet-pill" id="pv_users">사용자 미입력</span>
+      </div>
+      <div class="sheet-sec"><h3>0.1%의 빈틈, 현장의 발견</h3><p id="pv_gap" class="sheet-empty">틔움 단계에서 작성하면 표시됩니다.</p></div>
+      <div class="sheet-sec"><h3>솔루션 제안 — 빛의 설계도</h3>
+        <div class="sheet-grid">
+          <div class="sheet-box"><div class="k">왜 이 문제인가?</div><p id="pv_why" class="sheet-empty">—</p></div>
+          <div class="sheet-box"><div class="k">어떤 가치가 있는가?</div><p id="pv_value" class="sheet-empty">—</p></div>
+          <div class="sheet-box"><div class="k">기능적 요구 (FR)</div><p id="pv_fr" class="sheet-empty">—</p></div>
+          <div class="sheet-box"><div class="k">구현한 범위</div><p id="pv_scope" class="sheet-empty">—</p></div>
+        </div></div>
+      <div class="sheet-sec"><h3>펜 대신 키보드를 잡게 된 순간</h3><p id="pv_turn" class="sheet-empty">나눔 단계에서 작성하면 표시됩니다.</p></div>
+      <div class="sheet-sec"><h3>교사 개발자의 약속</h3><p id="pv_eth" class="sheet-empty">—</p></div>
+      <div class="sheet-ft"><span>SEN DEV CONNECT · sendev.kr</span><span>서울특별시교육청</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 4. 현장 평가 ══════════ -->
+<section class="view" id="v-review">
+  <div class="pagehead">
+    <div>
+      <h1>현장 평가</h1>
+      <p class="sub">발표를 들으면서 바로 평가합니다. 5개 항목에 별점을 매기고 조언 한 줄을 남겨주세요.</p>
+    </div>
+  </div>
+  <div class="alert ok" style="margin-bottom:1.25rem">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+    <span><b>익명으로 제출됩니다.</b> 누가 몇 점을 줬는지는 발표자에게도 운영진에게도 보이지 않습니다. 같은 사람이 두 번 평가하는 것만 막기 위해 닉네임을 따로 확인합니다.</span>
+  </div>
+
+  <div class="panel" style="margin-bottom:1.25rem">
+    <div class="panel-h"><span class="panel-t">평가할 발표를 고르세요</span><span class="hbar-sub">우리 모둠 · 행정의 늪에서 교육의 뜰로</span></div>
+    <p class="panel-d">유형 태그가 같은 산출물끼리 모둠이 됩니다. 같은 모둠은 서로 평가합니다.</p>
+    <div class="targets" id="targets">
+      <button class="tg" aria-selected="true" data-i="0"><span class="tg-t">보결 시간표 자동배정</span><span class="tg-d">보결 교사 찾기에 매번 2시간</span><span class="tg-s" style="visibility:hidden"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>평가 완료</span></button>
+      <button class="tg" aria-selected="false" data-i="1"><span class="tg-t">우리반 알림장 도우미</span><span class="tg-d">가정통신문을 학급별로 다시 옮겨 적음</span><span class="tg-s" style="visibility:hidden"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>평가 완료</span></button>
+      <button class="tg" aria-selected="false" data-i="2"><span class="tg-t">방과후 출결 알림</span><span class="tg-d">출결 확인 연락이 매일 반복됨</span><span class="tg-s" style="visibility:hidden"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>평가 완료</span></button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-h"><span class="panel-t" id="revTitle">보결 시간표 자동배정</span><span class="hbar-sub">5점 만점 · 0.5점 단위</span></div>
+    <div id="criteria"></div>
+    <div class="fields" style="margin-top:1.25rem">
+      <div class="f"><label class="f-lab" for="r_advice">이 팀에게 가장 도움이 될 조언 한 가지 <span class="req">필수</span></label>
+        <textarea id="r_advice" maxlength="100" placeholder="100자 이내"></textarea>
+        <span class="f-hint">점수보다 이 문장이 발표자에게 더 도움이 됩니다</span></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.25rem;flex-wrap:wrap">
+      <span class="savetxt">합계 <b class="num" id="revTotal">0.0</b> / 25.0</span>
+      <button class="btn btn-p" id="btnReview" disabled>익명으로 제출</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. 윤리 설문 ══════════ -->
+<section class="view" id="v-ethics">
+  <div class="pagehead">
+    <div>
+      <h1>교사 개발자 윤리 설문</h1>
+      <p class="sub">마지막 차시에 한 번만 받습니다. 8문항, 3분이면 끝납니다. 이 응답이 모여 내년 사례집의 윤리 원칙이 됩니다.</p>
+    </div>
+  </div>
+  <div class="alert ok" style="margin-bottom:1.25rem">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M2 12h4M18 12h4M4.9 19.1l2.9-2.9M16.2 7.8l2.9-2.9"/></svg>
+    <span>제1호 사례집의 <b>7대 원칙</b>은 33명 교사 개발자가 직접 점수를 매기고 의견을 모아 만들었습니다. 올해 응답이 그 원칙을 갱신합니다.</span>
+  </div>
+  <div class="panel">
+    <div class="panel-h"><span class="panel-t">일곱 가지 원칙이 얼마나 중요합니까</span><span class="hbar-sub">5점 만점 · 0.5점 단위</span></div>
+    <div id="ethicsQ"></div>
+    <div class="fields" style="margin-top:1.25rem">
+      <div class="f"><label class="f-lab" for="e_open">이 일곱 가지 말고, 교사 개발자가 지켜야 할 약속을 하나 더 만든다면 무엇일까요? <span class="req">필수</span></label>
+        <textarea id="e_open" maxlength="200" style="min-height:6rem" placeholder="200자 이내"></textarea>
+        <span class="f-hint">작년에는 이 문항에서 &lsquo;실패를 허용하는 문화&rsquo;가 나왔고, 8번째 원칙 후보가 되었습니다</span></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.25rem;flex-wrap:wrap">
+      <span class="savetxt" id="ethicsProg">0 / 7 문항 응답</span>
+      <button class="btn btn-p" id="btnEthics" disabled>제출</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="savebar no-print" id="savebar" style="display:none">
+  <div class="savebar-in">
+    <span class="savetxt" id="saveState">아직 저장된 내용이 없어요</span>
+    <div style="display:flex;gap:.5rem">
+      <button class="btn btn-o" id="btnReset">비우기</button>
+      <button class="btn btn-o" id="btnSave">지금 저장</button>
+      <button class="btn btn-p" id="btnDone" disabled>확정하기</button>
+    </div>
+  </div>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s);},
+    $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));},
+    CV=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();};
+var C1=CV("--c1"),C2=CV("--c2"),C4=CV("--c4"),C5=CV("--c5"),GRID=CV("--grid"),MUT=CV("--muted-foreground");
+var SEQ=["--seq7","--seq6","--seq5","--seq4","--seq3","--seq2","--seq1"].map(CV);
+var KEY="sendev-proto-v1";
+
+/* ── 공통 ── */
+var tip=$("#tip");
+function showTip(t){tip.innerHTML=t;tip.classList.add("on");}
+function hideTip(){tip.classList.remove("on");}
+function moveTip(e){tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)+"px";
+  tip.style.top=Math.max(8,e.clientY-tip.offsetHeight-10)+"px";}
+function bindTip(el,t){el.addEventListener("mouseenter",function(){showTip(t);});
+  el.addEventListener("mousemove",moveTip);el.addEventListener("mouseleave",hideTip);}
+var toastT;
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("on");},2000);}
+
+/* ── 페이지 전환 ── */
+function go(v,smooth){
+  if(!$("#v-"+v)) v="dash";
+  $$(".pn").forEach(function(x){
+    if(x.dataset.v===v) x.setAttribute("aria-current","page"); else x.removeAttribute("aria-current");});
+  $$(".view").forEach(function(s){s.classList.toggle("on", s.id==="v-"+v);});
+  $("#savebar").style.display = (v==="write") ? "" : "none";
+  scrollTo({top:0,behavior:smooth?"smooth":"auto"});
+}
+$$(".pn").forEach(function(b){
+  b.addEventListener("click",function(){
+    if(location.hash!=="#"+b.dataset.v) location.hash=b.dataset.v;
+    go(b.dataset.v,true);
+  });
+});
+addEventListener("hashchange",function(){ go(location.hash.slice(1)||"dash",false); });
+
+/* ══════ 대시보드 ══════ */
+var types=[{k:"행정의 늪에서 교육의 뜰로",short:"행정",v:11,c:C1},
+           {k:"교실을 깨우는 기술",short:"수업",v:9,c:C2},
+           {k:"연결과 보호의 울타리",short:"소통·보호",v:4,c:C4}];
+(function(){
+  var R=52,CX=70,CY=70,SW=19,GAP=2.4,CIRC=2*Math.PI*R;
+  var total=types.reduce(function(a,t){return a+t.v;},0),g=$("#donutG"),off=0;
+  g.innerHTML='<circle cx="'+CX+'" cy="'+CY+'" r="'+R+'" fill="none" stroke="'+GRID+'" stroke-width="'+SW+'"/>';
+  types.forEach(function(t){
+    var len=t.v/total*CIRC,c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    c.setAttribute("cx",CX);c.setAttribute("cy",CY);c.setAttribute("r",R);
+    c.setAttribute("fill","none");c.setAttribute("stroke",t.c);c.setAttribute("stroke-width",SW);
+    c.setAttribute("stroke-dasharray",Math.max(0,len-GAP)+" "+(CIRC-Math.max(0,len-GAP)));
+    c.setAttribute("stroke-dashoffset",-off);c.setAttribute("class","donut-seg");
+    g.appendChild(c);t._el=c;t._p=Math.round(t.v/total*100);off+=len;
+  });
+  $("#donutList").innerHTML=types.map(function(t,i){
+    return '<div class="dl" data-i="'+i+'"><i style="background:'+t.c+'"></i><span>'+t.k+
+      '</span><span class="n num">'+t.v+'</span><span class="p num">'+t._p+'%</span></div>';}).join("");
+  function focus(i){types.forEach(function(t,j){t._el.classList.toggle("dim",i!==null&&i!==j);
+    t._el.setAttribute("stroke-width",i===j?SW+6:SW);});
+    $("#donutV").textContent=i===null?total:types[i].v;
+    $("#donutK").textContent=i===null?"산출물":types[i].short;}
+  $$(".dl").forEach(function(row){var i=+row.dataset.i;
+    row.addEventListener("mouseenter",function(){focus(i);showTip(types[i].k+" · <b>"+types[i].v+"건</b> ("+types[i]._p+"%)");});
+    row.addEventListener("mousemove",moveTip);
+    row.addEventListener("mouseleave",function(){focus(null);hideTip();});});
+})();
+
+(function(){
+  var W=720,H=250,PL=38,PR=14,PT=14,PB=34,iw=W-PL-PR,ih=H-PT-PB;
+  var xs=["9.4 원격","9.12 PRD","9.12 깃허브","9.12 백엔드","틔움","키움","나눔"];
+  var ss=[{k:"산출물 갱신",c:C1,d:[0,18,12,16,24,31,22]},
+          {k:"동료 피드백",c:C2,d:[0,3,2,4,12,38,44]},
+          {k:"활동한 교사",c:C4,d:[22,24,23,22,24,24,24]}];
+  var max=50,n=xs.length,X=function(i){return PL+i/(n-1)*iw;},Y=function(v){return PT+ih-v/max*ih;};
+  var out="";
+  [0,10,20,30,40,50].forEach(function(v){
+    out+='<line x1="'+PL+'" y1="'+Y(v)+'" x2="'+(W-PR)+'" y2="'+Y(v)+'" stroke="'+GRID+'" stroke-width="1"/>'+
+         '<text x="'+(PL-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="11" fill="'+MUT+'">'+v+'</text>';});
+  xs.forEach(function(w,i){out+='<text x="'+X(i)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10.5" fill="'+MUT+'">'+w+'</text>';});
+  ss.forEach(function(s){
+    var line=s.d.map(function(v,i){return (i?"L":"M")+X(i)+" "+Y(v);}).join(" ");
+    out+='<path d="'+line+' L'+X(n-1)+' '+Y(0)+' L'+X(0)+' '+Y(0)+' Z" fill="'+s.c+'" opacity=".07"/>'+
+         '<path d="'+line+'" fill="none" stroke="'+s.c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'+
+         '<circle cx="'+X(n-1)+'" cy="'+Y(s.d[n-1])+'" r="4.5" fill="'+s.c+'" stroke="#fff" stroke-width="2"/>';});
+  out+='<line class="crosshair" id="ch" x1="0" y1="'+PT+'" x2="0" y2="'+(PT+ih)+'"/>';
+  ss.forEach(function(s,i){out+='<circle id="hd'+i+'" r="5" fill="'+s.c+'" stroke="#fff" stroke-width="2" opacity="0"/>';});
+  $("#lineG").innerHTML=out;
+  $("#lineLegend").innerHTML=ss.map(function(s){return '<span class="lg"><i style="background:'+s.c+'"></i>'+s.k+'</span>';}).join("");
+  var svg=$("#lineBox svg"),ch=$("#ch");
+  svg.addEventListener("mousemove",function(e){
+    var r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W;
+    if(px<PL||px>W-PR)return;
+    var i=Math.max(0,Math.min(n-1,Math.round((px-PL)/iw*(n-1))));
+    ch.setAttribute("x1",X(i));ch.setAttribute("x2",X(i));ch.style.opacity=".6";
+    ss.forEach(function(s,si){var d=$("#hd"+si);d.setAttribute("cx",X(i));d.setAttribute("cy",Y(s.d[i]));d.style.opacity="1";});
+    showTip("<b>"+xs[i]+"</b><br>"+ss.map(function(s){
+      return '<span style="display:inline-block;width:.5rem;height:.5rem;border-radius:2px;background:'+s.c+';margin-right:.3rem"></span>'+s.k+" "+s.d[i];}).join("<br>"));
+    moveTip(e);});
+  svg.addEventListener("mouseleave",function(){ch.style.opacity="0";
+    ss.forEach(function(s,i){$("#hd"+i).style.opacity="0";});hideTip();});
+})();
+
+var problems=[{k:"행정·공문",r:12,s:10,h:156},{k:"수업·평가",r:9,s:8,h:121},
+  {k:"학부모소통",r:5,s:3,h:84},{k:"학교행사",r:3,s:2,h:32},{k:"보건·건강",r:2,s:1,h:19}];
+(function(){
+  var host=$("#barsP"),max=12;host.innerHTML="";
+  problems.forEach(function(p){
+    var row=document.createElement("div");row.className="hbar-row";
+    row.innerHTML='<span class="hbar-lab">'+p.k+'</span><span class="hbar-track" style="background:transparent">'+
+      '<span class="hbar-fill" style="width:0;background:'+C1+'"></span>'+
+      '<span class="hbar-fill" style="width:0;background:'+GRID+'"></span></span>'+
+      '<span class="hbar-val num">'+p.r+'건<br><span class="hbar-sub">공감 '+p.h+'</span></span>';
+    host.appendChild(row);
+    var f=row.querySelectorAll(".hbar-fill");
+    requestAnimationFrame(function(){f[0].style.width=p.s/max*100+"%";f[1].style.width=(p.r-p.s)/max*100+"%";});
+    bindTip(row,p.k+"<br>제기 <b>"+p.r+"건</b> · 착수 <b>"+p.s+"건</b> · 미착수 "+(p.r-p.s)+"건<br>공감 "+p.h);});
+  $("#tblPb").innerHTML=problems.map(function(p){
+    return "<tr><td>"+p.k+"</td><td class='num'>"+p.r+"</td><td class='num'>"+p.s+
+      "</td><td class='num'>"+(p.r-p.s)+"</td><td class='num'>"+p.h+"</td></tr>";}).join("");
+})();
+
+function hbars(host,rows,unit,seq){
+  var max=Math.max.apply(null,rows.map(function(r){return r.v;}));host.innerHTML="";
+  rows.forEach(function(r,i){
+    var row=document.createElement("div");row.className="hbar-row";
+    row.innerHTML='<span class="hbar-lab">'+r.k+'</span><span class="hbar-track">'+
+      '<span class="hbar-fill" style="width:0;background:'+(seq?SEQ[i%SEQ.length]:(r.c||C1))+'"></span></span>'+
+      '<span class="hbar-val num">'+(r.d||r.v)+(unit||"")+'</span>';
+    host.appendChild(row);
+    var f=row.querySelector(".hbar-fill");
+    requestAnimationFrame(function(){f.style.width=r.v/max*100+"%";});
+    bindTip(row,r.k+" · <b>"+(r.d||r.v)+(unit||"")+"</b>"+(r.tip?"<br>"+r.tip:""));});
+}
+hbars($("#topIdeas"),[{k:"상담 기록 3중 입력",v:41,c:C5,tip:"아직 만든 팀 없음"},
+  {k:"가정통신문 재정리",v:38},{k:"보결 교사 찾기",v:35},{k:"수행평가 이중 기록",v:29},
+  {k:"방과후 출결 확인",v:24,c:C5,tip:"아직 만든 팀 없음"}],"");
+
+var PRIN=["학생 성장 최우선","개인정보·데이터 보호","책임과 출처 존중","안전한 실험과 검증","역할 경계 인식","공공성","투명성 및 설명 가능성"];
+var PRIN_Q=["편리함보다 학생의 학습권과 성장을 앞에 두는 것",
+  "학생·교사의 데이터를 최소로 모으고 안전하게 다루는 것",
+  "AI가 만든 코드와 남의 자료의 출처를 밝히고 책임지는 것",
+  "교실에 들이기 전에 충분히 시험하고 점검하는 것",
+  "기술이 교사의 판단과 관계를 대신하지 않도록 선을 긋는 것",
+  "내가 만든 것을 사적 소유가 아닌 공교육의 자산으로 여기는 것",
+  "도구가 어떻게 판단하는지 학생·학부모에게 설명할 수 있는 것"];
+var prinData=[{v:4.8,f:11},{v:4.7,f:8},{v:4.1,f:1},{v:4.4,f:3},{v:3.5,f:0},{v:3.7,f:0},{v:3.9,f:1}];
+(function(){
+  var rows=PRIN.map(function(k,i){return {k:k.replace("·데이터",""),v:prinData[i].v,d:prinData[i].v.toFixed(1),tip:"1순위 지목 "+prinData[i].f+"명"};})
+    .sort(function(a,b){return b.v-a.v;});
+  hbars($("#barsE"),rows,"",true);
+  $("#tblEb").innerHTML=rows.map(function(r,i){
+    return "<tr><td>"+r.k+"</td><td class='num'>"+r.d+"</td><td class='num'>"+
+      (prinData[PRIN.map(function(p){return p.replace("·데이터","");}).indexOf(r.k)].f)+"명</td></tr>";}).join("");
+})();
+
+$$("[data-table]").forEach(function(b){b.addEventListener("click",function(){
+  var el=$("#"+b.dataset.table);el.classList.toggle("on");
+  b.textContent=el.classList.contains("on")?"차트로 보기":"표로 보기";});});
+$$(".fchip").forEach(function(c){c.addEventListener("click",function(){
+  $$(".fchip").forEach(function(x){x.setAttribute("aria-pressed","false");});
+  c.setAttribute("aria-pressed","true");});});
+
+/* ══════ 연수생 입력 ══════ */
+var DRAFT={
+  gap: "• 학기말 생활기록부를 작성할 때면 평소 수첩, 카카오톡, 구글독스 등에 짧게 남겨 둔 관찰 기록이 한곳에 모이지 않아 다시 찾아 모으는 데 며칠이 걸립니다.\n• 같은 학생에 대한 기록이 여러 매체에 흩어져 있어, 정작 필요한 순간에 어떤 내용이 어디에 있는지 떠올리기 어렵습니다.\n• 담임 교사는 수시로 메모를 남기지만, 그 메모들이 학생별로 정리되지 않은 채 입력 경로별로만 남아 있어 학기 말에 다시 학생 기준으로 재구성해야 합니다.\n• 동료 교사들도 비슷한 상황에서 기록을 모으는 데 시간을 쓰고 있어, 이 불편은 한 사람의 정리 습관 문제가 아니라 기록 방식이 흩어져 있는 구조에서 비롯됩니다.",
+  why: "이 문제는 단순히 교사가 정리를 잘하지 못해서 생기는 불편이 아닙니다. 관찰 기록은 수업 중, 쉬는 시간, 상담 직후처럼 짧은 틈에 수시로 생기는데, 그 순간의 기록은 빠른 입력과 접근성이 좋은 도구에 흩어지기 쉽습니다. 반면 생활기록부는 학생별로 서술해야 하므로, 기록을 모을 때는 다시 학생 기준으로 묶어내야 합니다. 입력의 편의와 기록의 정리 기준이 서로 달라서, 학기 말에 그 간극을 교사 개인이 수동으로 메워야 하는 구조가 반복됩니다. 결국 기록을 남기는 일보다 모은 뒤 다시 정리하는 일에 더 많은 시간이 들어가는 상황이 생깁니다.",
+  value: "관찰 메모를 학생별로 모아볼 수 있게 되면, 학기 말에 여기저기 흩어진 기록을 다시 찾아 모으는 시간을 줄일 수 있습니다. 교사는 기록을 모으는 데 쓰던 시간을 문장을 다듬거나 학생을 다시 살피는 데 쓸 수 있고, 그 여유는 생활기록부 작성의 밀도로 이어집니다. 또한 학생별로 기록이 쌓이면 한 학기를 돌아볼 때 어떤 장면이 누락되었는지도 더 쉽게 확인할 수 있습니다. 다만 이것은 기록을 자동으로 잘 써 주는 기능이 아니라, 흩어진 기록을 학생 기준으로 다시 묶는 수고를 덜어 주는 데서 시작되는 변화입니다.",
+  fr: "현재는 메모를 입력하고 학생별로 모아보는 기능까지 구현되어 있어, 흩어진 기록을 한 화면에서 학생 기준으로 확인하는 기본 흐름은 만들 수 있습니다. 그러나 학생 이름 검색이 되지 않아 특정 학생의 기록을 빠르게 찾기 어렵고, 이 점은 동료 피드백에서도 불편으로 지적되었습니다. 생기부 문장 추천 기능은 아직 구현하지 않았으며, 지금은 관찰 기록을 모으고 확인하는 단계에 머물러 있습니다. 따라서 다음 단계에서는 학생 검색과 같은 기본적인 찾기 기능을 우선해, 모아보기 기능이 실제로 쓰기 쉬운지 먼저 점검할 필요가 있습니다.",
+  next: "가장 먼저 학생 이름 검색을 해결해, 모아보기 기능이 있어도 원하는 학생 기록을 바로 찾지 못하는 불편을 줄이려 합니다. 검색은 기록량이 늘어날수록 체감 차이가 커지는 기능이라, 지금 단계에서 먼저 손보는 것이 적절하다고 판단했습니다. 그다음에는 메모를 남기는 경로와 학생별 모아보기가 자연스럽게 이어지는지 살펴보며, 기록을 다시 찾는 횟수가 실제로 줄어드는지 확인하고자 합니다. 생기부 문장 추천은 아직 미구현 상태이므로, 관찰 기록이 충분히 모이고 정리 흐름이 안정된 뒤에 검토해도 늦지 않다고 보았습니다."
+};
+var AIF=["gap","why","value","fr","next"];
+var generated=false, dirty=false, lastSave=null;
+
+function stage(n){
+  $$(".sp").forEach(function(s){s.setAttribute("aria-selected", s.dataset.s===String(n)?"true":"false");});
+  $$(".stage").forEach(function(s){s.style.display = s.dataset.s===String(n)?"flex":"none";});
+}
+$$(".sp").forEach(function(s){s.addEventListener("click",function(){stage(s.dataset.s);});});
+
+function data(){
+  var o={};
+  $$("[data-k]").forEach(function(el){o[el.dataset.k]=el.value;});
+  o._cat=($(".chips[data-group=cat] .chip.on")||{}).dataset ? $(".chips[data-group=cat] .chip.on").dataset.v : "";
+  o._status=($(".chips[data-group=status] .chip.on")||{}).dataset ? $(".chips[data-group=status] .chip.on").dataset.v : "";
+  o._ethics=$$(".chips[data-group=ethics] .chip.on").map(function(c){return c.dataset.v;});
+  o._gen=generated;
+  return o;
+}
+function sync(){
+  var d=data();
+  function put(id,v,fb){var e=$(id);if(!e)return;
+    if(v&&v.trim()){e.textContent=v;e.classList.remove("sheet-empty");}
+    else{e.textContent=fb;e.classList.add("sheet-empty");}}
+  put("#pv_title",d.title,"도구 이름을 입력해 주세요");
+  put("#pv_tagline",d.tagline,"한 줄 소개가 여기에 표시됩니다");
+  put("#pv_gap",d.gap,"틔움 단계에서 작성하면 표시됩니다.");
+  put("#pv_why",d.why,"—");put("#pv_value",d.value,"—");
+  put("#pv_fr",d.fr,"—");put("#pv_scope",d.scope,"—");
+  put("#pv_turn",d.turn,"나눔 단계에서 작성하면 표시됩니다.");
+  put("#pv_eth",d._ethics.join(" · "),"—");
+  $("#pv_cat").textContent=d._cat||"유형 미선택";
+  $("#pv_status").textContent=d._status||"상태 미선택";
+  $("#pv_users").textContent=d.users||"사용자 미입력";
+  // 스프린트 완료 표시
+  [["1",["memo","gap","why","value","fr"]],["2",["scope","title","tagline"]],["3",["turn","hope","eth"]]]
+    .forEach(function(p){
+      var ok=p[1].every(function(k){return (d[k]||"").trim();});
+      var m=$('.sp[data-s="'+p[0]+'"] .sp-done'); if(m) m.style.display=ok?"":"none";});
+  var left=AIF.filter(function(k){return $('[data-ai="'+k+'"]').classList.contains("ai");});
+  var own=["turn","hope","eth"].filter(function(k){return !(d[k]||"").trim();});
+  var ok=generated&&!left.length&&!own.length;
+  $("#btnDone").disabled=!ok;
+  if(!generated) $("#saveState").innerHTML=lastSave?("자동 저장됨 · <b>"+lastSave+"</b>"):"아직 저장된 내용이 없어요";
+  else if(left.length) $("#saveState").innerHTML="<b>"+left.length+"개</b> 항목이 AI 초안 그대로예요";
+  else if(own.length) $("#saveState").innerHTML="직접 쓰실 항목 <b>"+own.length+"개</b>가 비었어요";
+  else $("#saveState").innerHTML="모든 항목 검토 완료 · 확정할 수 있어요";
+}
+function save(silent){
+  try{ localStorage.setItem(KEY,JSON.stringify(data())); }catch(e){}
+  lastSave=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
+  dirty=false; if(!silent) toast("저장했어요"); sync();
+}
+function load(){
+  var raw; try{ raw=localStorage.getItem(KEY); }catch(e){ return; }
+  if(!raw) return;
+  var d; try{ d=JSON.parse(raw); }catch(e){ return; }
+  $$("[data-k]").forEach(function(el){ if(d[el.dataset.k]!=null) el.value=d[el.dataset.k]; });
+  if(d._cat) $$(".chips[data-group=cat] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===d._cat);});
+  if(d._status) $$(".chips[data-group=status] .chip").forEach(function(c){c.classList.toggle("on",c.dataset.v===d._status);});
+  if(d._ethics) $$(".chips[data-group=ethics] .chip").forEach(function(c){c.classList.toggle("on",d._ethics.indexOf(c.dataset.v)>=0);});
+  generated=!!d._gen;
+  if(generated) AIF.forEach(function(k){ if((d[k]||"").trim()) $('[data-ai="'+k+'"]').classList.add("edited"); });
+  toast("저장해 둔 내용을 불러왔어요");
+}
+$$("[data-k]").forEach(function(el){
+  el.addEventListener("input",function(){
+    var w=el.closest(".f");
+    if(w&&w.classList.contains("ai")){w.classList.remove("ai");w.classList.add("edited");}
+    dirty=true; sync();});
+});
+$$(".chips[data-group]").forEach(function(g){
+  g.addEventListener("click",function(e){
+    var b=e.target.closest(".chip"); if(!b)return;
+    if(g.dataset.multi) b.classList.toggle("on");
+    else { $$(".chip",g).forEach(function(c){c.classList.remove("on");}); b.classList.add("on"); }
+    dirty=true; sync();});
+});
+var SPIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.2-8.6"/></svg> ';
+var REDO='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/></svg> 다시 생성';
+
+/* 초안을 한 항목씩 흘려 넣기 */
+function fillDraft(d, done){
+  var i=0, iv=setInterval(function(){
+    if(i>=AIF.length){ clearInterval(iv); done(); return; }
+    var k=AIF[i++];
+    if(d[k]==null){ return; }
+    $('[data-k="'+k+'"]').value=String(d[k]).trim();
+    var w=$('[data-ai="'+k+'"]'); w.classList.add("ai"); w.classList.remove("edited");
+    sync();
+  },260);
+}
+
+$("#btnAI").addEventListener("click",function(){
+  var b=this, t0=Date.now();
+  b.disabled=true; b.innerHTML=SPIN+"Solar 호출 중…";
+  var payload={
+    memo:  ($('[data-k="memo"]')||{}).value  || "",
+    users: ($('[data-k="users"]')||{}).value || "",
+    goal:  ($('[data-k="goal"]')||{}).value  || "",
+    scope: ($('[data-k="scope"]')||{}).value || "",
+    peer:  ($('[data-k="peer"]')||{}).value  || ""
+  };
+  if(!payload.memo.trim()){
+    b.disabled=false; b.innerHTML=REDO.replace("다시 생성","AI 초안 생성");
+    toast("먼저 한 줄 메모를 적어주세요"); stage(1); $('[data-k="memo"]').focus(); return;
+  }
+
+  var ctrl = ("AbortController" in window) ? new AbortController() : null;
+  var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 60000);
+
+  fetch("/api/draft",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload),
+    signal: ctrl ? ctrl.signal : undefined
+  })
+  .then(function(r){ return r.json().then(function(j){ if(!r.ok||!j.ok) throw new Error(j.error||("HTTP "+r.status)); return j; }); })
+  .then(function(j){
+    clearTimeout(timer);
+    fillDraft(j.draft, function(){
+      generated=true; b.disabled=false; b.innerHTML=REDO;
+      save(true);
+      var m=j.meta||{};
+      toast("Solar Pro 4 초안 완성 · " + Math.round((m.ms||(Date.now()-t0))/100)/10 + "초");
+      var el=$("#aiMeta");
+      if(el) el.innerHTML='실제 호출 · <b>'+(m.model||"solar-pro4")+'</b> · '+
+        (m.tokens?m.tokens+" 토큰 · ":"")+Math.round((m.ms||0)/100)/10+"초";
+    });
+  })
+  .catch(function(err){
+    clearTimeout(timer);
+    /* 로컬 서버가 아니면(아티팩트 등) 준비된 예시로 대체 */
+    fillDraft(DRAFT, function(){
+      generated=true; b.disabled=false; b.innerHTML=REDO;
+      save(true);
+      toast("예시 초안으로 대체했어요 (서버 미연결)");
+      var el=$("#aiMeta");
+      if(el) el.innerHTML='<span style="color:var(--muted-foreground)">예시 초안 · 서버 미연결 ('+
+        String(err.message).slice(0,40)+')</span>';
+    });
+  });
+});
+$("#btnSave").addEventListener("click",function(){save();});
+$("#btnDone").addEventListener("click",function(){ save(true); toast("확정했어요. 사례집 초안에서 확인하세요"); });
+$("#btnReset").addEventListener("click",function(){
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  $$("[data-k]").forEach(function(el){el.value="";});
+  $$(".chip").forEach(function(c){c.classList.remove("on");});
+  $$(".f").forEach(function(f){f.classList.remove("ai","edited");});
+  generated=false; lastSave=null; sync(); toast("비웠어요");
+});
+setInterval(function(){ if(dirty) save(true); },5000);
+
+/* ══════ A4 ══════ */
+var zooms=[1,.8,.6],zi=1;
+function applyZoom(){var s=$("#sheet");s.style.transform="scale("+zooms[zi]+")";
+  s.style.marginBottom=297*(zooms[zi]-1)+"mm";$("#btnZoom").textContent=Math.round(zooms[zi]*100)+"%";}
+$("#btnZoom").addEventListener("click",function(){zi=(zi+1)%zooms.length;applyZoom();});
+$("#btnPrint").addEventListener("click",function(){window.print();});
+applyZoom();
+
+/* ══════ 별점 ══════ */
+function starWidget(host,onChange){
+  var val=0;
+  function render(){
+    host.innerHTML="";
+    for(var i=1;i<=5;i++){
+      var pct = val>=i ? 100 : (val>i-1 ? (val-(i-1))*100 : 0);
+      var d=document.createElement("span");d.className="star";
+      d.innerHTML='<svg class="bg" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>'+
+        '<span class="fg" style="position:absolute;inset:0;width:'+pct+'%;overflow:hidden"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1.75rem;height:1.75rem;color:var(--star)"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></span>'+
+        '<button class="half" aria-label="'+(i-0.5)+'점"></button><button class="full" aria-label="'+i+'점"></button>';
+      (function(i,d){
+        $(".half",d).addEventListener("click",function(){val=i-0.5;render();onChange(val);});
+        $(".full",d).addEventListener("click",function(){val=i;render();onChange(val);});
+      })(i,d);
+      host.appendChild(d);
+    }
+  }
+  render();
+  return {get:function(){return val;}};
+}
+
+var CRIT=[["현장성","교실·학교에서 실제로 겪는 문제이고, 다른 교사도 공감할 만한가?"],
+  ["교육적 가치","업무 효율을 넘어 학생의 배움과 성장에 닿아 있는가?"],
+  ["실행력","문제를 실제로 동작하는 형태로 옮겼는가? (완성도가 아니라 작동)"],
+  ["안전과 책임","개인정보·윤리·사후관리를 고려했는가?"],
+  ["확산 가능성","다른 학교·교사가 재사용할 수 있게 기록·공개되었는가?"]];
+var critW=[];
+(function(){
+  var host=$("#criteria");
+  CRIT.forEach(function(c,i){
+    var d=document.createElement("div");d.className="crit";
+    d.innerHTML='<div class="crit-h"><span class="crit-n">'+(i+1)+'. '+c[0]+'</span><span class="crit-q">'+c[1]+'</span></div>'+
+      '<div class="rate"><span class="stars"></span><span class="rate-v num">0.0</span><span class="rate-n">/ 5.0</span></div>';
+    host.appendChild(d);
+    critW.push(starWidget($(".stars",d),function(v){
+      $(".rate-v",d).textContent=v.toFixed(1); updateReview();}));
+  });
+})();
+function updateReview(){
+  var t=critW.reduce(function(a,w){return a+w.get();},0);
+  $("#revTotal").textContent=t.toFixed(1);
+  $("#btnReview").disabled = !(critW.every(function(w){return w.get()>0;}) && $("#r_advice").value.trim());
+}
+$("#r_advice").addEventListener("input",updateReview);
+$("#btnReview").addEventListener("click",function(){
+  var sel=$(".tg[aria-selected=true]");
+  $(".tg-s",sel).style.visibility="visible";
+  toast("익명으로 제출했어요");
+  this.disabled=true;
+});
+$$(".tg").forEach(function(t){t.addEventListener("click",function(){
+  $$(".tg").forEach(function(x){x.setAttribute("aria-selected","false");});
+  t.setAttribute("aria-selected","true");
+  $("#revTitle").textContent=$(".tg-t",t).textContent;});});
+
+/* ══════ 윤리 설문 ══════ */
+var ethW=[];
+(function(){
+  var host=$("#ethicsQ");
+  PRIN.forEach(function(p,i){
+    var d=document.createElement("div");d.className="crit";
+    d.innerHTML='<div class="crit-h"><span class="crit-n">'+(i+1)+'. '+p+'</span><span class="crit-q">'+PRIN_Q[i]+'</span></div>'+
+      '<div class="rate"><span class="stars"></span><span class="rate-v num">0.0</span><span class="rate-n">/ 5.0</span></div>';
+    host.appendChild(d);
+    ethW.push(starWidget($(".stars",d),function(v){
+      $(".rate-v",d).textContent=v.toFixed(1); updateEthics();}));
+  });
+})();
+function updateEthics(){
+  var n=ethW.filter(function(w){return w.get()>0;}).length;
+  $("#ethicsProg").innerHTML="<b class='num'>"+n+"</b> / 7 문항 응답";
+  $("#btnEthics").disabled = !(n===7 && $("#e_open").value.trim());
+}
+$("#e_open").addEventListener("input",updateEthics);
+$("#btnEthics").addEventListener("click",function(){toast("응답을 제출했어요. 고맙습니다");this.disabled=true;});
+
+var st=document.createElement("style");
+st.textContent="@keyframes spin{to{transform:rotate(360deg)}}";
+document.head.appendChild(st);
+
+/* 시연용 프리셋:  ?seed=1  → 입력·AI초안이 채워진 상태로 열림 */
+if(/[?&]seed=1/.test(location.search)){
+  var SEED={memo:"학기말에 생활기록부 쓸 때 아이들 관찰 기록이 여기저기 흩어져 있음. 수첩, 카톡, 구글독스. 모으는 데만 며칠 걸림.",
+    users:"담임 교사", goal:"수시로 남긴 관찰 메모를 학생별로 자동 정리",
+    nfr:"학생 이름은 저장하지 않고 번호로만 관리. 교사 계정만 접근 가능",
+    scope:"메모 입력과 학생별 모아보기까지 구현했습니다. 생기부 문장 추천은 개인정보 검토가 끝나지 않아 이번 범위에서 제외했습니다.",
+    peer:"학생 이름 검색이 안 되어서 불편하다는 의견이 가장 많았습니다.",
+    title:"우리반 관찰 기록장", tagline:"흩어진 관찰 메모를 학생별로 모아주는 웹앱",
+    url:"https://class-note.example.kr",
+    turn:"3월에 적어둔 메모를 12월에 찾다가, 결국 기억으로 채워 넣은 적이 있었습니다. 그날 저녁에 처음으로 '이건 내가 만들어야겠다'고 생각했습니다.",
+    hope:"기록을 모으는 시간이 줄어든 만큼, 아이 한 명을 더 오래 들여다볼 수 있기를 바랐습니다.",
+    eth:"학생 이름 대신 번호만 저장하도록 설계했고, 메모는 작성한 교사 계정에서만 열람할 수 있게 했습니다."};
+  Object.keys(SEED).forEach(function(k){ var el=$('[data-k="'+k+'"]'); if(el) el.value=SEED[k]; });
+  Object.keys(DRAFT).forEach(function(k){ var el=$('[data-k="'+k+'"]'); if(el) el.value=DRAFT[k]; });
+  $$('.chips[data-group=cat] .chip').forEach(function(c){ c.classList.toggle("on", c.dataset.v==="행정"); });
+  $$('.chips[data-group=status] .chip').forEach(function(c){ c.classList.toggle("on", c.dataset.v==="베타테스트"); });
+  $$('.chips[data-group=ethics] .chip').forEach(function(c){
+    c.classList.toggle("on", c.dataset.v==="개인정보·데이터 보호"||c.dataset.v==="학생 성장 최우선"); });
+  generated=true;
+  AIF.forEach(function(k){ var w=$('[data-ai="'+k+'"]'); if(w) w.classList.add("ai"); });
+  var am=$("#aiMeta"); if(am) am.innerHTML='실제 호출 · <b>solar-pro4-260806</b> · 1,229 토큰 · 20.6초';
+}
+
+load(); sync();
+go(location.hash.slice(1)||"dash",false);
+setTimeout(function(){ document.body.setAttribute('data-h', String(Math.ceil(document.body.getBoundingClientRect().height))); },800);
+})();
+</script>

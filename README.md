@@ -1,93 +1,69 @@
-# 260810성장형확장
+# 성장형 교사 개발자 플랫폼 — 프로토타입
 
+서울특별시교육청 **성장형 교사 개발자 과정 2기**를 위한 화면 시안입니다.
+sendev.kr에 이식하는 것을 전제로, 디자인과 데이터 구조를 맞춰 만들었습니다.
 
+## 무엇을 푸는가
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+연수생이 **한 번 쓴 내용이 다시 쓰이지 않는 곳이 없게** 만드는 것이 목표입니다.
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.aigov.go.kr/greenguyhh/hackathon_expansion.git
-git branch -M main
-git push -uf origin main
+작년   Padlet(수합) + Canva(양식) + 수작업 편집  →  사례집 PDF
+             ↑ 따로        ↑ 따로       ↑ 이중 작업
+
+올해   폼 하나 = 수합 + 양식 + DB
+         ↓
+       AI 초안 → 수정·확정 → ① 사례집 페이지  ② A4 PDF
+                              ③ 대시보드      ④ 윤리 인사이트
 ```
 
-## Integrate with your tools
+## 실행
 
-* [Set up project integrations](https://gitlab.aigov.go.kr/greenguyhh/hackathon_expansion/-/settings/integrations)
+```bash
+cp .env.example .env      # UPSTAGE_API_KEY 입력
+node server.mjs           # → http://localhost:8787
+```
 
-## Collaborate with your team
+의존성 없습니다. Node 18 이상이면 됩니다.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+| 주소 | 화면 |
+|---|---|
+| `/?seed=1#dash` | 대시보드 |
+| `/?seed=1#write` | 연수생 입력 (틔움·키움·나눔) |
+| `/?seed=1#preview` | 사례집 초안 (A4) |
+| `/?seed=1#review` | 현장 평가 (익명) |
+| `/?seed=1#ethics` | 윤리 설문 |
 
-## Test and Deploy
+`?seed=1` 은 시연용 프리셋입니다. 입력과 AI 초안이 채워진 상태로 열립니다.
+서버 없이 `prototype.html` 만 열어도 동작합니다 — 이때 AI 초안은 예시로 대체됩니다.
 
-Use the built-in continuous integration in GitLab.
+## 구조
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+| 파일 | 역할 |
+|---|---|
+| `prototype.html` | 화면 5종. 데이터는 localStorage, 더미 데이터는 파일에 번들 |
+| `server.mjs` | `.env` 를 읽어 Upstage Solar 호출. **API 키가 머무는 유일한 곳** |
+| `CASEBOOK_SPEC.md` | 사례집 데이터 스키마 · 루브릭 · 윤리 설문 문항 |
+| `DESIGN.md` | sendev.kr 디자인 시스템 조사 결과 |
+| `screenshots/` | 화면 캡처 5종 |
 
-***
+### sendev 이식 시
 
-# Editing this README
+`server.mjs` 의 `/api/draft` 핸들러가 **TanStack Start 서버 함수(`createServerFn`)로 그대로 옮겨질 자리**입니다.
+브라우저는 API 키를 보지 않습니다. 이 경계를 유지해 주세요.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## 알아둘 것
 
-## Suggestions for a good README
+- 대시보드 숫자는 **전부 예시 데이터**입니다.
+- AI 초안은 `solar-pro4` 를 실제 호출합니다. 응답에 20초 안팎 걸립니다.
+- AI가 쓴 항목은 **고쳐야만 확정**됩니다. 초안 그대로 저장되지 않습니다.
+- `펜 대신 키보드를 잡게 된 순간` `교실에 어떤 변화를 바랐나요` 두 항목은 AI가 쓰지 않습니다.
+- 동료 평가는 익명입니다. 중복 방지용으로만 닉네임을 확인합니다.
+- 차트 색은 DESIGN.md 토큰이 아닌 별도 팔레트를 씁니다.
+  기존 `--chart-1~5` 는 흰 배경 대비와 색각 이상 판별에서 실패해 다시 잡았습니다. (`CASEBOOK_SPEC.md` 참고)
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## 근거 자료
 
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- 제1호 교사 개발자 해커톤 사례집 (92p) — 지면 구조와 7대 원칙
+- 2026-08-04 강윤지 장학사 통화 — 기록 일원화, 제출 시점 분류, 통계 자동화
+- 2026-08-09 성장형 강사진 회의록 — 틔움·키움·나눔, 공유 카드, 상호 평가
