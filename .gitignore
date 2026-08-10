@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# 에디터 / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 로그 / 임시 파일
+*.log
+tmp/
+temp/
+
+# 의존성 (추후 프론트엔드 코드가 들어올 경우)
+node_modules/
+dist/
+build/
+.cache/
+
+# 환경변수 · 비밀값 (절대 커밋 금지)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# 이 저장소 전용 GitLab 자격증명 파일이 생길 경우 대비
+.git-credentials
+gitlab-credentials
