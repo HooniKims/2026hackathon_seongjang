@@ -76,6 +76,7 @@ const server = createServer(async (req, res) => {
         `<!doctype html><html lang="ko"><head><meta charset="utf-8">` +
         `<meta name="viewport" content="width=device-width, initial-scale=1">` +
         `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">` +
+        `<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">` +
         `</head><body>${html}</body></html>`);
     } catch {
       send(500, "text/plain; charset=utf-8", "index.html 을 찾을 수 없습니다.");
@@ -88,7 +89,8 @@ const server = createServer(async (req, res) => {
     if (/[\\/]|\.\./.test(name)) { send(400, "text/plain", "bad path"); return; }
     try {
       const buf = await readFile(join(ROOT, "assets", name));
-      const type = name.endsWith(".png") ? "image/png"
+      const type = name.endsWith(".svg") ? "image/svg+xml"
+        : name.endsWith(".png") ? "image/png"
         : name.endsWith(".jpg") || name.endsWith(".jpeg") ? "image/jpeg"
         : name.endsWith(".svg") ? "image/svg+xml" : "application/octet-stream";
       res.writeHead(200, { "Content-Type": type, "Cache-Control": "no-store" });

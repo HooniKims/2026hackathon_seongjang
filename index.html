@@ -1,4 +1,5 @@
 <title>성장형 교사 개발자 플랫폼 — 프로토타입</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 
 <style>
 :root{
@@ -28,7 +29,9 @@ h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
 .hdr{position:sticky;top:0;z-index:30;background:rgb(255 255 255/.92);backdrop-filter:blur(8px);box-shadow:var(--shadow-sm)}
 .hdr-in{margin:0 auto;max-width:1800px;display:flex;align-items:center;gap:.75rem;padding:.875rem 1.5rem}
 @media(min-width:640px){.hdr-in{padding:.875rem 3rem}}
-.logo{display:flex;align-items:center;gap:.5rem}
+.logo{display:flex;align-items:center;gap:.5rem;cursor:pointer;transition:transform .15s}
+.logo:hover{transform:translateY(-1px)}
+.logo:active{transform:scale(.97)}
 .logo-mark{display:flex;height:2.25rem;width:2.25rem;align-items:center;justify-content:center;border-radius:.875rem;background:var(--primary);color:var(--primary-foreground);box-shadow:var(--shadow-md)}
 .logo-txt{font-size:1.125rem;font-weight:700}
 .spacer{margin-left:auto}
@@ -312,10 +315,10 @@ input:focus,textarea:focus,select:focus{box-shadow:0 0 0 2px var(--ring);border-
 
 <header class="hdr">
   <div class="hdr-in">
-    <span class="logo">
+    <button class="logo" id="logoHome" aria-label="첫 화면으로">
       <span class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg></span>
       <span class="logo-txt">SEN DEV CONNECT</span>
-    </span>
+    </button>
     <span class="spacer"></span>
     <span class="protoTag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>프로토타입 · 예시 데이터</span>
   </div>
@@ -887,6 +890,7 @@ $$(".pn").forEach(function(b){
     if(location.hash!=="#"+b.dataset.v) location.hash=b.dataset.v;
     go(b.dataset.v,true);});});
 addEventListener("hashchange",function(){ go(location.hash.slice(1)||"dash",false); });
+$("#logoHome").addEventListener("click",function(){ location.hash="dash"; go("dash",true); });
 
 /* ═══════════════ 차트 헬퍼 ═══════════════ */
 function hbars(host,rows,unit,seq){
